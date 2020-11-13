@@ -1,4 +1,0 @@
-C:/Users/asus/CLionProjects/cinder_0.9.2_vc2015/my-projects/final-project-JacobAlbus/cmake-build-debug/CMakeFiles/jjba-visualizer.dir
-C:/Users/asus/CLionProjects/cinder_0.9.2_vc2015/my-projects/final-project-JacobAlbus/cmake-build-debug/CMakeFiles/jjba-tests.dir
-C:/Users/asus/CLionProjects/cinder_0.9.2_vc2015/my-projects/final-project-JacobAlbus/cmake-build-debug/CMakeFiles/edit_cache.dir
-C:/Users/asus/CLionProjects/cinder_0.9.2_vc2015/my-projects/final-project-JacobAlbus/cmake-build-debug/CMakeFiles/rebuild_cache.dir
