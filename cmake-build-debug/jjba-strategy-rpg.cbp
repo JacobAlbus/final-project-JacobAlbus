@@ -191,6 +191,9 @@
 			<Option target="jjba-visualizer"/>
 			<Option target="jjba-tests"/>
 		</Unit>
+		<Unit filename="C:/Users/asus/CLionProjects/cinder_0.9.2_vc2015/my-projects/final-project-JacobAlbus/tests/board_tests.cc">
+			<Option target="jjba-tests"/>
+		</Unit>
 		<Unit filename="C:/Users/asus/CLionProjects/cinder_0.9.2_vc2015/my-projects/final-project-JacobAlbus/tests/test_main.cc">
 			<Option target="jjba-tests"/>
 		</Unit>

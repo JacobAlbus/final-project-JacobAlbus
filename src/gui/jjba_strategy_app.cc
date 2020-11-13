@@ -4,7 +4,7 @@ namespace jjba_strategy {
 
 namespace visualizer {
 
-JJBAStrategyApp::JJBAStrategyApp() {
+JJBAStrategyApp::JJBAStrategyApp() : render_engine_(kBoardSize) {
   ci::app::setWindowSize((int) kWindowSize, (int) kWindowSize);
 }
 
@@ -12,15 +12,7 @@ void JJBAStrategyApp::update() {
 }
 
 void JJBAStrategyApp::draw() {
-  ci::Color8u background_color(0, 0, 0);
-  ci::gl::clear(background_color);
-
-  ci::gl::drawStringCentered(
-      "balls",
-      glm::vec2(kWindowSize / 2, kMargin / 2), ci::Color("white"));
-  ci::gl::drawStringCentered(
-      "nuts",
-      glm::vec2(kWindowSize / 2, kMargin/ 0.75), ci::Color("white"));
+  render_engine_.RenderBoard();
 }
 
 void JJBAStrategyApp::mouseDown(ci::app::MouseEvent event) {

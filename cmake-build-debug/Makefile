@@ -287,6 +287,33 @@ src\gui\render_engine.cc.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\jjba-tests.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\jjba-tests.dir\src\gui\render_engine.cc.s
 .PHONY : src\gui\render_engine.cc.s
 
+tests\board_tests.obj: tests\board_tests.cc.obj
+
+.PHONY : tests\board_tests.obj
+
+# target to build an object file
+tests\board_tests.cc.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\jjba-tests.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\jjba-tests.dir\tests\board_tests.cc.obj
+.PHONY : tests\board_tests.cc.obj
+
+tests\board_tests.i: tests\board_tests.cc.i
+
+.PHONY : tests\board_tests.i
+
+# target to preprocess a source file
+tests\board_tests.cc.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\jjba-tests.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\jjba-tests.dir\tests\board_tests.cc.i
+.PHONY : tests\board_tests.cc.i
+
+tests\board_tests.s: tests\board_tests.cc.s
+
+.PHONY : tests\board_tests.s
+
+# target to generate assembly for a file
+tests\board_tests.cc.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\jjba-tests.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\jjba-tests.dir\tests\board_tests.cc.s
+.PHONY : tests\board_tests.cc.s
+
 tests\test_main.obj: tests\test_main.cc.obj
 
 .PHONY : tests\test_main.obj
@@ -339,6 +366,9 @@ help:
 	@echo ... src/gui/render_engine.obj
 	@echo ... src/gui/render_engine.i
 	@echo ... src/gui/render_engine.s
+	@echo ... tests/board_tests.obj
+	@echo ... tests/board_tests.i
+	@echo ... tests/board_tests.s
 	@echo ... tests/test_main.obj
 	@echo ... tests/test_main.i
 	@echo ... tests/test_main.s

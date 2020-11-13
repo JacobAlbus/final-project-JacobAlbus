@@ -2,6 +2,7 @@
 #include "cinder/app/App.h"
 #include "cinder/app/RendererGl.h"
 #include "cinder/gl/gl.h"
+#include "render_engine.h"
 
 namespace jjba_strategy {
 
@@ -45,9 +46,12 @@ class JJBAStrategyApp : public ci::app::App {
    */
   void keyDown(ci::app::KeyEvent event) override;
 
-  const float kWindowSize = 875;
+  const float kWindowSize = 900;
+  const size_t kBoardSize = 30;
   const double kMargin = 20;
 
+ private:
+  RenderEngine render_engine_;
 };
 
 }  // namespace visualizer
