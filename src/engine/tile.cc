@@ -2,6 +2,7 @@
 
 namespace jjba_strategy {
 
+
 Tile::Tile(TileType type) {
   switch(type) {
     case kGrass:

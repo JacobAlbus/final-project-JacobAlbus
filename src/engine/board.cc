@@ -3,16 +3,33 @@
 
 namespace jjba_strategy {
 
+//TODO implement JSON reader
 Board::Board(size_t board_size) : kBoardSize(board_size) {
-  for(size_t row = 0; row < kBoardSize; row++) {
-    std::vector<Tile> empty;
-    board_.push_back(empty);
-    for(size_t column = 0; column < kBoardSize; column++) {
-      //TODO fix magic
-      auto type = static_cast<TileType>(ci::randInt(0, 4));
-      board_[row].push_back(Tile(type));
-    }
-  }
+  std::vector<Tile> empty;
+  board_.push_back(empty);
+  board_.push_back(empty);
+  board_.push_back(empty);
+  board_.push_back(empty);
+
+  board_[0].push_back(Tile(TileType::kMountain));
+  board_[0].push_back(Tile(TileType::kMountain));
+  board_[0].push_back(Tile(TileType::kMountain));
+  board_[0].push_back(Tile(TileType::kMountain));
+
+  board_[1].push_back(Tile(TileType::kGrass));
+  board_[1].push_back(Tile(TileType::kGrass));
+  board_[1].push_back(Tile(TileType::kWater));
+  board_[1].push_back(Tile(TileType::kWater));
+
+  board_[2].push_back(Tile(TileType::kGrass));
+  board_[2].push_back(Tile(TileType::kGrass));
+  board_[2].push_back(Tile(TileType::kWater));
+  board_[2].push_back(Tile(TileType::kDesert));
+
+  board_[3].push_back(Tile(TileType::kGrass));
+  board_[3].push_back(Tile(TileType::kGrass));
+  board_[3].push_back(Tile(TileType::kWater));
+  board_[3].push_back(Tile(TileType::kDesert));
 }
 
 } // namespace jjba_strategy

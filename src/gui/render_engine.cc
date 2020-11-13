@@ -6,7 +6,7 @@ RenderEngine::RenderEngine(size_t board_size,
                            float window_size) :
                            kBoardSize(board_size),
                            kWindowSize(window_size),
-                           board_(board_size) {}
+                           engine_(board_size) {}
 
 void RenderEngine::RenderBoard() const {
   const auto kTileSize = static_cast<float>(kWindowSize / kBoardSize);
@@ -14,8 +14,15 @@ void RenderEngine::RenderBoard() const {
   for (size_t row = 0; row < kBoardSize; ++row) {
     for (size_t col = 0; col < kBoardSize; ++col) {
 
-      const auto& tile = board_.GetBoard()[row][col];
-      ci::gl::color(tile.GetColor());
+      // const auto& tile = engine_.GetBoard()[0][0];
+      ci::gl::color(255, 255, 255);
+
+      //TODO should have a character objects attached to tiles?
+      const glm::vec2 kPosition = glm::vec2(row, col);
+      if(engine_.IsCharacterAtTile(kPosition)) {
+        const auto& character = engine_.FindCharacterAtPosition(kPosition);
+        ci::gl::color(character.GetColor());
+      }
 
       glm::vec2 pixel_top_left = glm::vec2(col * kTileSize, row * kTileSize);
       glm::vec2 pixel_bottom_right = pixel_top_left +

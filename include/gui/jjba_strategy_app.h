@@ -48,7 +48,7 @@ class JJBAStrategyApp : public ci::app::App {
 
   //TODO make seperate file for constants/integrate JSON
   const float kWindowSize = 900;
-  const size_t kBoardSize = 30;
+  const size_t kBoardSize = 4;
 
  private:
   RenderEngine render_engine_;

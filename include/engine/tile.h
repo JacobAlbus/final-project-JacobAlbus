@@ -2,6 +2,7 @@
 #define JJBA_STRATEGY_RPG_SRC_ENGINE_TILE_H_
 
 #include "cinder/gl/gl.h"
+#include "engine/character.h"
 
 namespace jjba_strategy {
 
@@ -16,6 +17,7 @@ class Tile {
  public:
   Tile(TileType type);
 
+
   inline const ci::Color& GetColor() const { return kTileColor; }
 
  private:
@@ -23,4 +25,5 @@ class Tile {
 };
 
 } // namespace jjba_strategy
+
 #endif //JJBA_STRATEGY_RPG_SRC_ENGINE_TILE_H_

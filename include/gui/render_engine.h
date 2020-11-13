@@ -2,7 +2,7 @@
 #define JJBA_STRATEGY_RPG_SRC_GUI_RENDER_ENGINE_H_
 
 #include <engine/board.h>
-
+#include <engine/game_engine.h>
 namespace jjba_strategy {
 
 class RenderEngine {
@@ -13,7 +13,7 @@ class RenderEngine {
  private:
   const float kWindowSize;
   const size_t kBoardSize;
-  Board board_;
+  GameEngine engine_;
 };
 
 } // namespace jjba_strategy
