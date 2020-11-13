@@ -4,7 +4,7 @@ namespace jjba_strategy {
 
 namespace visualizer {
 
-JJBAStrategyApp::JJBAStrategyApp() : render_engine_(kBoardSize) {
+JJBAStrategyApp::JJBAStrategyApp() : render_engine_(kBoardSize, kWindowSize) {
   ci::app::setWindowSize((int) kWindowSize, (int) kWindowSize);
 }
 

@@ -7,10 +7,11 @@ namespace jjba_strategy {
 
 class RenderEngine {
  public:
-  RenderEngine(size_t board_size);
+  RenderEngine(size_t board_size, float window_size);
 
   void RenderBoard() const;
  private:
+  const float kWindowSize;
   const size_t kBoardSize;
   Board board_;
 };

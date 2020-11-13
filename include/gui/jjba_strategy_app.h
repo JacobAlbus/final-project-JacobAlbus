@@ -47,8 +47,7 @@ class JJBAStrategyApp : public ci::app::App {
   void keyDown(ci::app::KeyEvent event) override;
 
   const float kWindowSize = 900;
-  const size_t kBoardSize = 30;
-  const double kMargin = 20;
+  const size_t kBoardSize = 90;
 
  private:
   RenderEngine render_engine_;
