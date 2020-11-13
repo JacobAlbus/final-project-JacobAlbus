@@ -1,0 +1,28 @@
+"C:\Program Files\JetBrains\CLion 2020.2.4\bin\cmake\win\bin\cmake.exe" -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - NMake Makefiles" C:\Users\asus\CLionProjects\cinder_0.9.2_vc2015\my-projects\final-project-JacobAlbus
+CMake Deprecation Warning at C:/Users/asus/CLionProjects/cinder_0.9.2_vc2015/proj/cmake/modules/cinderMakeApp.cmake:130 (cmake_policy):
+  The OLD behavior for policy CMP0015 will be removed from a future version
+  of CMake.
+
+  The cmake-policies(7) manual explains that the OLD behaviors of all
+  policies are deprecated and that a policy should be set to OLD only under
+  specific short-term circumstances.  Projects should be ported to the NEW
+  behavior and not rely on setting a policy to OLD.
+Call Stack (most recent call first):
+  CMakeLists.txt:43 (ci_make_app)
+
+
+CMake Deprecation Warning at C:/Users/asus/CLionProjects/cinder_0.9.2_vc2015/proj/cmake/modules/cinderMakeApp.cmake:130 (cmake_policy):
+  The OLD behavior for policy CMP0015 will be removed from a future version
+  of CMake.
+
+  The cmake-policies(7) manual explains that the OLD behaviors of all
+  policies are deprecated and that a policy should be set to OLD only under
+  specific short-term circumstances.  Projects should be ported to the NEW
+  behavior and not rely on setting a policy to OLD.
+Call Stack (most recent call first):
+  CMakeLists.txt:50 (ci_make_app)
+
+
+-- Configuring done
+-- Generating done
+-- Build files have been written to: C:/Users/asus/CLionProjects/cinder_0.9.2_vc2015/my-projects/final-project-JacobAlbus/cmake-build-debug
