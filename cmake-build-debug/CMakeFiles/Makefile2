@@ -80,12 +80,12 @@ clean: CMakeFiles\jjba-tests.dir\clean
 CMakeFiles\jjba-visualizer.dir\all:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\jjba-visualizer.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\jjba-visualizer.dir\depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\jjba-visualizer.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\jjba-visualizer.dir\build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=C:\Users\asus\CLionProjects\cinder_0.9.2_vc2015\my-projects\final-project-JacobAlbus\cmake-build-debug\CMakeFiles --progress-num=4,5,6 "Built target jjba-visualizer"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=C:\Users\asus\CLionProjects\cinder_0.9.2_vc2015\my-projects\final-project-JacobAlbus\cmake-build-debug\CMakeFiles --progress-num=7,8,9,10,11,12 "Built target jjba-visualizer"
 .PHONY : CMakeFiles\jjba-visualizer.dir\all
 
 # Build rule for subdir invocation for target.
 CMakeFiles\jjba-visualizer.dir\rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start C:\Users\asus\CLionProjects\cinder_0.9.2_vc2015\my-projects\final-project-JacobAlbus\cmake-build-debug\CMakeFiles 3
+	$(CMAKE_COMMAND) -E cmake_progress_start C:\Users\asus\CLionProjects\cinder_0.9.2_vc2015\my-projects\final-project-JacobAlbus\cmake-build-debug\CMakeFiles 6
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 /nologo -$(MAKEFLAGS) CMakeFiles\jjba-visualizer.dir\all
 	$(CMAKE_COMMAND) -E cmake_progress_start C:\Users\asus\CLionProjects\cinder_0.9.2_vc2015\my-projects\final-project-JacobAlbus\cmake-build-debug\CMakeFiles 0
 .PHONY : CMakeFiles\jjba-visualizer.dir\rule
@@ -107,12 +107,12 @@ CMakeFiles\jjba-visualizer.dir\clean:
 CMakeFiles\jjba-tests.dir\all:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\jjba-tests.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\jjba-tests.dir\depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\jjba-tests.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\jjba-tests.dir\build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=C:\Users\asus\CLionProjects\cinder_0.9.2_vc2015\my-projects\final-project-JacobAlbus\cmake-build-debug\CMakeFiles --progress-num=1,2,3 "Built target jjba-tests"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=C:\Users\asus\CLionProjects\cinder_0.9.2_vc2015\my-projects\final-project-JacobAlbus\cmake-build-debug\CMakeFiles --progress-num=1,2,3,4,5,6 "Built target jjba-tests"
 .PHONY : CMakeFiles\jjba-tests.dir\all
 
 # Build rule for subdir invocation for target.
 CMakeFiles\jjba-tests.dir\rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start C:\Users\asus\CLionProjects\cinder_0.9.2_vc2015\my-projects\final-project-JacobAlbus\cmake-build-debug\CMakeFiles 3
+	$(CMAKE_COMMAND) -E cmake_progress_start C:\Users\asus\CLionProjects\cinder_0.9.2_vc2015\my-projects\final-project-JacobAlbus\cmake-build-debug\CMakeFiles 6
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 /nologo -$(MAKEFLAGS) CMakeFiles\jjba-tests.dir\all
 	$(CMAKE_COMMAND) -E cmake_progress_start C:\Users\asus\CLionProjects\cinder_0.9.2_vc2015\my-projects\final-project-JacobAlbus\cmake-build-debug\CMakeFiles 0
 .PHONY : CMakeFiles\jjba-tests.dir\rule

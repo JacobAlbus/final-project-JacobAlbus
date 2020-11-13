@@ -1,9 +1,9 @@
 #include "gui/jjba_strategy_app.h"
 
-using ideal_gas::visualizer::IdealGasApp;
+using jjba_strategy::visualizer::JJBAStrategyApp;
 
-void prepareSettings(IdealGasApp::Settings* settings) {
+void prepareSettings(JJBAStrategyApp::Settings* settings) {
   settings->setResizable(false);
 }
 
-CINDER_APP(IdealGasApp, ci::app::RendererGl, prepareSettings);
+CINDER_APP(JJBAStrategyApp, ci::app::RendererGl, prepareSettings);

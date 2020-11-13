@@ -167,6 +167,66 @@ jjba_strategy_main.cc.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\jjba-visualizer.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\jjba-visualizer.dir\jjba_strategy_main.cc.s
 .PHONY : jjba_strategy_main.cc.s
 
+src\engine\board.obj: src\engine\board.cc.obj
+
+.PHONY : src\engine\board.obj
+
+# target to build an object file
+src\engine\board.cc.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\jjba-visualizer.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\jjba-visualizer.dir\src\engine\board.cc.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\jjba-tests.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\jjba-tests.dir\src\engine\board.cc.obj
+.PHONY : src\engine\board.cc.obj
+
+src\engine\board.i: src\engine\board.cc.i
+
+.PHONY : src\engine\board.i
+
+# target to preprocess a source file
+src\engine\board.cc.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\jjba-visualizer.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\jjba-visualizer.dir\src\engine\board.cc.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\jjba-tests.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\jjba-tests.dir\src\engine\board.cc.i
+.PHONY : src\engine\board.cc.i
+
+src\engine\board.s: src\engine\board.cc.s
+
+.PHONY : src\engine\board.s
+
+# target to generate assembly for a file
+src\engine\board.cc.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\jjba-visualizer.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\jjba-visualizer.dir\src\engine\board.cc.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\jjba-tests.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\jjba-tests.dir\src\engine\board.cc.s
+.PHONY : src\engine\board.cc.s
+
+src\engine\tile.obj: src\engine\tile.cc.obj
+
+.PHONY : src\engine\tile.obj
+
+# target to build an object file
+src\engine\tile.cc.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\jjba-visualizer.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\jjba-visualizer.dir\src\engine\tile.cc.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\jjba-tests.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\jjba-tests.dir\src\engine\tile.cc.obj
+.PHONY : src\engine\tile.cc.obj
+
+src\engine\tile.i: src\engine\tile.cc.i
+
+.PHONY : src\engine\tile.i
+
+# target to preprocess a source file
+src\engine\tile.cc.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\jjba-visualizer.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\jjba-visualizer.dir\src\engine\tile.cc.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\jjba-tests.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\jjba-tests.dir\src\engine\tile.cc.i
+.PHONY : src\engine\tile.cc.i
+
+src\engine\tile.s: src\engine\tile.cc.s
+
+.PHONY : src\engine\tile.s
+
+# target to generate assembly for a file
+src\engine\tile.cc.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\jjba-visualizer.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\jjba-visualizer.dir\src\engine\tile.cc.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\jjba-tests.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\jjba-tests.dir\src\engine\tile.cc.s
+.PHONY : src\engine\tile.cc.s
+
 src\gui\jjba_strategy_app.obj: src\gui\jjba_strategy_app.cc.obj
 
 .PHONY : src\gui\jjba_strategy_app.obj
@@ -196,6 +256,36 @@ src\gui\jjba_strategy_app.cc.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\jjba-visualizer.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\jjba-visualizer.dir\src\gui\jjba_strategy_app.cc.s
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\jjba-tests.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\jjba-tests.dir\src\gui\jjba_strategy_app.cc.s
 .PHONY : src\gui\jjba_strategy_app.cc.s
+
+src\gui\render_engine.obj: src\gui\render_engine.cc.obj
+
+.PHONY : src\gui\render_engine.obj
+
+# target to build an object file
+src\gui\render_engine.cc.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\jjba-visualizer.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\jjba-visualizer.dir\src\gui\render_engine.cc.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\jjba-tests.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\jjba-tests.dir\src\gui\render_engine.cc.obj
+.PHONY : src\gui\render_engine.cc.obj
+
+src\gui\render_engine.i: src\gui\render_engine.cc.i
+
+.PHONY : src\gui\render_engine.i
+
+# target to preprocess a source file
+src\gui\render_engine.cc.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\jjba-visualizer.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\jjba-visualizer.dir\src\gui\render_engine.cc.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\jjba-tests.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\jjba-tests.dir\src\gui\render_engine.cc.i
+.PHONY : src\gui\render_engine.cc.i
+
+src\gui\render_engine.s: src\gui\render_engine.cc.s
+
+.PHONY : src\gui\render_engine.s
+
+# target to generate assembly for a file
+src\gui\render_engine.cc.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\jjba-visualizer.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\jjba-visualizer.dir\src\gui\render_engine.cc.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\jjba-tests.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\jjba-tests.dir\src\gui\render_engine.cc.s
+.PHONY : src\gui\render_engine.cc.s
 
 tests\test_main.obj: tests\test_main.cc.obj
 
@@ -237,9 +327,18 @@ help:
 	@echo ... jjba_strategy_main.obj
 	@echo ... jjba_strategy_main.i
 	@echo ... jjba_strategy_main.s
+	@echo ... src/engine/board.obj
+	@echo ... src/engine/board.i
+	@echo ... src/engine/board.s
+	@echo ... src/engine/tile.obj
+	@echo ... src/engine/tile.i
+	@echo ... src/engine/tile.s
 	@echo ... src/gui/jjba_strategy_app.obj
 	@echo ... src/gui/jjba_strategy_app.i
 	@echo ... src/gui/jjba_strategy_app.s
+	@echo ... src/gui/render_engine.obj
+	@echo ... src/gui/render_engine.i
+	@echo ... src/gui/render_engine.s
 	@echo ... tests/test_main.obj
 	@echo ... tests/test_main.i
 	@echo ... tests/test_main.s
