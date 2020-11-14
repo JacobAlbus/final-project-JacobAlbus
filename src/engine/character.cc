@@ -16,4 +16,8 @@ Character::Character(const std::string& name,
   }
 }
 
+void Character::UpdatePosition(const glm::vec2 &updated_position) {
+  position_ = updated_position;
+}
+
 } // namespace jjba_strategy

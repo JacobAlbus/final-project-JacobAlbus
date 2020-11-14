@@ -10,6 +10,8 @@ class Character {
  public:
   Character(const std::string& name, bool is_player, const glm::vec2& position);
 
+  void UpdatePosition(const glm::vec2& updated_position);
+
   inline const std::string& GetName() const { return kName; };
   inline bool IsPlayer() const { return is_player_; };
   inline const ci::Color& GetColor() const { return color_; };

@@ -3,11 +3,15 @@
 
 #include <engine/board.h>
 #include <engine/game_engine.h>
+#include "cinder/app/App.h"
+
 namespace jjba_strategy {
 
 class RenderEngine {
  public:
   RenderEngine(size_t board_size, float window_size);
+
+  void HandleInput(const ci::app::KeyEvent& event);
 
   void RenderBoard() const;
  private:

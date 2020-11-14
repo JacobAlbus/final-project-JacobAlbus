@@ -3,6 +3,7 @@
 
 #include "engine/board.h"
 #include "engine/character.h"
+#include "cinder/app/App.h"
 
 namespace jjba_strategy {
 
@@ -25,6 +26,12 @@ class GameEngine {
    * @return character at position if found, SOMETHING otherwise
    */
   const Character& FindCharacterAtPosition(const glm::vec2& position) const;
+
+  /**
+   * Handles User Inputs
+   * @param event object containing input
+   */
+  void HandleInput(const ci::app::KeyEvent& event);
 
   inline const board_t& GetBoard() const { return board_; };
 

@@ -38,4 +38,8 @@ void RenderEngine::RenderBoard() const {
   }
 }
 
+void RenderEngine::HandleInput(const ci::app::KeyEvent& event) {
+  engine_.HandleInput(event);
+}
+
 } // namespace jjba_strategy

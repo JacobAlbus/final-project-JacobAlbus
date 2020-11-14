@@ -23,12 +23,7 @@ void JJBAStrategyApp::mouseDrag(ci::app::MouseEvent event) {
 }
 
 void JJBAStrategyApp::keyDown(ci::app::KeyEvent event) {
-  switch (event.getCode()) {
-    case ci::app::KeyEvent::KEY_ESCAPE: {
-      exit(0);
-      break;
-    }
-  }
+  render_engine_.HandleInput(event);
 }
 
 
