@@ -46,9 +46,13 @@ class GameEngine {
    */
   bool IsCharacterOnScreen(const glm::vec2& position) const;
 
+  void UpdatePlayableCharacter();
+
+  size_t character_index_;
   size_t kBoardSize;
   Board board_;
   characters_t characters_;
+  Character* player_;
 };
 
 } // namespace jjba_strategy

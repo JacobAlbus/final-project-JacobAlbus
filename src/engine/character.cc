@@ -13,12 +13,15 @@ Character::Character(const std::string& name,
 
   ci::fs::path path = ci::fs::path(image_path);
   kImage = ci::gl::Texture::create(ci::loadImage(cinder::app::loadAsset(path)));
+}
 
-  if(is_player) {
-    color_ = ci::Color(0, 0, 0);
-  } else {
-    color_ = ci::Color(1, 0, 1);
-  }
+Character& Character::operator=(const Character& rhs) {
+  kImage = rhs.kImage;
+  kName = rhs.kName;
+  position_ = rhs.position_;
+  is_player_ = rhs.is_player_;
+
+  return *this;
 }
 
 void Character::UpdatePosition(const glm::vec2 &updated_position) {
