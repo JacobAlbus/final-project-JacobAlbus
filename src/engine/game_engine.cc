@@ -43,28 +43,43 @@ void GameEngine::HandleInput(const ci::app::KeyEvent& event) {
     case ci::app::KeyEvent::KEY_UP: {
       glm::vec2 updated_position = characters_[0].GetPosition();
       updated_position.x--;
-      characters_[0].UpdatePosition(updated_position);
+      if(IsCharacterOnScreen(updated_position) && !IsCharacterAtTile(updated_position)) {
+        characters_[0].UpdatePosition(updated_position);
+      }
       break;
     }
     case ci::app::KeyEvent::KEY_DOWN: {
       glm::vec2 updated_position = characters_[0].GetPosition();
       updated_position.x++;
-      characters_[0].UpdatePosition(updated_position);
+      if(IsCharacterOnScreen(updated_position) && !IsCharacterAtTile(updated_position)) {
+        characters_[0].UpdatePosition(updated_position);
+      }
       break;
     }
     case ci::app::KeyEvent::KEY_LEFT: {
       glm::vec2 updated_position = characters_[0].GetPosition();
       updated_position.y--;
-      characters_[0].UpdatePosition(updated_position);
+      if(IsCharacterOnScreen(updated_position) && !IsCharacterAtTile(updated_position)) {
+        characters_[0].UpdatePosition(updated_position);
+      }
       break;
     }
     case ci::app::KeyEvent::KEY_RIGHT: {
       glm::vec2 updated_position = characters_[0].GetPosition();
       updated_position.y++;
-      characters_[0].UpdatePosition(updated_position);
+      if(IsCharacterOnScreen(updated_position) && !IsCharacterAtTile(updated_position)) {
+        characters_[0].UpdatePosition(updated_position);
+      }
       break;
     }
   }
+}
+
+bool GameEngine::IsCharacterOnScreen(const glm::vec2& position) const {
+  return position.x >= 0 &&
+         position.x <= static_cast<float>(kBoardSize - 1) &&
+         position.y >= 0 &&
+         position.y <= static_cast<float>(kBoardSize - 1);
 }
 
 } // namespace jjba_strategy

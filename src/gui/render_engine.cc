@@ -1,5 +1,4 @@
 #include "gui/render_engine.h"
-#include "cinder/gl/Texture.h"
 
 namespace jjba_strategy {
 

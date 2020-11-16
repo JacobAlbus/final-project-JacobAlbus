@@ -39,6 +39,13 @@ class GameEngine {
   inline const characters_t& GetCharacters() const { return characters_; };
 
  private:
+  /**
+   * Checks to see if character is on screen
+   * @param position object of character
+   * @return true or false depending on if character is on screen
+   */
+  bool IsCharacterOnScreen(const glm::vec2& position) const;
+
   size_t kBoardSize;
   Board board_;
   characters_t characters_;
