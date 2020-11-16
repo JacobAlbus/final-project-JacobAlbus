@@ -1,4 +1,5 @@
 #include "gui/render_engine.h"
+#include "cinder/gl/Texture.h"
 
 namespace jjba_strategy {
 
@@ -14,23 +15,26 @@ void RenderEngine::RenderBoard() const {
   for (size_t row = 0; row < kBoardSize; ++row) {
     for (size_t col = 0; col < kBoardSize; ++col) {
 
-      // const auto& tile = engine_.GetBoard()[0][0];
-      ci::gl::color(255, 255, 255);
+      glm::vec2 pixel_top_left = glm::vec2(col * kTileSize, row * kTileSize);
+      glm::vec2 pixel_bottom_right = pixel_top_left +
+          glm::vec2(kTileSize, kTileSize);
+
+      ci::Rectf pixel_bounding_box(pixel_top_left, pixel_bottom_right);
+      ci::gl::color(ci::Color("white"));
 
       //TODO should have a character objects attached to tiles?
       const glm::vec2 kPosition = glm::vec2(row, col);
       if(engine_.IsCharacterAtTile(kPosition)) {
         const auto& character = engine_.FindCharacterAtPosition(kPosition);
-        ci::gl::color(character.GetColor());
+        const ci::gl::TextureRef& texture = character->GetImage();
+
+        ci::gl::draw(texture, pixel_bounding_box);
+      } else {
+        const auto& tile = engine_.GetBoard()[row][col];
+        const ci::gl::TextureRef& texture = tile.GetImage();
+
+        ci::gl::draw(texture, pixel_bounding_box);
       }
-
-      glm::vec2 pixel_top_left = glm::vec2(col * kTileSize, row * kTileSize);
-      glm::vec2 pixel_bottom_right = pixel_top_left +
-                                     glm::vec2(kTileSize, kTileSize);
-
-      ci::Rectf pixel_bounding_box(pixel_top_left, pixel_bottom_right);
-
-      ci::gl::drawSolidRect(pixel_bounding_box);
 
       ci::gl::color(ci::Color("black"));
       ci::gl::drawStrokedRect(pixel_bounding_box);

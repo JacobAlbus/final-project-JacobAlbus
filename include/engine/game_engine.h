@@ -25,7 +25,7 @@ class GameEngine {
    * @param given position object
    * @return character at position if found, SOMETHING otherwise
    */
-  const Character& FindCharacterAtPosition(const glm::vec2& position) const;
+  const Character* FindCharacterAtPosition(const glm::vec2& position) const;
 
   /**
    * Handles User Inputs
@@ -33,13 +33,14 @@ class GameEngine {
    */
   void HandleInput(const ci::app::KeyEvent& event);
 
-  inline const board_t& GetBoard() const { return board_; };
+  //TODO change naming possibly
+  inline const board_t& GetBoard() const { return board_.GetBoard(); };
 
   inline const characters_t& GetCharacters() const { return characters_; };
 
  private:
   size_t kBoardSize;
-  board_t board_;
+  Board board_;
   characters_t characters_;
 };
 

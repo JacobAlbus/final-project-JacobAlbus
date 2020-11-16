@@ -18,10 +18,10 @@ class Tile {
   Tile(TileType type);
 
 
-  inline const ci::Color& GetColor() const { return kTileColor; }
+  inline const ci::gl::TextureRef& GetImage() const { return kImage; }
 
  private:
-  ci::Color kTileColor;
+  ci::gl::TextureRef kImage;
 };
 
 } // namespace jjba_strategy

@@ -1,23 +1,28 @@
 #include "engine/tile.h"
+#include "cinder/app/App.h"
 
 namespace jjba_strategy {
 
-
 Tile::Tile(TileType type) {
   switch(type) {
-    case kGrass:
-      kTileColor = ci::Color(0, 1, 0);
+    case kGrass: {
+      ci::fs::path path = ci::fs::path("tiles/grass.png");
+      kImage = ci::gl::Texture::create(ci::loadImage(cinder::app::loadAsset(path)));
       break;
-    case kDesert:
-      kTileColor = ci::Color(1, 1, 0);
+    } case kDesert: {
+      ci::fs::path path = ci::fs::path("tiles/sand.jpg");
+      kImage = ci::gl::Texture::create(ci::loadImage(cinder::app::loadAsset(path)));
       break;
-    case kMountain:
-      kTileColor = ci::Color(1, 1, 1);
+    } case kMountain: {
+      ci::fs::path path = ci::fs::path("tiles/stone.png");
+      kImage = ci::gl::Texture::create(ci::loadImage(cinder::app::loadAsset(path)));
       break;
-    case kWater:
-      kTileColor = ci::Color(0, 0, 1);
+    } case kWater: {
+      ci::fs::path path = ci::fs::path("tiles/water.jpg");
+      kImage = ci::gl::Texture::create(ci::loadImage(cinder::app::loadAsset(path)));
       break;
+    }
   }
 }
 
-}
+} // namespace jjba_strategy
