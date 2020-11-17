@@ -17,7 +17,6 @@ class Tile {
  public:
   Tile(TileType type);
 
-
   inline const ci::gl::TextureRef& GetImage() const { return kImage; }
 
  private:

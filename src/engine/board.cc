@@ -1,35 +1,22 @@
 #include "engine/board.h"
-#include <cinder/Rand.h>
+#include "nlohmann/json.hpp"
 
 namespace jjba_strategy {
 
-//TODO implement JSON reader
 Board::Board(size_t board_size) : kBoardSize(board_size) {
-  std::vector<Tile> empty;
-  board_.push_back(empty);
-  board_.push_back(empty);
-  board_.push_back(empty);
-  board_.push_back(empty);
+  //TODO fix file pathing
+  std::ifstream file("C:\\Users\\asus\\CLionProjects\\cinder_0.9.2_vc2015\\my-projects\\final-project-JacobAlbus\\assets\\boards\\board1.json");
+  nlohmann::json board_state;
+  file >> board_state;
 
-  board_[0].push_back(Tile(TileType::kMountain));
-  board_[0].push_back(Tile(TileType::kMountain));
-  board_[0].push_back(Tile(TileType::kMountain));
-  board_[0].push_back(Tile(TileType::kMountain));
-
-  board_[1].push_back(Tile(TileType::kGrass));
-  board_[1].push_back(Tile(TileType::kGrass));
-  board_[1].push_back(Tile(TileType::kWater));
-  board_[1].push_back(Tile(TileType::kWater));
-
-  board_[2].push_back(Tile(TileType::kGrass));
-  board_[2].push_back(Tile(TileType::kGrass));
-  board_[2].push_back(Tile(TileType::kWater));
-  board_[2].push_back(Tile(TileType::kDesert));
-
-  board_[3].push_back(Tile(TileType::kGrass));
-  board_[3].push_back(Tile(TileType::kGrass));
-  board_[3].push_back(Tile(TileType::kWater));
-  board_[3].push_back(Tile(TileType::kDesert));
+  for(const auto& file_row : board_state["board"]) {
+    std::vector<Tile> board_row;
+    for(const auto& file_tile : file_row) {
+      Tile board_tile = Tile(static_cast<TileType>(*file_tile.begin()));
+      board_row.push_back(board_tile);
+    }
+    board_.push_back(board_row);
+  }
 }
 
 } // namespace jjba_strategy

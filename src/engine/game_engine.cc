@@ -1,4 +1,5 @@
 #include "engine/game_engine.h"
+#include "nlohmann/json.hpp"
 
 namespace jjba_strategy {
 
@@ -7,10 +8,10 @@ GameEngine::GameEngine(size_t board_size) :
                        board_(board_size),
                        character_index_(0) {
   //TODO implement JSON
-  characters_.push_back(Character("Jotaro", true, glm::vec2(2, 1), "characters/jotaro.jpg"));
-  characters_.push_back(Character("Dio", false, glm::vec2(0, 3), "characters/dio.jpg"));
-  characters_.push_back(Character("Polnareff", false, glm::vec2(3, 0), "characters/polnareff.png"));
-  characters_.push_back(Character("Joseph", false, glm::vec2(2, 0), "characters/joseph.jpg"));
+  characters_.push_back(Character("Jotaro", glm::vec2(2, 1), "characters/jotaro.jpg"));
+  characters_.push_back(Character("Joseph", glm::vec2(2, 0), "characters/joseph.jpg"));
+  characters_.push_back(Character("Dio", glm::vec2(0, 3), "characters/dio.jpg"));
+  characters_.push_back(Character("Polnareff", glm::vec2(3, 0), "characters/polnareff.png"));
 
   player_ = &characters_[0];
 }
