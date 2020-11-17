@@ -10,11 +10,10 @@ typedef std::vector<std::vector<Tile>> board_t;
 
 class Board {
  public:
-  Board(size_t board_size);
+  Board();
 
   inline const board_t& GetBoard() const { return board_; }
  private:
-  size_t kBoardSize;
   board_t board_;
 };
 

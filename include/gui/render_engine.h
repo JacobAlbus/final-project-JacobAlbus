@@ -16,7 +16,7 @@ class RenderEngine {
   void RenderBoard() const;
  private:
   const float kWindowSize;
-  const size_t kBoardSize;
+  const size_t board_size_;
   GameEngine engine_;
 };
 

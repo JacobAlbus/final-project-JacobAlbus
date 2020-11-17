@@ -3,7 +3,7 @@
 
 namespace jjba_strategy {
 
-Board::Board(size_t board_size) : kBoardSize(board_size) {
+Board::Board() {
   //TODO fix file pathing
   std::ifstream file("C:\\Users\\asus\\CLionProjects\\cinder_0.9.2_vc2015\\my-projects\\final-project-JacobAlbus\\assets\\boards\\board1.json");
   nlohmann::json board_state;

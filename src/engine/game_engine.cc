@@ -4,14 +4,14 @@
 namespace jjba_strategy {
 
 GameEngine::GameEngine(size_t board_size) :
-                       kBoardSize(board_size),
-                       board_(board_size),
+                       board_size_(board_size),
+                       board_(),
                        character_index_(0) {
   //TODO implement JSON
-  characters_.push_back(Character("Jotaro", glm::vec2(2, 1), "characters/jotaro.jpg"));
-  characters_.push_back(Character("Joseph", glm::vec2(2, 0), "characters/joseph.jpg"));
-  characters_.push_back(Character("Dio", glm::vec2(0, 3), "characters/dio.jpg"));
-  characters_.push_back(Character("Polnareff", glm::vec2(3, 0), "characters/polnareff.png"));
+  characters_.push_back(Character("Jotaro", glm::vec2(2, 1), "characters/jotaro.jpg", true));
+  characters_.push_back(Character("Joseph", glm::vec2(2, 0), "characters/joseph.jpg", false));
+  characters_.push_back(Character("Dio", glm::vec2(0, 3), "characters/dio.jpg", false));
+  characters_.push_back(Character("Polnareff", glm::vec2(3, 0), "characters/polnareff.png", false));
 
   player_ = &characters_[0];
 }
@@ -84,18 +84,21 @@ void GameEngine::HandleInput(const ci::app::KeyEvent& event) {
 
 bool GameEngine::IsCharacterOnScreen(const glm::vec2& position) const {
   return position.x >= 0 &&
-         position.x <= static_cast<float>(kBoardSize - 1) &&
+         position.x <= static_cast<float>(board_size_ - 1) &&
          position.y >= 0 &&
-         position.y <= static_cast<float>(kBoardSize - 1);
+         position.y <= static_cast<float>(board_size_ - 1);
 }
 
 void GameEngine::UpdatePlayableCharacter() {
+  player_->UpdateIsPlayer();
   if(character_index_ < characters_.size() - 1) {
     character_index_++;
     player_ = &characters_[character_index_];
+    player_->UpdateIsPlayer();
   } else {
     character_index_ = 0;
     player_ = &characters_[character_index_];
+    player_->UpdateIsPlayer();
   }
 }
 

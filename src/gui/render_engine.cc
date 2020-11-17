@@ -4,15 +4,15 @@ namespace jjba_strategy {
 
 RenderEngine::RenderEngine(size_t board_size,
                            float window_size) :
-                           kBoardSize(board_size),
+                           board_size_(board_size),
                            kWindowSize(window_size),
                            engine_(board_size) {}
 
 void RenderEngine::RenderBoard() const {
-  const auto kTileSize = static_cast<float>(kWindowSize / kBoardSize);
+  const auto kTileSize = static_cast<float>(kWindowSize / board_size_);
 
-  for (size_t row = 0; row < kBoardSize; ++row) {
-    for (size_t col = 0; col < kBoardSize; ++col) {
+  for (size_t row = 0; row < board_size_; ++row) {
+    for (size_t col = 0; col < board_size_; ++col) {
 
       glm::vec2 pixel_top_left = glm::vec2(col * kTileSize, row * kTileSize);
       glm::vec2 pixel_bottom_right = pixel_top_left +
@@ -26,6 +26,10 @@ void RenderEngine::RenderBoard() const {
       if(engine_.IsCharacterAtTile(kPosition)) {
         const auto& character = engine_.FindCharacterAtPosition(kPosition);
         const ci::gl::TextureRef& texture = character->GetImage();
+
+        if(!character->IsPlayer()) {
+          ci::gl::color(ci::Color("gray"));
+        }
 
         ci::gl::draw(texture, pixel_bounding_box);
       } else {

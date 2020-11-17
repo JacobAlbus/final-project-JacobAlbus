@@ -49,7 +49,7 @@ class GameEngine {
   void UpdatePlayableCharacter();
 
   size_t character_index_;
-  size_t kBoardSize;
+  size_t board_size_;
   Board board_;
   characters_t characters_;
   Character* player_;
