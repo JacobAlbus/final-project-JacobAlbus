@@ -7,13 +7,24 @@ GameEngine::GameEngine(size_t board_size) :
                        board_size_(board_size),
                        board_(),
                        character_index_(0) {
-  //TODO implement JSON
-  characters_.push_back(Character("Jotaro", glm::vec2(2, 1), "characters/jotaro.jpg", true));
-  characters_.push_back(Character("Joseph", glm::vec2(2, 0), "characters/joseph.jpg", false));
-  characters_.push_back(Character("Dio", glm::vec2(0, 3), "characters/dio.jpg", false));
-  characters_.push_back(Character("Polnareff", glm::vec2(3, 0), "characters/polnareff.png", false));
+  //TODO fix file pathing
+  std::ifstream file("C:\\Users\\asus\\CLionProjects\\cinder_0.9.2_vc2015\\my-projects\\final-project-JacobAlbus\\assets\\boards\\board1.json");
+  nlohmann::json board_state;
+  file >> board_state;
 
-  player_ = &characters_[0];
+  for(const auto& characters : board_state["characters"]) {
+    for(const auto& character: characters){
+      std::string name = character[0];
+      size_t x_position = character[1][0];
+      size_t y_position = character[1][1];
+      glm::vec2 position(x_position, y_position);
+      std::string image_path = character[2];
+      bool is_player = character[3];
+      characters_.push_back(Character(name, position, image_path, is_player));
+    }
+  }
+  //TODO fix initial player instantiation
+  player_ = &characters_[2];
 }
 
 bool GameEngine::IsCharacterAtTile(const glm::vec2& tile_position) const {

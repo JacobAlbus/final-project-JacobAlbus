@@ -7,18 +7,19 @@
 using namespace jjba_strategy;
 
 TEST_CASE("A") {
-  std::ifstream i("C:\\Users\\asus\\CLionProjects\\cinder_0.9.2_vc2015\\my-projects\\final-project-JacobAlbus\\assets\\boards\\board1.json");
-  nlohmann::json j;
-  i >> j;
+  std::ifstream file("C:\\Users\\asus\\CLionProjects\\cinder_0.9.2_vc2015\\my-projects\\final-project-JacobAlbus\\assets\\boards\\board1.json");
+  nlohmann::json board_state;
+  file >> board_state;
 
-  board_t board;
-  for(const auto& row : j["board"]) {
-    std::vector<Tile> enum_row;
-    for(const auto& item : row) {
-      Tile tile = Tile(static_cast<TileType>(*item.begin()));
-      enum_row.push_back(tile);
+  for(const auto& characters : board_state["characters"]) {
+    for(const auto& character: characters){
+      std::string name = character[0];
+      size_t x_position = character[1][0];
+      size_t y_position = character[1][1];
+      glm::vec2 position(x_position, y_position);
+      std::string image_path = character[2];
+      bool is_player = character[3];
     }
-    board.push_back(enum_row);
   }
 }
 

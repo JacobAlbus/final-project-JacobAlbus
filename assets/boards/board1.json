@@ -11,5 +11,10 @@
     [0, 0, 0, 0, 0, 2, 2, 3, 1, 1],
     [0, 0, 0, 0, 0, 0, 2, 2, 1, 1]
   ],
-  "characters": []
+  "characters": [{
+    "Jotaro": ["Jotaro", [2, 1], "characters/jotaro.jpg", true],
+    "Polnareff": ["Polnareff", [2, 0], "characters/polnareff.png", false],
+    "Dio": ["Dio", [0, 3], "characters/dio.jpg", false],
+    "Joseph": ["Joseph", [3, 0], "characters/joseph.jpg", false]
+  }]
 }
