@@ -23,4 +23,14 @@ void Character::UpdateIsPlayer() {
   is_player_ = !is_player_;
 }
 
+void Character::RenderCharacter(const ci::Rectf& character_location) const {
+  if(is_player_) {
+    ci::gl::color(ci::Color("gray"));
+  } else {
+    ci::gl::color(ci::Color("white"));
+  }
+
+  ci::gl::draw(kImage, character_location);
+}
+
 } // namespace jjba_strategy

@@ -25,22 +25,12 @@ void RenderEngine::RenderBoard() const {
       const glm::vec2 kPosition = glm::vec2(row, col);
       if(engine_.IsCharacterAtTile(kPosition)) {
         const auto& character = engine_.FindCharacterAtPosition(kPosition);
-        const ci::gl::TextureRef& texture = character->GetImage();
+        character->RenderCharacter(pixel_bounding_box);
 
-        if(!character->IsPlayer()) {
-          ci::gl::color(ci::Color("gray"));
-        }
-
-        ci::gl::draw(texture, pixel_bounding_box);
       } else {
         const auto& tile = engine_.GetBoard()[row][col];
-        const ci::gl::TextureRef& texture = tile.GetImage();
-
-        ci::gl::draw(texture, pixel_bounding_box);
+        tile.RenderTile(pixel_bounding_box);
       }
-
-      ci::gl::color(ci::Color("black"));
-      ci::gl::drawStrokedRect(pixel_bounding_box);
     }
   }
 }

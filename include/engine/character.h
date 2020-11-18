@@ -8,6 +8,13 @@ namespace jjba_strategy {
 
 class Character {
  public:
+  /**
+   * Instantiates character
+   * @param name of character
+   * @param position of character
+   * @param path to image file
+   * @param whether or not character is initial player
+   */
   Character(const std::string& name,
             const glm::vec2& position,
             const std::string& image_path,
@@ -16,8 +23,21 @@ class Character {
   //TODO do I need big 5?
   inline Character& operator=(const Character& rhs) = default;
 
+  /**
+   * Updates position of player
+   * @param new position of player
+   */
   void UpdatePosition(const glm::vec2& updated_position);
 
+  /**
+   * Renders character at given location
+   * @param given location of character
+   */
+  void RenderCharacter(const ci::Rectf& character_location) const;
+
+  /**
+   * Changes whether or not character is current player
+   */
   void UpdateIsPlayer();
 
   inline const std::string& GetName() const { return kName; };

@@ -11,6 +11,10 @@ typedef std::vector<Character> characters_t;
 
 class GameEngine {
  public:
+  /**
+   * Instantiates GameEngine
+   * @param board size of initial board
+   */
   GameEngine(size_t board_size);
 
   /**

@@ -10,6 +10,9 @@ typedef std::vector<std::vector<Tile>> board_t;
 
 class Board {
  public:
+  /**
+   * Instantiates board object
+   */
   Board();
 
   inline const board_t& GetBoard() const { return board_; }

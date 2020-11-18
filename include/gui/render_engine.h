@@ -9,8 +9,17 @@ namespace jjba_strategy {
 
 class RenderEngine {
  public:
+  /**
+   * Instantiates engine renderer
+   * @param size of initial board
+   * @param size of window
+   */
   RenderEngine(size_t board_size, float window_size);
 
+  /**
+   * Performs character action based on input of player
+   * @param event object containing input
+   */
   void HandleInput(const ci::app::KeyEvent& event);
 
   void RenderBoard() const;

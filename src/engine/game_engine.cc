@@ -24,7 +24,7 @@ GameEngine::GameEngine(size_t board_size) :
     }
   }
   //TODO fix initial player instantiation
-  player_ = &characters_[2];
+  player_ = &characters_[0];
 }
 
 bool GameEngine::IsCharacterAtTile(const glm::vec2& tile_position) const {
