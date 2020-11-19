@@ -1,9 +1,12 @@
 {
   "board": [
-    [0, 0, 0, 0],
-    [0, 0, 0, 0],
-    [0, 0, 0, 0],
-    [0, 0, 0, 0]
+    [1, 1, 1, 1],
+    [1, 1, 1, 1],
+    [1, 1, 1, 1],
+    [1, 1, 1, 1]
   ],
-  "characters": []
+  "characters": [{
+    "Avdol": ["Avdol", [2, 1], "characters/avdol.jpg", true],
+    "Iggy": ["Iggy", [2, 0], "characters/iggy.jpg", false]
+  }]
 }

@@ -7,24 +7,9 @@ GameEngine::GameEngine(float window_size, const std::string& json_file_path) :
                        kWindowSize(window_size),
                        board_(kWindowSize, json_file_path),
                        character_index_(0) {
-  //TODO fix file pathing
-  std::ifstream file(json_file_path);
-  nlohmann::json board_state;
-  file >> board_state;
 
-  for(const auto& characters : board_state["characters"]) {
-    for(const auto& character: characters){
-      std::string name = character[0];
-      size_t x_position = character[1][0];
-      size_t y_position = character[1][1];
-      glm::vec2 position(x_position, y_position);
-      std::string image_path = character[2];
-      bool is_player = character[3];
-      characters_.push_back(Character(name, position, image_path, is_player));
-    }
-  }
-  //TODO fix initial player instantiation
-  player_ = &characters_[0];
+  characters_ = Character::GenerateCharacters(json_file_path);
+  player_ = &characters_[FindCurrentPlayerIndex()];
   board_size_ = board_.GetBoard().size();
 }
 
@@ -127,7 +112,20 @@ void GameEngine::UpdatePlayableCharacter() {
 
 void GameEngine::UpdateBoardState(const std::string& json_file_path) {
   board_.GenerateBoard(json_file_path);
+  characters_ = Character::GenerateCharacters(json_file_path);
+  player_ = &characters_[FindCurrentPlayerIndex()];
   board_size_ = board_.GetBoard().size();
+}
+
+//TODO make it return reference to character
+size_t GameEngine::FindCurrentPlayerIndex() const {
+  for(size_t index = 0; index < characters_.size(); index++) {
+    if(characters_[index].IsPlayer()) {
+      return index;
+    }
+  }
+  //TODO is this bad implementation
+  throw std::invalid_argument("No player found");
 }
 
 } // namespace jjba_strategy

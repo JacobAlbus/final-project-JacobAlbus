@@ -63,6 +63,8 @@ class GameEngine {
    */
   void UpdateBoardState(const std::string& json_file_path);
 
+  size_t FindCurrentPlayerIndex() const;
+
   const float kWindowSize;
   size_t character_index_;
   size_t board_size_;
