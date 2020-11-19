@@ -26,6 +26,7 @@ Tile::Tile(TileType type) {
 }
 
 void Tile::RenderTile(const ci::Rectf& tile_location) const {
+  ci::gl::color(ci::Color("white"));
   ci::gl::draw(kImage, tile_location);
 }
 

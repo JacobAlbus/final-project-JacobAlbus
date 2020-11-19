@@ -14,8 +14,9 @@ class GameEngine {
   /**
    * Instantiates GameEngine
    * @param board size of initial board
+   * @param path to json file containing board state
    */
-  GameEngine(size_t board_size);
+  GameEngine(float window_size, const std::string& json_file_path);
 
   /**
    * Returns true or false depending if a character exists at tile
@@ -37,6 +38,8 @@ class GameEngine {
    */
   void HandleInput(const ci::app::KeyEvent& event);
 
+  void RenderBoardState() const;
+
   //TODO change naming possibly
   inline const board_t& GetBoard() const { return board_.GetBoard(); };
 
@@ -50,8 +53,17 @@ class GameEngine {
    */
   bool IsCharacterOnScreen(const glm::vec2& position) const;
 
+  /**
+   * Updates which character is currently being controlled
+   */
   void UpdatePlayableCharacter();
 
+  /**
+   * Updates the state of board, including the characters
+   */
+  void UpdateBoardState(const std::string& json_file_path);
+
+  const float kWindowSize;
   size_t character_index_;
   size_t board_size_;
   Board board_;

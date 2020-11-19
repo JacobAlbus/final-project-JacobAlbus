@@ -23,14 +23,31 @@ void Character::UpdateIsPlayer() {
   is_player_ = !is_player_;
 }
 
-void Character::RenderCharacter(const ci::Rectf& character_location) const {
+void Character::RenderCharacter(size_t board_size, float window_size) const {
   if(is_player_) {
-    ci::gl::color(ci::Color("gray"));
-  } else {
     ci::gl::color(ci::Color("white"));
+  } else {
+    ci::gl::color(ci::Color("gray"));
   }
 
-  ci::gl::draw(kImage, character_location);
+  ci::Rectf pixel_bounding_box = CalculatePixelBoundingBox(board_size,
+                                                           window_size);
+  ci::gl::draw(kImage, pixel_bounding_box);
+}
+
+ci::Rectf Character::CalculatePixelBoundingBox(size_t board_size,
+                                               float window_size)
+                                               const {
+  const auto kTileSize = static_cast<float>(window_size / board_size);
+  float col = position_.y;
+  float row = position_.x;
+
+  glm::vec2 pixel_top_left = glm::vec2(col * kTileSize, row * kTileSize);
+  glm::vec2 pixel_bottom_right = pixel_top_left +
+                                 glm::vec2(kTileSize, kTileSize);
+
+  //TODO isn't passing by copy slower?
+  return ci::Rectf(pixel_top_left, pixel_bottom_right);
 }
 
 } // namespace jjba_strategy

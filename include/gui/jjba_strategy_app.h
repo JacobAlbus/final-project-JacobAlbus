@@ -34,9 +34,9 @@ class JJBAStrategyApp : public ci::app::App {
    */
   void keyDown(ci::app::KeyEvent event) override;
 
-  //TODO make seperate file for constants/integrate JSON
+  //TODO make seperate file for constants
   const float kWindowSize = 900;
-  const size_t kBoardSize = 10;
+  const std::string initial_board_file_path = "C:\\Users\\asus\\CLionProjects\\cinder_0.9.2_vc2015\\my-projects\\final-project-JacobAlbus\\assets\\boards\\board1.json";
 
  private:
   RenderEngine render_engine_;

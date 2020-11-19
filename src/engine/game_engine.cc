@@ -3,12 +3,12 @@
 
 namespace jjba_strategy {
 
-GameEngine::GameEngine(size_t board_size) :
-                       board_size_(board_size),
-                       board_(),
+GameEngine::GameEngine(float window_size, const std::string& json_file_path) :
+                       kWindowSize(window_size),
+                       board_(kWindowSize, json_file_path),
                        character_index_(0) {
   //TODO fix file pathing
-  std::ifstream file("C:\\Users\\asus\\CLionProjects\\cinder_0.9.2_vc2015\\my-projects\\final-project-JacobAlbus\\assets\\boards\\board1.json");
+  std::ifstream file(json_file_path);
   nlohmann::json board_state;
   file >> board_state;
 
@@ -25,6 +25,7 @@ GameEngine::GameEngine(size_t board_size) :
   }
   //TODO fix initial player instantiation
   player_ = &characters_[0];
+  board_size_ = board_.GetBoard().size();
 }
 
 bool GameEngine::IsCharacterAtTile(const glm::vec2& tile_position) const {
@@ -47,6 +48,13 @@ const Character* GameEngine::FindCharacterAtPosition(const glm::vec2& position) 
   }
 
   return nullptr;
+}
+
+void GameEngine::RenderBoardState() const {
+  board_.RenderBoard(kWindowSize);
+  for(const auto& character : characters_) {
+    character.RenderCharacter(board_size_, kWindowSize);
+  }
 }
 
 void GameEngine::HandleInput(const ci::app::KeyEvent& event) {
@@ -90,6 +98,10 @@ void GameEngine::HandleInput(const ci::app::KeyEvent& event) {
       }
       break;
     }
+    case ci::app::KeyEvent::KEY_SPACE: {
+      UpdateBoardState("C:\\Users\\asus\\CLionProjects\\cinder_0.9.2_vc2015\\my-projects\\final-project-JacobAlbus\\assets\\boards\\board2.json");
+      break;
+    }
   }
 }
 
@@ -111,6 +123,11 @@ void GameEngine::UpdatePlayableCharacter() {
     player_ = &characters_[character_index_];
     player_->UpdateIsPlayer();
   }
+}
+
+void GameEngine::UpdateBoardState(const std::string& json_file_path) {
+  board_.GenerateBoard(json_file_path);
+  board_size_ = board_.GetBoard().size();
 }
 
 } // namespace jjba_strategy

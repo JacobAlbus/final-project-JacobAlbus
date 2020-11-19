@@ -30,10 +30,9 @@ class Character {
   void UpdatePosition(const glm::vec2& updated_position);
 
   /**
-   * Renders character at given location
-   * @param given location of character
+   * Renders character at their position
    */
-  void RenderCharacter(const ci::Rectf& character_location) const;
+  void RenderCharacter(size_t board_size, float window_size) const;
 
   /**
    * Changes whether or not character is current player
@@ -46,6 +45,12 @@ class Character {
   inline bool IsPlayer() const { return is_player_; }
 
  private:
+  /**
+   * Calculates window/box where character should be rendered
+   * @return box where character should be rendered
+   */
+  ci::Rectf CalculatePixelBoundingBox(size_t board_size, float window_size) const;
+
   bool is_player_;
   glm::vec2 position_;
   //TODO make const

@@ -13,8 +13,10 @@ class RenderEngine {
    * Instantiates engine renderer
    * @param size of initial board
    * @param size of window
+   * @param path to json file containing board state
    */
-  RenderEngine(size_t board_size, float window_size);
+  RenderEngine(float window_size,
+               const std::string& json_file_path);
 
   /**
    * Performs character action based on input of player
@@ -24,8 +26,6 @@ class RenderEngine {
 
   void RenderBoard() const;
  private:
-  const float kWindowSize;
-  const size_t board_size_;
   GameEngine engine_;
 };
 
