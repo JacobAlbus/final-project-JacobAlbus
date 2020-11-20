@@ -2,7 +2,7 @@
 #include "cinder/app/App.h"
 #include "cinder/app/RendererGl.h"
 #include "cinder/gl/gl.h"
-#include "engine/game_engine.h"
+#include "gui/render_engine.h"
 
 namespace jjba_strategy {
 
@@ -39,7 +39,7 @@ class JJBAStrategyApp : public ci::app::App {
   const std::string initial_board_file_path = "C:\\Users\\asus\\CLionProjects\\cinder_0.9.2_vc2015\\my-projects\\final-project-JacobAlbus\\assets\\boards\\board1.json";
 
  private:
-  GameEngine game_engine_;
+  RenderEngine render_engine_;
 };
 
 }  // namespace visualizer

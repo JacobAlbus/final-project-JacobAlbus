@@ -81,12 +81,13 @@ void GameEngine::HandleInput(const ci::app::KeyEvent& event) {
 
 bool GameEngine::IsCharacterOnScreen(const glm::vec2& position) const {
   const size_t kWindowTopMargin = 2;
-  const size_t kWindowMargin = 1;
+  const size_t kWindowSideMargin = 2;
+  const size_t kWindowBottomMargin = 1;
 
   return position.x >= kWindowTopMargin &&
-         position.x <= static_cast<float>(board_size_ - 1 - kWindowMargin) &&
-         position.y >= kWindowMargin &&
-         position.y <= static_cast<float>(board_size_ - 1- kWindowMargin);
+         position.x <= static_cast<float>(board_size_ - kWindowSideMargin) &&
+         position.y >= kWindowBottomMargin &&
+         position.y <= static_cast<float>(board_size_ - kWindowSideMargin);
 }
 
 void GameEngine::UpdatePlayableCharacter() {
