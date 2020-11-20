@@ -19,33 +19,24 @@ class GameEngine {
   GameEngine(float window_size, const std::string& json_file_path);
 
   /**
+   * Handles User Inputs
+   * @param event object containing input
+   */
+  void HandleInput(const ci::app::KeyEvent& event);
+
+  /**
+   * Renders the board and characters
+   */
+  void RenderBoardState() const;
+
+ private:
+  /**
    * Returns true or false depending if a character exists at tile
    * @param given position object
    * @return true or false
    */
   bool IsCharacterAtTile(const glm::vec2& tile_position) const;
 
-  /**
-   * Finds character at given position returns SOMETHING if not found
-   * @param given position object
-   * @return character at position if found, SOMETHING otherwise
-   */
-  const Character* FindCharacterAtPosition(const glm::vec2& position) const;
-
-  /**
-   * Handles User Inputs
-   * @param event object containing input
-   */
-  void HandleInput(const ci::app::KeyEvent& event);
-
-  void RenderBoardState() const;
-
-  //TODO change naming possibly
-  inline const board_t& GetBoard() const { return board_.GetBoard(); };
-
-  inline const characters_t& GetCharacters() const { return characters_; };
-
- private:
   /**
    * Checks to see if character is on screen
    * @param position object of character
@@ -63,6 +54,10 @@ class GameEngine {
    */
   void UpdateBoardState(const std::string& json_file_path);
 
+  /**
+   * Finds the index of current player
+   * @return index of current player
+   */
   size_t FindCurrentPlayerIndex() const;
 
   const float kWindowSize;

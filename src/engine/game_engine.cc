@@ -1,5 +1,4 @@
 #include "engine/game_engine.h"
-#include "nlohmann/json.hpp"
 
 namespace jjba_strategy {
 
@@ -23,16 +22,6 @@ bool GameEngine::IsCharacterAtTile(const glm::vec2& tile_position) const {
   return false;
   //TODO get this to work
   //return std::any_of(characters_.begin(), characters_.end(), tile_position);
-}
-
-const Character* GameEngine::FindCharacterAtPosition(const glm::vec2& position) const {
-  for(const auto& character : characters_) {
-    if(character.GetPosition() == position) {
-       return &character;
-    }
-  }
-
-  return nullptr;
 }
 
 void GameEngine::RenderBoardState() const {

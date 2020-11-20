@@ -38,7 +38,7 @@ include("${CINDER_PATH}/proj/cmake/modules/cinderMakeApp.cmake")
 
 list(APPEND ENGINE_SOURCE_FILES src/engine/board.cc src/engine/tile.cc
                                 src/engine/game_engine.cc src/engine/character.cc)
-list(APPEND GUI_SOURCE_FILES src/gui/jjba_strategy_app.cc src/gui/render_engine.cc)
+list(APPEND GUI_SOURCE_FILES src/gui/jjba_strategy_app.cc)
 list(APPEND TEST_FILES tests/board_tests.cc)
 
 ci_make_app(

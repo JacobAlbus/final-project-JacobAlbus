@@ -40,6 +40,12 @@ class Character {
    */
   void UpdateIsPlayer();
 
+  /**
+   *
+   *
+   * @param json_file_path
+   * @return
+   */
   static std::vector<Character> Character::GenerateCharacters(const std::string& json_file_path) {
     std::ifstream file(json_file_path);
     nlohmann::json board_state;
