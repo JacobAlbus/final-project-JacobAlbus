@@ -80,10 +80,13 @@ void GameEngine::HandleInput(const ci::app::KeyEvent& event) {
 }
 
 bool GameEngine::IsCharacterOnScreen(const glm::vec2& position) const {
-  return position.x >= 0 &&
-         position.x <= static_cast<float>(board_size_ - 1) &&
-         position.y >= 0 &&
-         position.y <= static_cast<float>(board_size_ - 1);
+  const size_t kWindowTopMargin = 2;
+  const size_t kWindowMargin = 1;
+
+  return position.x >= kWindowTopMargin &&
+         position.x <= static_cast<float>(board_size_ - 1 - kWindowMargin) &&
+         position.y >= kWindowMargin &&
+         position.y <= static_cast<float>(board_size_ - 1- kWindowMargin);
 }
 
 void GameEngine::UpdatePlayableCharacter() {
@@ -104,6 +107,7 @@ void GameEngine::UpdateBoardState(const std::string& json_file_path) {
   characters_ = Character::GenerateCharacters(json_file_path);
   player_ = &characters_[FindCurrentPlayerIndex()];
   board_size_ = board_.GetBoard().size();
+  character_index_ = 0;
 }
 
 //TODO make it return reference to character

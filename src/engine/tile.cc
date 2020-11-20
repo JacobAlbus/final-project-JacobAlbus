@@ -21,6 +21,10 @@ Tile::Tile(TileType type) {
       ci::fs::path path = ci::fs::path("tiles/water.jpg");
       kImage = ci::gl::Texture::create(ci::loadImage(cinder::app::loadAsset(path)));
       break;
+    } case kEmpty: {
+      ci::fs::path path = ci::fs::path("tiles/empty.png");
+      kImage = ci::gl::Texture::create(ci::loadImage(cinder::app::loadAsset(path)));
+      break;
     }
   }
 }
