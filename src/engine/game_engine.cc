@@ -7,13 +7,14 @@ GameEngine::GameEngine(float window_size, const std::string& json_file_path) :
                        board_(kWindowSize, json_file_path),
                        character_index_(0) {
 
-  characters_ = Character::GenerateCharacters(json_file_path);
-  player_ = &characters_[FindCurrentPlayerIndex()];
+  allied_characters_ = Character::GenerateCharacters(json_file_path, "allied characters");
+  enemy_characters_ = Character::GenerateCharacters(json_file_path, "enemy characters");
+  player_ = &allied_characters_[FindCurrentPlayerIndex()];
   board_size_ = board_.GetBoard().size();
 }
 
 bool GameEngine::IsCharacterAtTile(const glm::vec2& tile_position) const {
-  for(const auto& character : characters_) {
+  for(const auto& character : allied_characters_) {
     if(character.GetPosition() == tile_position) {
       return true;
     }
@@ -26,7 +27,10 @@ bool GameEngine::IsCharacterAtTile(const glm::vec2& tile_position) const {
 
 void GameEngine::RenderBoardState() const {
   board_.RenderBoard(kWindowSize);
-  for(const auto& character : characters_) {
+  for(const auto& character : allied_characters_) {
+    character.RenderCharacter(board_size_, kWindowSize);
+  }
+  for(const auto& character : enemy_characters_) {
     character.RenderCharacter(board_size_, kWindowSize);
   }
 }
@@ -92,29 +96,29 @@ bool GameEngine::IsCharacterOnScreen(const glm::vec2& position) const {
 
 void GameEngine::UpdatePlayableCharacter() {
   player_->UpdateIsPlayer();
-  if(character_index_ < characters_.size() - 1) {
+  if(character_index_ < allied_characters_.size() - 1) {
     character_index_++;
-    player_ = &characters_[character_index_];
+    player_ = &allied_characters_[character_index_];
     player_->UpdateIsPlayer();
   } else {
     character_index_ = 0;
-    player_ = &characters_[character_index_];
+    player_ = &allied_characters_[character_index_];
     player_->UpdateIsPlayer();
   }
 }
 
 void GameEngine::UpdateBoardState(const std::string& json_file_path) {
   board_.GenerateBoard(json_file_path);
-  characters_ = Character::GenerateCharacters(json_file_path);
-  player_ = &characters_[FindCurrentPlayerIndex()];
+  allied_characters_ = Character::GenerateCharacters(json_file_path, "allied characters");
+  player_ = &allied_characters_[FindCurrentPlayerIndex()];
   board_size_ = board_.GetBoard().size();
   character_index_ = 0;
 }
 
 //TODO make it return reference to character
 size_t GameEngine::FindCurrentPlayerIndex() const {
-  for(size_t index = 0; index < characters_.size(); index++) {
-    if(characters_[index].IsPlayer()) {
+  for(size_t index = 0; index < allied_characters_.size(); index++) {
+    if(allied_characters_[index].IsPlayer()) {
       return index;
     }
   }

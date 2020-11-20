@@ -29,6 +29,10 @@ class GameEngine {
    */
   void RenderBoardState() const;
 
+  inline const characters_t& GetAlliedCharacters() const { return allied_characters_; }
+  inline const characters_t& GetEnemyCharacters() const { return enemy_characters_; };
+  inline size_t GetBoardSize() const { return board_size_; };
+
  private:
   /**
    * Returns true or false depending if a character exists at tile
@@ -64,7 +68,8 @@ class GameEngine {
   size_t character_index_;
   size_t board_size_;
   Board board_;
-  characters_t characters_;
+  characters_t allied_characters_;
+  characters_t enemy_characters_;
   Character* player_;
 };
 

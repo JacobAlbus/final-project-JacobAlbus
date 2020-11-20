@@ -8,7 +8,7 @@
     [4, 1, 1, 1, 1, 1, 4],
     [4, 4, 4, 4, 4, 4, 4]
   ],
-  "characters": [{
+  "allied characters": [{
     "Avdol": ["Avdol", [2, 2], "characters/avdol.jpg", true],
     "Iggy": ["Iggy", [2, 1], "characters/iggy.jpg", false]
   }]
