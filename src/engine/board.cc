@@ -4,7 +4,6 @@
 namespace jjba_strategy {
 
 Board::Board(float window_size, const std::string& json_file_path) {
-
   GenerateBoard(json_file_path);
   board_size_ = board_.size();
 }
@@ -27,11 +26,20 @@ void Board::GenerateBoard(const std::string& json_file_path) {
   board_size_ = board_.size();
 }
 
-void Board::RenderBoard(float window_size) const {
+void Board::RenderBoard(float window_size, const std::vector<glm::vec2>& player_movement_options) const {
   const auto kTileSize = static_cast<float>(window_size / board_size_);
 
   for (size_t row = 0; row < board_size_; ++row) {
     for (size_t col = 0; col < board_size_; ++col) {
+
+      for(const auto& position : player_movement_options) {
+        if(glm::vec2(row, col) == position) {
+          ci::gl::color(ci::Color("green"));
+          break;
+        } else {
+          ci::gl::color(ci::Color("white"));
+        }
+      }
 
       glm::vec2 pixel_top_left = glm::vec2(col * kTileSize, row * kTileSize);
       glm::vec2 pixel_bottom_right = pixel_top_left +

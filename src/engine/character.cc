@@ -51,8 +51,8 @@ void Character::RenderCharacterFacePlate(bool is_enemy, size_t board_size,
   const auto kTopMargin = static_cast<float>(board_size);
 
   glm::vec2 pixel_top_left;
-  if(is_enemy){
-    pixel_top_left = glm::vec2(window_size - ((index + 1) * kTileSize), kTopMargin);
+  if(is_enemy) {
+    pixel_top_left = glm::vec2(window_size - ((index + 1) * kTileSize) - kSideMargin - kTopMargin, kTopMargin);
   } else {
     pixel_top_left = glm::vec2(index * kTileSize + kSideMargin + kTopMargin, kTopMargin);
   }
@@ -67,6 +67,10 @@ void Character::RenderCharacterFacePlate(bool is_enemy, size_t board_size,
                              ci::Color("white"));
   ci::gl::drawStringCentered(kName, pixel_bottom_right - glm::vec2(kTileSize/2, -30.0f),
                              ci::Color("white"));
+}
+
+void Character::UpdateHealth(float new_health) {
+  health_ = new_health;
 }
 
 ci::Rectf Character::CalculatePixelBoundingBox(size_t board_size,

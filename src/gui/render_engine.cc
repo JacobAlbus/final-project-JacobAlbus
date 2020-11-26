@@ -25,10 +25,32 @@ void RenderEngine::RenderGame() const {
                                                      index,
                                                      kWindowSize);
   }
+
+  RenderInputOptions();
 }
 
 void RenderEngine::HandleInput(const ci::app::KeyEvent& event) {
   game_engine_.HandleInput(event);
+}
+
+//TODO is fine that I "hard-code" each input option
+void RenderEngine::RenderInputOptions() const {
+  glm::vec2 nib(0, kWindowSize);
+
+  switch(game_engine_.GetInputType()) {
+    case InputType::kAttack :
+      ci::gl::drawStringCentered("Attack", nib - glm::vec2(-(kWindowSize / 20), kWindowSize / 20),
+                                 ci::Color("blue"));
+      ci::gl::drawStringCentered("Move Player", nib - glm::vec2(-(kWindowSize / 8), kWindowSize / 20),
+                                 ci::Color("white"));
+      break;
+    case InputType::kMovementInput :
+      ci::gl::drawStringCentered("Attack", nib - glm::vec2(-(kWindowSize / 20), kWindowSize / 20),
+                                 ci::Color("white"));
+      ci::gl::drawStringCentered("Move Player", nib - glm::vec2(-(kWindowSize / 8), kWindowSize / 20),
+                                 ci::Color("blue"));
+      break;
+  }
 }
 
 } //namespace jjba_strategy

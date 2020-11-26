@@ -24,6 +24,11 @@ class RenderEngine {
    */
   void HandleInput(const ci::app::KeyEvent& event);
  private:
+  /**
+   * Renders player input options
+   */
+  void RenderInputOptions() const;
+
   GameEngine game_engine_;
   const float kWindowSize;
 };

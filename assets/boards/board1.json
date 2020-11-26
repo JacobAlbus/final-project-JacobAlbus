@@ -20,6 +20,8 @@
     "Joseph": ["Joseph", [7, 1], "characters/joseph.jpg", false]
   }],
   "enemy characters": [{
-    "Dio": ["Dio", [4, 8], "characters/dio.jpg", false]
+    "Dio": ["Dio", [4, 8], "characters/dio.jpg", false],
+    "Bio": ["Dio", [4, 8], "characters/dio.jpg", false],
+    "Cio": ["Dio", [4, 8], "characters/dio.jpg", false]
   }]
 }

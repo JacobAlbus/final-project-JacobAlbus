@@ -47,8 +47,14 @@ class Character {
    * @param index in order of face plates
    * @param size of window
    */
-  void Character::RenderCharacterFacePlate(bool is_enemy, size_t board_size,
-                                           size_t index, float window_size) const;
+  void RenderCharacterFacePlate(bool is_enemy, size_t board_size,
+                                size_t index, float window_size) const;
+
+  /**
+   * Updates health with passed value
+   * @param passed value
+   */
+  void UpdateHealth(float new_health);
 
   /**
    * Reads characters from JSON file

@@ -7,6 +7,12 @@
 
 namespace jjba_strategy {
 
+enum InputType {
+  kMovementInput,
+  kAttack,
+  kMenuInput,
+};
+
 typedef std::vector<Character> characters_t;
 
 class GameEngine {
@@ -30,10 +36,17 @@ class GameEngine {
   void RenderBoardState() const;
 
   inline const characters_t& GetAlliedCharacters() const { return allied_characters_; }
-  inline const characters_t& GetEnemyCharacters() const { return enemy_characters_; };
-  inline size_t GetBoardSize() const { return board_size_; };
+  inline const characters_t& GetEnemyCharacters() const { return enemy_characters_; }
+  inline size_t GetBoardSize() const { return board_size_; }
+  inline InputType GetInputType() const { return current_input_; }
 
  private:
+  /**
+   * Moves player based on user input
+   * @param event object containing input
+   */
+  void HandleMovementInput(const ci::app::KeyEvent& event);
+
   /**
    * Returns true or false depending if a character exists at tile
    * @param given position object
@@ -64,9 +77,19 @@ class GameEngine {
    */
   size_t FindCurrentPlayerIndex() const;
 
+  /**
+   * Calculates tiles player is able to move to in turn
+   * @return vector of positions player can move to
+   */
+  std::vector<glm::vec2> CalculatePlayerMovement() const;
+
+  void HandleMenuInput(const ci::app::KeyEvent& event);
+
   const float kWindowSize;
   size_t character_index_;
   size_t board_size_;
+  InputType current_input_;
+  bool in_menu_;
   Board board_;
   characters_t allied_characters_;
   characters_t enemy_characters_;

@@ -11,5 +11,9 @@
   "allied characters": [{
     "Avdol": ["Avdol", [2, 2], "characters/avdol.jpg", true],
     "Iggy": ["Iggy", [2, 1], "characters/iggy.jpg", false]
+  }],
+  "enemy characters": [{
+    "Avdol": ["Avdol", [-2, -2], "characters/avdol.jpg", false],
+    "Iggy": ["Iggy", [-2, -1], "characters/iggy.jpg", false]
   }]
 }
