@@ -8,8 +8,8 @@
 namespace jjba_strategy {
 
 enum InputType {
-  kMovementInput,
   kAttack,
+  kMovementInput,
   kMenuInput,
 };
 
@@ -83,11 +83,28 @@ class GameEngine {
    */
   std::vector<glm::vec2> CalculatePlayerMovement() const;
 
+  /**
+   * Handles inputs to the character action menu
+   * @param event object containing input
+   */
   void HandleMenuInput(const ci::app::KeyEvent& event);
+
+  /**
+   * Handles input for when player attacks
+   * @param event object containing input
+   */
+  void HandleAttackInput(const ci::app::KeyEvent& event);
+
+  /**
+   * Finds characters within attack range of player
+   * @return vector characters in attack range of player
+   */
+  std::vector<size_t> FindCharactersIndexesInAttackRange(bool is_player_allied);
 
   const float kWindowSize;
   size_t character_index_;
   size_t board_size_;
+  size_t player_movement_option_index;
   InputType current_input_;
   bool in_menu_;
   Board board_;

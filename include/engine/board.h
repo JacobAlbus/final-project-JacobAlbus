@@ -29,7 +29,10 @@ class Board {
    * @param size of window length/width
    * @param all positions player can move
    */
-  void RenderBoard(float window_size, const std::vector<glm::vec2>& player_movement_options) const;
+  void RenderBoard(float window_size,
+                   bool player_is_moving,
+                   size_t player_movement_option_index,
+                   const std::vector<glm::vec2>& player_movement_options) const;
 
  private:
   size_t board_size_;

@@ -26,18 +26,26 @@ void Board::GenerateBoard(const std::string& json_file_path) {
   board_size_ = board_.size();
 }
 
-void Board::RenderBoard(float window_size, const std::vector<glm::vec2>& player_movement_options) const {
+void Board::RenderBoard(float window_size,
+                        bool player_is_moving,
+                        size_t movement_option_index,
+                        const std::vector<glm::vec2>& player_movement_options) const {
   const auto kTileSize = static_cast<float>(window_size / board_size_);
 
   for (size_t row = 0; row < board_size_; ++row) {
     for (size_t col = 0; col < board_size_; ++col) {
 
-      for(const auto& position : player_movement_options) {
-        if(glm::vec2(row, col) == position) {
-          ci::gl::color(ci::Color("green"));
-          break;
-        } else {
-          ci::gl::color(ci::Color("white"));
+      if(player_is_moving) {
+        for(const auto& position : player_movement_options) {
+          if(glm::vec2(row, col) == player_movement_options[movement_option_index]) {
+            ci::gl::color(ci::Color("red"));
+            break;
+          } else if(glm::vec2(row, col) == position) {
+            ci::gl::color(ci::Color("green"));
+            break;
+          } else {
+            ci::gl::color(ci::Color("white"));
+          }
         }
       }
 

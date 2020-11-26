@@ -7,6 +7,7 @@ GameEngine::GameEngine(float window_size, const std::string& json_file_path) :
                        board_(kWindowSize, json_file_path),
                        current_input_(InputType::kAttack),
                        in_menu_(true),
+                       player_movement_option_index(0),
                        character_index_(0) {
   allied_characters_ = Character::GenerateCharacters(json_file_path, "allied characters");
   enemy_characters_ = Character::GenerateCharacters(json_file_path, "enemy characters");
@@ -20,6 +21,11 @@ bool GameEngine::IsCharacterAtTile(const glm::vec2& tile_position) const {
       return true;
     }
   }
+  for(const auto& character : enemy_characters_) {
+    if(character.GetPosition() == tile_position) {
+      return true;
+    }
+  }
 
   return false;
   //TODO get this to work
@@ -28,7 +34,9 @@ bool GameEngine::IsCharacterAtTile(const glm::vec2& tile_position) const {
 
 void GameEngine::RenderBoardState() const {
   std::vector<glm::vec2> player_movement_options = CalculatePlayerMovement();
-  board_.RenderBoard(kWindowSize, player_movement_options);
+  bool player_is_moving = current_input_ == InputType::kMovementInput;
+  board_.RenderBoard(kWindowSize, player_is_moving,
+                     player_movement_option_index, player_movement_options);
   for(const auto& character : allied_characters_) {
     character.RenderCharacter(board_size_, kWindowSize);
   }
@@ -44,11 +52,9 @@ void GameEngine::HandleInput(const ci::app::KeyEvent& event) {
     switch(current_input_) {
       case InputType::kMovementInput :
         HandleMovementInput(event);
-        in_menu_ = true;
         break;
       case InputType::kAttack :
-        player_->UpdateHealth(player_->GetHealth() - 10.0f);
-        in_menu_ = true;
+        HandleAttackInput(event);
         break;
     }
   }
@@ -101,66 +107,45 @@ size_t GameEngine::FindCurrentPlayerIndex() const {
 std::vector<glm::vec2> GameEngine::CalculatePlayerMovement() const {
   std::vector<glm::vec2> player_movement_options;
   player_movement_options.push_back(player_->GetPosition() - glm::vec2(1, 1));
-  player_movement_options.push_back(player_->GetPosition() - glm::vec2(0, 1));
   player_movement_options.push_back(player_->GetPosition() - glm::vec2(1, 0));
-  player_movement_options.push_back(player_->GetPosition() + glm::vec2(1, 0));
-  player_movement_options.push_back(player_->GetPosition() + glm::vec2(-1, 1));
-  player_movement_options.push_back(player_->GetPosition() + glm::vec2(1, -1));
+  player_movement_options.push_back(player_->GetPosition() - glm::vec2(1, -1));
   player_movement_options.push_back(player_->GetPosition() + glm::vec2(0, 1));
   player_movement_options.push_back(player_->GetPosition() + glm::vec2(1, 1));
+  player_movement_options.push_back(player_->GetPosition() + glm::vec2(1, 0));
+  player_movement_options.push_back(player_->GetPosition() + glm::vec2(1, -1));
+  player_movement_options.push_back(player_->GetPosition() - glm::vec2(0, 1));
 
   return player_movement_options;
 }
 
 void GameEngine::HandleMovementInput(const ci::app::KeyEvent& event) {
+  const auto& movement_options = CalculatePlayerMovement();
+
   switch (event.getCode()) {
-    case ci::app::KeyEvent::KEY_ESCAPE: {
+    case ci::app::KeyEvent::KEY_ESCAPE:
       exit(0);
-    }
-    case ci::app::KeyEvent::KEY_UP: {
-      glm::vec2 updated_position = player_->GetPosition();
-      updated_position.x--;
-      if(IsCharacterOnScreen(updated_position) && !IsCharacterAtTile(updated_position)) {
-        player_->UpdateHealth(player_->GetHealth() - 10.0f);
-        player_->UpdatePosition(updated_position);
-        UpdatePlayableCharacter();
+    case ci::app::KeyEvent::KEY_LEFT:
+      if(player_movement_option_index == 0) {
+        player_movement_option_index = movement_options.size() - 1;
+      } else {
+        player_movement_option_index--;
       }
       break;
-    }
-    case ci::app::KeyEvent::KEY_DOWN: {
-      glm::vec2 updated_position = player_->GetPosition();
-      updated_position.x++;
-      if(IsCharacterOnScreen(updated_position) && !IsCharacterAtTile(updated_position)) {
-        player_->UpdateHealth(player_->GetHealth() - 10.0f);
-        player_->UpdatePosition(updated_position);
-        UpdatePlayableCharacter();
+    case ci::app::KeyEvent::KEY_RIGHT:
+      if(player_movement_option_index == movement_options.size() - 1) {
+        player_movement_option_index = 0;
+      } else {
+        player_movement_option_index++;
       }
       break;
-    }
-    case ci::app::KeyEvent::KEY_LEFT: {
-      glm::vec2 updated_position = player_->GetPosition();
-      updated_position.y--;
-      if(IsCharacterOnScreen(updated_position) && !IsCharacterAtTile(updated_position)) {
-        player_->UpdateHealth(player_->GetHealth() - 10.0f);
-        player_->UpdatePosition(updated_position);
+    case ci::app::KeyEvent::KEY_SPACE:
+      glm::vec2 new_position = movement_options[player_movement_option_index];
+      if(!IsCharacterAtTile(new_position) && IsCharacterOnScreen(new_position)) {
+        player_->UpdatePosition(new_position);
         UpdatePlayableCharacter();
+        in_menu_ = true;
       }
       break;
-    }
-    case ci::app::KeyEvent::KEY_RIGHT: {
-      glm::vec2 updated_position = player_->GetPosition();
-      updated_position.y++;
-      if(IsCharacterOnScreen(updated_position) && !IsCharacterAtTile(updated_position)) {
-        player_->UpdateHealth(player_->GetHealth() - 10.0f);
-        player_->UpdatePosition(updated_position);
-        UpdatePlayableCharacter();
-      }
-      break;
-    }
-    case ci::app::KeyEvent::KEY_SPACE: {
-      UpdateBoardState("assets\\boards\\board2.json");
-      break;
-    }
   }
 }
 
@@ -170,11 +155,10 @@ void GameEngine::HandleMenuInput(const ci::app::KeyEvent &event) {
 
   switch(event.getCode()) {
     case ci::app::KeyEvent::KEY_LEFT :
-      current_input--;
-      if(current_input < 0) {
+      if(current_input == 0) {
         current_input_ = static_cast<InputType>(max_input);
       } else {
-        current_input_ = static_cast<InputType>(current_input);
+        current_input_ = static_cast<InputType>(current_input - 1);
       }
       break;
     case ci::app::KeyEvent::KEY_RIGHT :
@@ -188,7 +172,44 @@ void GameEngine::HandleMenuInput(const ci::app::KeyEvent &event) {
     case ci::app::KeyEvent::KEY_SPACE :
       in_menu_ = false;
       break;
+    case ci::app::KeyEvent::KEY_ESCAPE :
+      exit(0);
   }
+}
+
+std::vector<size_t> GameEngine::FindCharactersIndexesInAttackRange(bool is_player_allied) {
+  std::vector<size_t> character_indexes;
+  const auto& attack_range_tiles = CalculatePlayerMovement();
+
+  if(is_player_allied) {
+    for(const auto& position : attack_range_tiles) {
+      for(size_t index = 0; index < enemy_characters_.size(); index++) {
+        if(enemy_characters_[index].GetPosition() == position) {
+          character_indexes.push_back(index);
+        }
+      }
+    }
+  } else {
+    for(const auto& position : attack_range_tiles) {
+      for(size_t index = 0; index < allied_characters_.size(); index++) {
+        if(allied_characters_[index].GetPosition() == position) {
+          character_indexes.push_back(index);
+        }
+      }
+    }
+  }
+
+  return character_indexes;
+}
+
+void GameEngine::HandleAttackInput(const ci::app::KeyEvent& event) {
+  //TODO update to make it variable depending on player status
+  bool is_player_allied = true;
+  auto characters_indexes = FindCharactersIndexesInAttackRange(is_player_allied);
+
+  Character* enemy = &enemy_characters_[characters_indexes[0]];
+  enemy->UpdateHealth(enemy->GetHealth() - 10.0f);
+  in_menu_ = true;
 }
 
 } // namespace jjba_strategy
