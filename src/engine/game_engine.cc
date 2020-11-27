@@ -77,6 +77,10 @@ void GameEngine::UpdatePlayableCharacter() {
     character_index_++;
     player_ = &allied_characters_[character_index_];
     player_->UpdateIsPlayer();
+  } else if(character_index_ < allied_characters_.size() + enemy_characters_.size() - 1) {
+    character_index_++;
+    player_ = &enemy_characters_[character_index_ - allied_characters_.size()];
+    player_->UpdateIsPlayer();
   } else {
     character_index_ = 0;
     player_ = &allied_characters_[character_index_];
@@ -155,7 +159,7 @@ void GameEngine::HandleMenuInput(const ci::app::KeyEvent &event) {
 
   switch(event.getCode()) {
     case ci::app::KeyEvent::KEY_LEFT :
-      if(current_input == 0) {
+      if(current_input <= 0) {
         current_input_ = static_cast<InputType>(max_input);
       } else {
         current_input_ = static_cast<InputType>(current_input - 1);
@@ -203,12 +207,21 @@ std::vector<size_t> GameEngine::FindCharactersIndexesInAttackRange(bool is_playe
 }
 
 void GameEngine::HandleAttackInput(const ci::app::KeyEvent& event) {
-  //TODO update to make it variable depending on player status
-  bool is_player_allied = true;
+  bool is_player_allied = character_index_ < allied_characters_.size();
   auto characters_indexes = FindCharactersIndexesInAttackRange(is_player_allied);
 
-  Character* enemy = &enemy_characters_[characters_indexes[0]];
-  enemy->UpdateHealth(enemy->GetHealth() - 10.0f);
+  if(!characters_indexes.empty()) {
+    if(is_player_allied) {
+      Character* enemy = &enemy_characters_[characters_indexes[0]];
+      enemy->UpdateHealth(enemy->GetHealth() - 10.0f);
+      UpdatePlayableCharacter();
+    } else {
+      Character* enemy = &allied_characters_[characters_indexes[0]];
+      enemy->UpdateHealth(enemy->GetHealth() - 10.0f);
+      UpdatePlayableCharacter();
+    }
+  }
+
   in_menu_ = true;
 }
 
