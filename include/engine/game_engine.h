@@ -39,6 +39,7 @@ class GameEngine {
   inline const characters_t& GetEnemyCharacters() const { return enemy_characters_; }
   inline size_t GetBoardSize() const { return board_size_; }
   inline InputType GetInputType() const { return current_input_; }
+  inline const std::string& GetMessage() const { return message_; }
   inline size_t GetCharacterIndex() const { return character_index_; }
 
  private:
@@ -106,6 +107,7 @@ class GameEngine {
   size_t character_index_;
   size_t board_size_;
   size_t player_movement_option_index;
+  std::string message_;
   InputType current_input_;
   bool in_menu_;
   Board board_;

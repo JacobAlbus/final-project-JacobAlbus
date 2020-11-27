@@ -12,6 +12,7 @@ void RenderEngine::RenderGame() const {
 
   const characters_t& allied_characters = game_engine_.GetAlliedCharacters();
   bool is_player_allied = game_engine_.GetCharacterIndex() < allied_characters.size();
+
   if(is_player_allied) {
     ci::gl::color(ci::Color("white"));
   } else {
@@ -37,6 +38,8 @@ void RenderEngine::RenderGame() const {
                                                      kWindowSize);
   }
 
+  ci::gl::drawStringCentered(game_engine_.GetMessage(), glm::vec2(kWindowSize / 2, kWindowSize / 10),
+                             ci::Color("white"));
   RenderInputOptions();
 }
 

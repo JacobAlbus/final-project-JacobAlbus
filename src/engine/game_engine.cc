@@ -8,7 +8,8 @@ GameEngine::GameEngine(float window_size, const std::string& json_file_path) :
                        current_input_(InputType::kAttack),
                        in_menu_(true),
                        player_movement_option_index(0),
-                       character_index_(0) {
+                       character_index_(0),
+                       message_("Pick an input (use space bar to confirm)") {
   allied_characters_ = Character::GenerateCharacters(json_file_path, "allied characters");
   enemy_characters_ = Character::GenerateCharacters(json_file_path, "enemy characters");
   player_ = &allied_characters_[FindCurrentPlayerIndex()];
@@ -53,9 +54,11 @@ void GameEngine::HandleInput(const ci::app::KeyEvent& event) {
     switch(current_input_) {
       case InputType::kMovementInput :
         HandleMovementInput(event);
+        message_ = "Pick a tile to move to (use space bar to confirm)";
         break;
       case InputType::kAttack :
         HandleAttackInput(event);
+        message_ = "Pick an enemy in range to attack (use space bar to confirm)";
         break;
     }
   }
@@ -149,6 +152,7 @@ void GameEngine::HandleMovementInput(const ci::app::KeyEvent& event) {
         player_->UpdatePosition(new_position);
         UpdatePlayableCharacter();
         in_menu_ = true;
+        message_ = "Pick an input (use space bar to confirm)";
       }
       break;
   }
@@ -223,6 +227,7 @@ void GameEngine::HandleAttackInput(const ci::app::KeyEvent& event) {
     }
   }
 
+  message_ = "Pick an input (use space bar to confirm)";
   in_menu_ = true;
 }
 
