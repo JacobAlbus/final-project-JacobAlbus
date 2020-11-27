@@ -34,9 +34,10 @@ bool GameEngine::IsCharacterAtTile(const glm::vec2& tile_position) const {
 
 void GameEngine::RenderBoardState() const {
   std::vector<glm::vec2> player_movement_options = CalculatePlayerMovement();
-  bool player_is_moving = current_input_ == InputType::kMovementInput;
+  bool player_is_moving = current_input_ == InputType::kMovementInput && !in_menu_;
   board_.RenderBoard(kWindowSize, player_is_moving,
                      player_movement_option_index, player_movement_options);
+
   for(const auto& character : allied_characters_) {
     character.RenderCharacter(board_size_, kWindowSize);
   }

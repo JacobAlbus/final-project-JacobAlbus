@@ -44,7 +44,6 @@ void Character::RenderCharacter(size_t board_size, float window_size) const {
 
 void Character::RenderCharacterFacePlate(bool is_enemy, size_t board_size,
                                          size_t index, float window_size) const {
-  ci::gl::color(ci::Color("white"));
 
   const auto kTileSize = static_cast<float>(window_size / board_size);
   const auto kSideMargin = static_cast<float>(board_size * index);

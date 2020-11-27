@@ -47,6 +47,8 @@ void Board::RenderBoard(float window_size,
             ci::gl::color(ci::Color("white"));
           }
         }
+      } else {
+        ci::gl::color(ci::Color("white"));
       }
 
       glm::vec2 pixel_top_left = glm::vec2(col * kTileSize, row * kTileSize);

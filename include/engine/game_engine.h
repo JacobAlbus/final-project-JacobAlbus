@@ -39,6 +39,7 @@ class GameEngine {
   inline const characters_t& GetEnemyCharacters() const { return enemy_characters_; }
   inline size_t GetBoardSize() const { return board_size_; }
   inline InputType GetInputType() const { return current_input_; }
+  inline size_t GetCharacterIndex() const { return character_index_; }
 
  private:
   /**

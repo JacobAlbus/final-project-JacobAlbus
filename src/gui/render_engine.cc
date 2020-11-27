@@ -11,6 +11,12 @@ void RenderEngine::RenderGame() const {
   game_engine_.RenderBoardState();
 
   const characters_t& allied_characters = game_engine_.GetAlliedCharacters();
+  bool is_player_allied = game_engine_.GetCharacterIndex() < allied_characters.size();
+  if(is_player_allied) {
+    ci::gl::color(ci::Color("white"));
+  } else {
+    ci::gl::color(ci::Color("gray"));
+  }
   for(size_t index = 0; index < allied_characters.size(); index++) {
     allied_characters[index].RenderCharacterFacePlate(false,
                                                       game_engine_.GetBoardSize(),
@@ -18,6 +24,11 @@ void RenderEngine::RenderGame() const {
                                                       kWindowSize);
   }
 
+  if(is_player_allied) {
+    ci::gl::color(ci::Color("gray"));
+  } else {
+    ci::gl::color(ci::Color("white"));
+  }
   const characters_t& enemy_characters = game_engine_.GetEnemyCharacters();
   for(size_t index = 0; index < enemy_characters.size(); index++) {
     enemy_characters[index].RenderCharacterFacePlate(true,
