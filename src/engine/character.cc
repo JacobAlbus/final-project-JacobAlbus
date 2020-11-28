@@ -12,11 +12,13 @@ enum CharacterType {
 Character::Character(const std::string& name,
                      const glm::vec2& position,
                      const std::string& image_path,
-                     bool is_player) :
+                     bool is_player,
+                     bool is_targeted) :
                      health_(100.0f),
                      kName(name),
                      position_(position),
-                     is_player_(is_player) {
+                     is_player_(is_player),
+                     is_targeted_(is_targeted) {
 
   ci::fs::path path = ci::fs::path(image_path);
   kImage = ci::gl::Texture::create(ci::loadImage(cinder::app::loadAsset(path)));
@@ -33,6 +35,8 @@ void Character::UpdateIsPlayer() {
 void Character::RenderCharacter(size_t board_size, float window_size) const {
   if(is_player_) {
     ci::gl::color(ci::Color("white"));
+  } else if(is_targeted_){
+    ci::gl::color(ci::Color("red"));
   } else {
     ci::gl::color(ci::Color("gray"));
   }

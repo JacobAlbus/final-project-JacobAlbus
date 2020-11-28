@@ -23,7 +23,13 @@ class RenderEngine {
    * Handles user inputs
    */
   void HandleInput(const ci::app::KeyEvent& event);
+
+  /**
+   * Updates Game State
+   */
+  void UpdateGameState();
  private:
+
   /**
    * Renders player input options
    */

@@ -19,7 +19,8 @@ class Character {
   Character(const std::string& name,
             const glm::vec2& position,
             const std::string& image_path,
-            bool is_player);
+            bool is_player,
+            bool is_targeted);
 
   //TODO do I need big 5?
   inline Character& operator=(const Character& rhs) = default;
@@ -77,7 +78,7 @@ class Character {
         glm::vec2 position(x_position, y_position);
         std::string image_path = character[2];
         bool is_player = character[3];
-        characters.emplace_back(name, position, image_path, is_player);
+        characters.emplace_back(name, position, image_path, is_player, false);
       }
     }
 
@@ -89,6 +90,7 @@ class Character {
   inline const ci::gl::TextureRef& GetImage() const { return kImage; }
   inline bool IsPlayer() const { return is_player_; }
   inline float GetHealth() const { return health_; }
+  inline void UpdateIsTarget() { is_targeted_ = !is_targeted_; }
 
  private:
   /**
@@ -99,6 +101,7 @@ class Character {
 
   float health_;
   bool is_player_;
+  bool is_targeted_;
   glm::vec2 position_;
   //TODO make const
   std::string kName;

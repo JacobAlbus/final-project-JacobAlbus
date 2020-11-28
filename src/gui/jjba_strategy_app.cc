@@ -9,6 +9,7 @@ JJBAStrategyApp::JJBAStrategyApp() : render_engine_(kWindowSize, initial_board_f
 }
 
 void JJBAStrategyApp::update() {
+  render_engine_.UpdateGameState();
 }
 
 void JJBAStrategyApp::draw() {

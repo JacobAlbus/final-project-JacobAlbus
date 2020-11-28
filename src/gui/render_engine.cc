@@ -47,6 +47,10 @@ void RenderEngine::HandleInput(const ci::app::KeyEvent& event) {
   game_engine_.HandleInput(event);
 }
 
+void RenderEngine::UpdateGameState() {
+  game_engine_.UpdateGameState();
+}
+
 //TODO is fine that I "hard-code" each input option
 void RenderEngine::RenderInputOptions() const {
   glm::vec2 nib(0, kWindowSize);

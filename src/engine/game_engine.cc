@@ -9,11 +9,33 @@ GameEngine::GameEngine(float window_size, const std::string& json_file_path) :
                        in_menu_(true),
                        player_movement_option_index(0),
                        character_index_(0),
+                       targeted_character_index_(0),
                        message_("Pick an input (use space bar to confirm)") {
   allied_characters_ = Character::GenerateCharacters(json_file_path, "allied characters");
   enemy_characters_ = Character::GenerateCharacters(json_file_path, "enemy characters");
   player_ = &allied_characters_[FindCurrentPlayerIndex()];
   board_size_ = board_.GetBoard().size();
+}
+
+void GameEngine::UpdateGameState() {
+  for(size_t index = 0; index < allied_characters_.size(); index++) {
+    if(allied_characters_[index].GetHealth() <= 0.0f) {
+      allied_characters_.erase(allied_characters_.begin() + index);
+    }
+  }
+
+  for(size_t index = 0; index < enemy_characters_.size(); index++) {
+    if(enemy_characters_[index].GetHealth() <= 0.0f) {
+      enemy_characters_.erase(enemy_characters_.begin() + index);
+    }
+  }
+
+  if(allied_characters_.empty()) {
+    message_ = "Enemies Win!!!";
+  }
+  if(enemy_characters_.empty()) {
+    message_ = "Allies Win!!!";
+  }
 }
 
 bool GameEngine::IsCharacterAtTile(const glm::vec2& tile_position) const {
@@ -34,10 +56,9 @@ bool GameEngine::IsCharacterAtTile(const glm::vec2& tile_position) const {
 }
 
 void GameEngine::RenderBoardState() const {
-  std::vector<glm::vec2> player_movement_options = CalculatePlayerMovement();
   bool player_is_moving = current_input_ == InputType::kMovementInput && !in_menu_;
   board_.RenderBoard(kWindowSize, player_is_moving,
-                     player_movement_option_index, player_movement_options);
+                     player_movement_option_index, CalculatePlayerMovement());
 
   for(const auto& character : allied_characters_) {
     character.RenderCharacter(board_size_, kWindowSize);
@@ -58,7 +79,7 @@ void GameEngine::HandleInput(const ci::app::KeyEvent& event) {
         break;
       case InputType::kAttack :
         HandleAttackInput(event);
-        message_ = "Pick an enemy in range to attack (use space bar to confirm)";
+        message_ = std::to_string(targeted_character_index_);
         break;
     }
   }
@@ -132,6 +153,9 @@ void GameEngine::HandleMovementInput(const ci::app::KeyEvent& event) {
   switch (event.getCode()) {
     case ci::app::KeyEvent::KEY_ESCAPE:
       exit(0);
+    case ci::app::KeyEvent::KEY_BACKSPACE:
+      in_menu_ = true;
+      break;
     case ci::app::KeyEvent::KEY_LEFT:
       if(player_movement_option_index == 0) {
         player_movement_option_index = movement_options.size() - 1;
@@ -178,9 +202,21 @@ void GameEngine::HandleMenuInput(const ci::app::KeyEvent &event) {
         current_input_ = static_cast<InputType>(current_input);
       }
       break;
-    case ci::app::KeyEvent::KEY_SPACE :
+    case ci::app::KeyEvent::KEY_SPACE : {
       in_menu_ = false;
+
+      //TODO fix shoddy implementation
+      bool is_player_allied = character_index_ < allied_characters_.size();
+      auto targeted_characters = FindCharactersIndexesInAttackRange(is_player_allied);
+      if(!targeted_characters.empty() && current_input_ == InputType::kAttack) {
+        GetTargetedCharacter(is_player_allied, targeted_characters)->UpdateIsTarget();
+      }
+
+      //TODO pass in event object with left or right arrow input
+      //HandleMenuInput(event);
       break;
+    }
+
     case ci::app::KeyEvent::KEY_ESCAPE :
       exit(0);
   }
@@ -213,22 +249,56 @@ std::vector<size_t> GameEngine::FindCharactersIndexesInAttackRange(bool is_playe
 
 void GameEngine::HandleAttackInput(const ci::app::KeyEvent& event) {
   bool is_player_allied = character_index_ < allied_characters_.size();
-  auto characters_indexes = FindCharactersIndexesInAttackRange(is_player_allied);
+  auto targeted_characters = FindCharactersIndexesInAttackRange(is_player_allied);
 
-  if(!characters_indexes.empty()) {
-    if(is_player_allied) {
-      Character* enemy = &enemy_characters_[characters_indexes[0]];
-      enemy->UpdateHealth(enemy->GetHealth() - 10.0f);
-      UpdatePlayableCharacter();
-    } else {
-      Character* enemy = &allied_characters_[characters_indexes[0]];
-      enemy->UpdateHealth(enemy->GetHealth() - 10.0f);
-      UpdatePlayableCharacter();
+  if(!targeted_characters.empty()) {
+    switch (event.getCode()) {
+      //TODO remove brackets
+      case ci::app::KeyEvent::KEY_BACKSPACE: {
+        Character *target_character = GetTargetedCharacter(is_player_allied, targeted_characters);
+        target_character->UpdateIsTarget();
+        in_menu_ = true;
+        break;
+      } case ci::app::KeyEvent::KEY_RIGHT:
+        GetTargetedCharacter(is_player_allied, targeted_characters)->UpdateIsTarget();
+        targeted_character_index_++;
+        if(targeted_character_index_ >= targeted_characters.size()) {
+          targeted_character_index_ = 0;
+        }
+        GetTargetedCharacter(is_player_allied, targeted_characters)->UpdateIsTarget();
+        break;
+      case ci::app::KeyEvent::KEY_LEFT:
+        GetTargetedCharacter(is_player_allied, targeted_characters)->UpdateIsTarget();
+        if(targeted_character_index_ <= 0) {
+          targeted_character_index_ = targeted_characters.size() - 1;
+        } else {
+          targeted_character_index_--;
+        }
+        GetTargetedCharacter(is_player_allied, targeted_characters)->UpdateIsTarget();
+        break;
+      case ci::app::KeyEvent::KEY_SPACE:
+        Character* target_character = GetTargetedCharacter(is_player_allied, targeted_characters);
+        target_character->UpdateHealth(target_character->GetHealth() - 10.0f);
+        target_character->UpdateIsTarget();
+        targeted_character_index_ = 0;
+        in_menu_ = true;
+        UpdatePlayableCharacter();
+        break;
     }
+  } else {
+    in_menu_ = true;
   }
 
-  message_ = "Pick an input (use space bar to confirm)";
-  in_menu_ = true;
+  message_ = std::to_string(targeted_character_index_);
+}
+
+Character* GameEngine::GetTargetedCharacter(bool is_player_allied,
+                                         const std::vector<size_t>& targeted_characters) {
+  if(is_player_allied) {
+    return &enemy_characters_[targeted_characters[targeted_character_index_]];
+  } else {
+    return &allied_characters_[targeted_characters[targeted_character_index_]];
+  }
 }
 
 } // namespace jjba_strategy

@@ -35,6 +35,8 @@ class GameEngine {
    */
   void RenderBoardState() const;
 
+  void UpdateGameState();
+
   inline const characters_t& GetAlliedCharacters() const { return allied_characters_; }
   inline const characters_t& GetEnemyCharacters() const { return enemy_characters_; }
   inline size_t GetBoardSize() const { return board_size_; }
@@ -103,10 +105,20 @@ class GameEngine {
    */
   std::vector<size_t> FindCharactersIndexesInAttackRange(bool is_player_allied);
 
+  /**
+   * Gets character who is currently targeted by player
+   * @param whether or not the player is on the allied team
+   * @param vector of indexes containing opposing characters in attack range
+   * @return character is currently targeted by player
+   */
+  Character* GetTargetedCharacter(bool is_player_allied,
+                                  const std::vector<size_t>& targeted_character_indexes);
+
   const float kWindowSize;
   size_t character_index_;
   size_t board_size_;
   size_t player_movement_option_index;
+  size_t targeted_character_index_;
   std::string message_;
   InputType current_input_;
   bool in_menu_;
