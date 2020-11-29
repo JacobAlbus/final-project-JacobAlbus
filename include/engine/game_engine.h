@@ -10,7 +10,7 @@ namespace jjba_strategy {
 enum InputType {
   kAttack,
   kMovementInput,
-  kMenuInput,
+  kGameOver,
 };
 
 typedef std::vector<Character> characters_t;

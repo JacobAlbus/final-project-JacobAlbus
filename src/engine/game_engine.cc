@@ -10,7 +10,7 @@ GameEngine::GameEngine(float window_size, const std::string& json_file_path) :
                        player_movement_option_index(0),
                        character_index_(0),
                        targeted_character_index_(0),
-                       message_("Pick an input (use space bar to confirm)") {
+                       message_("Pick an input (use enter bar to confirm)") {
   allied_characters_ = Character::GenerateCharacters(json_file_path, "allied characters");
   enemy_characters_ = Character::GenerateCharacters(json_file_path, "enemy characters");
   player_ = &allied_characters_[FindCurrentPlayerIndex()];
@@ -32,9 +32,24 @@ void GameEngine::UpdateGameState() {
 
   if(allied_characters_.empty()) {
     message_ = "Enemies Win!!!";
+    current_input_ = InputType::kGameOver;
   }
   if(enemy_characters_.empty()) {
     message_ = "Allies Win!!!";
+    current_input_ = InputType::kGameOver;
+  }
+
+  if(in_menu_ && !allied_characters_.empty() && !enemy_characters_.empty()) {
+    message_ = "Pick an input (use enter bar to confirm)";
+  } else {
+    switch(current_input_) {
+      case InputType::kMovementInput :
+        message_ = "Pick a tile to move to (use backspace to go back)";
+        break;
+      case InputType::kAttack :
+        message_ = "Pick a character to attack (use backspace to go back)";
+        break;
+    }
   }
 }
 
@@ -75,11 +90,9 @@ void GameEngine::HandleInput(const ci::app::KeyEvent& event) {
     switch(current_input_) {
       case InputType::kMovementInput :
         HandleMovementInput(event);
-        message_ = "Pick a tile to move to (use space bar to confirm)";
         break;
       case InputType::kAttack :
         HandleAttackInput(event);
-        message_ = std::to_string(targeted_character_index_);
         break;
     }
   }
@@ -151,50 +164,49 @@ void GameEngine::HandleMovementInput(const ci::app::KeyEvent& event) {
   const auto& movement_options = CalculatePlayerMovement();
 
   switch (event.getCode()) {
-    case ci::app::KeyEvent::KEY_ESCAPE:
+    case ci::app::KeyEvent::KEY_ESCAPE :
       exit(0);
-    case ci::app::KeyEvent::KEY_BACKSPACE:
+    case ci::app::KeyEvent::KEY_BACKSPACE :
       in_menu_ = true;
       break;
-    case ci::app::KeyEvent::KEY_LEFT:
+    case ci::app::KeyEvent::KEY_a :
       if(player_movement_option_index == 0) {
         player_movement_option_index = movement_options.size() - 1;
       } else {
         player_movement_option_index--;
       }
       break;
-    case ci::app::KeyEvent::KEY_RIGHT:
+    case ci::app::KeyEvent::KEY_d :
       if(player_movement_option_index == movement_options.size() - 1) {
         player_movement_option_index = 0;
       } else {
         player_movement_option_index++;
       }
       break;
-    case ci::app::KeyEvent::KEY_SPACE:
+    case ci::app::KeyEvent::KEY_RETURN :
       glm::vec2 new_position = movement_options[player_movement_option_index];
       if(!IsCharacterAtTile(new_position) && IsCharacterOnScreen(new_position)) {
         player_->UpdatePosition(new_position);
         UpdatePlayableCharacter();
         in_menu_ = true;
-        message_ = "Pick an input (use space bar to confirm)";
       }
       break;
   }
 }
 
 void GameEngine::HandleMenuInput(const ci::app::KeyEvent &event) {
-  auto max_input = static_cast<size_t>(kMenuInput) - 1;
+  auto max_input = static_cast<size_t>(kGameOver) - 1;
   auto current_input = static_cast<size_t>(current_input_);
 
   switch(event.getCode()) {
-    case ci::app::KeyEvent::KEY_LEFT :
+    case ci::app::KeyEvent::KEY_a :
       if(current_input <= 0) {
         current_input_ = static_cast<InputType>(max_input);
       } else {
         current_input_ = static_cast<InputType>(current_input - 1);
       }
       break;
-    case ci::app::KeyEvent::KEY_RIGHT :
+    case ci::app::KeyEvent::KEY_d :
       current_input++;
       if(current_input > max_input) {
         current_input_ = static_cast<InputType>(0);
@@ -202,7 +214,7 @@ void GameEngine::HandleMenuInput(const ci::app::KeyEvent &event) {
         current_input_ = static_cast<InputType>(current_input);
       }
       break;
-    case ci::app::KeyEvent::KEY_SPACE : {
+    case ci::app::KeyEvent::KEY_RETURN : {
       in_menu_ = false;
 
       //TODO fix shoddy implementation
@@ -216,7 +228,6 @@ void GameEngine::HandleMenuInput(const ci::app::KeyEvent &event) {
       //HandleMenuInput(event);
       break;
     }
-
     case ci::app::KeyEvent::KEY_ESCAPE :
       exit(0);
   }
@@ -259,7 +270,7 @@ void GameEngine::HandleAttackInput(const ci::app::KeyEvent& event) {
         target_character->UpdateIsTarget();
         in_menu_ = true;
         break;
-      } case ci::app::KeyEvent::KEY_RIGHT:
+      } case ci::app::KeyEvent::KEY_d:
         GetTargetedCharacter(is_player_allied, targeted_characters)->UpdateIsTarget();
         targeted_character_index_++;
         if(targeted_character_index_ >= targeted_characters.size()) {
@@ -267,7 +278,7 @@ void GameEngine::HandleAttackInput(const ci::app::KeyEvent& event) {
         }
         GetTargetedCharacter(is_player_allied, targeted_characters)->UpdateIsTarget();
         break;
-      case ci::app::KeyEvent::KEY_LEFT:
+      case ci::app::KeyEvent::KEY_a:
         GetTargetedCharacter(is_player_allied, targeted_characters)->UpdateIsTarget();
         if(targeted_character_index_ <= 0) {
           targeted_character_index_ = targeted_characters.size() - 1;
@@ -276,7 +287,7 @@ void GameEngine::HandleAttackInput(const ci::app::KeyEvent& event) {
         }
         GetTargetedCharacter(is_player_allied, targeted_characters)->UpdateIsTarget();
         break;
-      case ci::app::KeyEvent::KEY_SPACE:
+      case ci::app::KeyEvent::KEY_RETURN:
         Character* target_character = GetTargetedCharacter(is_player_allied, targeted_characters);
         target_character->UpdateHealth(target_character->GetHealth() - 10.0f);
         target_character->UpdateIsTarget();
@@ -288,8 +299,6 @@ void GameEngine::HandleAttackInput(const ci::app::KeyEvent& event) {
   } else {
     in_menu_ = true;
   }
-
-  message_ = std::to_string(targeted_character_index_);
 }
 
 Character* GameEngine::GetTargetedCharacter(bool is_player_allied,
