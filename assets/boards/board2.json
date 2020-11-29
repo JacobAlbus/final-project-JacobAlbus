@@ -13,7 +13,7 @@
     "Iggy": ["Iggy", [2, 1], "characters/iggy.jpg", false]
   }],
   "enemy characters": [{
-    "Avdol": ["Avdol", [-2, -2], "characters/avdol.jpg", false],
-    "Iggy": ["Iggy", [-2, -1], "characters/iggy.jpg", false]
+    "Avdol": ["Avdol", [3, 3], "characters/avdol.jpg", false],
+    "Iggy": ["Iggy", [4, 4], "characters/iggy.jpg", false]
   }]
 }

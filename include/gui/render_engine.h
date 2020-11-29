@@ -12,7 +12,7 @@ class RenderEngine {
    * @param size of window
    * @param path to json file containing board
    */
-  RenderEngine(float window_size_, const std::string& json_file_path);
+  RenderEngine(float window_size_, const std::string& boards_folder_path);
 
   /**
    * Renders the board and other UI components

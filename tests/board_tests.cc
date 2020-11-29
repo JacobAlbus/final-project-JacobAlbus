@@ -1,25 +1,26 @@
 #include <iostream>
 #include <catch2/catch.hpp>
 
-#include "nlohmann/json.hpp"
-#include "engine/board.h"
+#include "engine/game_engine.h"
 
 using namespace jjba_strategy;
 
-TEST_CASE("A") {
-  std::ifstream file("C:\\Users\\asus\\CLionProjects\\cinder_0.9.2_vc2015\\my-projects\\final-project-JacobAlbus\\assets\\boards\\board1.json");
-  nlohmann::json board_state;
-  file >> board_state;
+bool IsEqual(const glm::vec2& pos1, const glm::vec2& pos2) {
+  return pos1 == pos2;
+}
 
-  for(const auto& characters : board_state["characters"]) {
-    for(const auto& character: characters){
-      std::string name = character[0];
-      size_t x_position = character[1][0];
-      size_t y_position = character[1][1];
-      glm::vec2 position(x_position, y_position);
-      std::string image_path = character[2];
-      bool is_player = character[3];
-    }
+TEST_CASE("A") {
+  const std::string initial_board_file_path = "C:\\Users\\asus\\CLionProjects\\cinder_0.9.2_vc2015\\my-projects\\final-project-JacobAlbus\\assets\\boards\\board1.json";
+  GameEngine engine = GameEngine(900.0f, initial_board_file_path);
+
+  glm::vec2 nib(2, 2);
+  std::vector<glm::vec2> positions = Character::GetCharactersPositions(engine.GetAlliedCharacters());
+  if(std::any_of(engine.GetAlliedCharacters().begin(),
+                 engine.GetAlliedCharacters().end(),
+                 IsEqual)) {
+    std::cout << "nib";
+  } else {
+    std::cout << "nig";
   }
 }
 

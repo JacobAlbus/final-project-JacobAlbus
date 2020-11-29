@@ -36,7 +36,7 @@ class JJBAStrategyApp : public ci::app::App {
 
   //TODO make seperate file for constants
   const float kWindowSize = 900;
-  const std::string initial_board_file_path = "C:\\Users\\asus\\CLionProjects\\cinder_0.9.2_vc2015\\my-projects\\final-project-JacobAlbus\\assets\\boards\\board1.json";
+  const std::string boards_folder_path_ = "C:\\Users\\asus\\CLionProjects\\cinder_0.9.2_vc2015\\my-projects\\final-project-JacobAlbus\\assets\\boards\\";
 
  private:
   RenderEngine render_engine_;

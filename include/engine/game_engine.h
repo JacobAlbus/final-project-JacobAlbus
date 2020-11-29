@@ -35,6 +35,9 @@ class GameEngine {
    */
   void RenderBoardState() const;
 
+  /**
+   * Checks for win conditions and deaths and updates game accordingly
+   */
   void UpdateGameState();
 
   inline const characters_t& GetAlliedCharacters() const { return allied_characters_; }
@@ -79,7 +82,7 @@ class GameEngine {
    * Finds the index of current player
    * @return index of current player
    */
-  size_t FindCurrentPlayerIndex() const;
+  Character* FindCurrentPlayer();
 
   /**
    * Calculates tiles player is able to move to in turn
@@ -103,7 +106,7 @@ class GameEngine {
    * Finds characters within attack range of player
    * @return vector characters in attack range of player
    */
-  std::vector<size_t> FindCharactersIndexesInAttackRange(bool is_player_allied);
+  std::vector<size_t> FindCharactersIndexesInAttackRange();
 
   /**
    * Gets character who is currently targeted by player
@@ -111,8 +114,18 @@ class GameEngine {
    * @param vector of indexes containing opposing characters in attack range
    * @return character is currently targeted by player
    */
-  Character* GetTargetedCharacter(bool is_player_allied,
-                                  const std::vector<size_t>& targeted_character_indexes);
+  Character* GetTargetedCharacter(const std::vector<size_t>& targeted_character_indexes);
+
+  /**
+   * Updates message to player
+   */
+   void UpdateMessage();
+
+   /**
+    * Handles input for when the game is over;
+    * @param event object containing input
+    */
+   void HandleGameOverInput(const ci::app::KeyEvent& event);
 
   const float kWindowSize;
   size_t character_index_;
@@ -120,8 +133,10 @@ class GameEngine {
   size_t player_movement_option_index;
   size_t targeted_character_index_;
   std::string message_;
+  std::string boards_folder_path_;
   InputType current_input_;
   bool in_menu_;
+  bool is_player_allied_;
   Board board_;
   characters_t allied_characters_;
   characters_t enemy_characters_;

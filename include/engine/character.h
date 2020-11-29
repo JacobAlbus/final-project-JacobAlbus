@@ -63,7 +63,7 @@ class Character {
    * @param type of characters being read (enemy or allied)
    * @return vector of characters from JSON file
    */
-  static std::vector<Character> Character::GenerateCharacters(const std::string& json_file_path,
+  static std::vector<Character> GenerateCharacters(const std::string& json_file_path,
                                                               const std::string& characters_type) {
     std::ifstream file(json_file_path);
     nlohmann::json board_state;
