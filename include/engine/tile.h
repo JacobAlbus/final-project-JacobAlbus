@@ -20,7 +20,7 @@ class Tile {
    * Instantiates tile based on TileType passed
    * @param given TileType enum
    */
-  Tile(TileType type);
+  explicit Tile(TileType type);
 
   /**
    * Renders tile at given location

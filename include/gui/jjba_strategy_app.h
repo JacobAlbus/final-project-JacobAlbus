@@ -34,7 +34,6 @@ class JJBAStrategyApp : public ci::app::App {
    */
   void keyDown(ci::app::KeyEvent event) override;
 
-  //TODO make seperate file for constants
   const float kWindowSize = 900;
   const std::string boards_folder_path_ = "C:\\Users\\asus\\CLionProjects\\cinder_0.9.2_vc2015\\my-projects\\final-project-JacobAlbus\\assets\\boards\\";
 

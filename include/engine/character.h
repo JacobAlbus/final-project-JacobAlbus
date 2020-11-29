@@ -63,7 +63,7 @@ class Character {
    * @param type of characters being read (enemy or allied)
    * @return vector of characters from JSON file
    */
-  static std::vector<Character> GenerateCharacters(const std::string& json_file_path,
+  static std::vector<Character> Character::GenerateCharacters(const std::string& json_file_path,
                                                               const std::string& characters_type) {
     std::ifstream file(json_file_path);
     nlohmann::json board_state;
@@ -85,9 +85,7 @@ class Character {
     return characters;
   }
 
-  inline const std::string& GetName() const { return kName; };
   inline const glm::vec2& GetPosition() const { return position_; };
-  inline const ci::gl::TextureRef& GetImage() const { return kImage; }
   inline bool IsPlayer() const { return is_player_; }
   inline float GetHealth() const { return health_; }
   inline void UpdateIsTarget() { is_targeted_ = !is_targeted_; }
@@ -103,7 +101,6 @@ class Character {
   bool is_player_;
   bool is_targeted_;
   glm::vec2 position_;
-  //TODO make const
   std::string kName;
   ci::gl::TextureRef kImage;
 };

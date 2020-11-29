@@ -3,7 +3,7 @@
 
 namespace jjba_strategy {
 
-Board::Board(float window_size, const std::string& json_file_path) {
+Board::Board(const std::string& json_file_path) {
   GenerateBoard(json_file_path);
   board_size_ = board_.size();
 }
@@ -27,7 +27,7 @@ void Board::GenerateBoard(const std::string& json_file_path) {
 }
 
 void Board::RenderBoard(float window_size,
-                        bool player_is_moving,
+                        bool is_player_moving,
                         size_t movement_option_index,
                         const std::vector<glm::vec2>& player_movement_options) const {
   const auto kTileSize = static_cast<float>(window_size / board_size_);
@@ -35,21 +35,9 @@ void Board::RenderBoard(float window_size,
   for (size_t row = 0; row < board_size_; ++row) {
     for (size_t col = 0; col < board_size_; ++col) {
 
-      if(player_is_moving) {
-        for(const auto& position : player_movement_options) {
-          if(glm::vec2(row, col) == player_movement_options[movement_option_index]) {
-            ci::gl::color(ci::Color("red"));
-            break;
-          } else if(glm::vec2(row, col) == position) {
-            ci::gl::color(ci::Color("green"));
-            break;
-          } else {
-            ci::gl::color(ci::Color("white"));
-          }
-        }
-      } else {
-        ci::gl::color(ci::Color("white"));
-      }
+      glm::vec2 current_tile(row, col);
+      UpdateCharacterColor(is_player_moving, movement_option_index,
+                           current_tile, player_movement_options);
 
       glm::vec2 pixel_top_left = glm::vec2(col * kTileSize, row * kTileSize);
       glm::vec2 pixel_bottom_right = pixel_top_left +
@@ -60,6 +48,27 @@ void Board::RenderBoard(float window_size,
       const auto& tile = board_[row][col];
       tile.RenderTile(pixel_bounding_box);
     }
+  }
+}
+
+void Board::UpdateCharacterColor(bool is_player_moving,
+                                 size_t movement_option_index,
+                                 const glm::vec2& current_tile,
+                                 const std::vector<glm::vec2>& player_movement_options) const {
+  if(is_player_moving) {
+    for(const auto& position : player_movement_options) {
+      if(current_tile == player_movement_options[movement_option_index]) {
+        ci::gl::color(ci::Color("red"));
+        break;
+      } else if(current_tile == position) {
+        ci::gl::color(ci::Color("green"));
+        break;
+      } else {
+        ci::gl::color(ci::Color("white"));
+      }
+    }
+  } else {
+    ci::gl::color(ci::Color("white"));
   }
 }
 
