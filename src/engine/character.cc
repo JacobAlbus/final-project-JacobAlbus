@@ -58,11 +58,13 @@ void Character::RenderCharacterFacePlate(bool is_enemy, size_t board_size,
   ci::Rectf pixel_bounding_box(pixel_top_left, pixel_bottom_right);
 
   ci::gl::draw(kImage, pixel_bounding_box);
-  auto health = static_cast<size_t>(health_);
+
   //TODO implement health bar
-  ci::gl::drawStringCentered(std::to_string(health), pixel_bottom_right - glm::vec2(kTileSize/2, -15.0f),
+  const float kSpacing = -15.0f;
+  auto health = static_cast<size_t>(health_);
+  ci::gl::drawStringCentered(std::to_string(health), pixel_bottom_right - glm::vec2(kTileSize / 2, kSpacing),
                              ci::Color("white"));
-  ci::gl::drawStringCentered(kName, pixel_bottom_right - glm::vec2(kTileSize/2, -30.0f),
+  ci::gl::drawStringCentered(kName, pixel_bottom_right - glm::vec2(kTileSize / 2, kSpacing * 2),
                              ci::Color("white"));
 }
 
@@ -81,8 +83,7 @@ ci::Rectf Character::CalculatePixelBoundingBox(size_t board_size,
   glm::vec2 pixel_bottom_right = pixel_top_left +
                                  glm::vec2(kTileSize, kTileSize);
 
-  //TODO isn't passing by copy slower?
-  return ci::Rectf(pixel_top_left, pixel_bottom_right);
+  return {pixel_top_left, pixel_bottom_right};
 }
 
 } // namespace jjba_strategy

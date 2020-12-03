@@ -128,16 +128,20 @@ class GameEngine {
    void HandleGameOverInput(const ci::app::KeyEvent& event);
 
   const float kWindowSize;
-  size_t character_index_;
-  size_t board_size_;
-  size_t player_movement_option_index;
-  size_t targeted_character_index_;
-  std::string message_;
   const std::string kBoardsFolderPath;
+  size_t character_index_;
+
+  std::string message_;
   InputType current_input_;
   bool in_menu_;
-  bool is_player_allied_;
+
+  size_t board_size_;
   Board board_;
+
+  bool is_player_allied_;
+  size_t player_movement_option_index;
+  size_t targeted_character_index_;
+
   characters_t allied_characters_;
   characters_t enemy_characters_;
   Character* player_;

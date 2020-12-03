@@ -9,8 +9,14 @@ RenderEngine::RenderEngine(float window_size,
 
 void RenderEngine::RenderGame() const {
   game_engine_.RenderBoardState();
-  RenderInputOptions();
+
+  std::vector<std::string> inputs;
+  inputs.emplace_back("Attack");
+  inputs.emplace_back("Move Player");
+
+  RenderInputOptions(inputs);
   RenderAllFacePlates();
+
   ci::gl::drawStringCentered(game_engine_.GetMessage(), glm::vec2(kWindowSize / 2, kWindowSize / 10),
                              ci::Color("white"));
 }
@@ -47,28 +53,23 @@ void RenderEngine::RenderAllFacePlates() const {
   }
 }
 
-void RenderEngine::RenderInputOptions() const {
+void RenderEngine::RenderInputOptions(const std::vector<std::string>& inputs ) const {
   glm::vec2 bottom_right_corner(0, kWindowSize);
+  ci::Color color;
 
-  switch(game_engine_.GetInputType()) {
-    case InputType::kAttack :
-      ci::gl::drawStringCentered("Attack",
-                                 bottom_right_corner - glm::vec2(-(kWindowSize / 20), kWindowSize / 20),
-                                 ci::Color("blue"));
-      ci::gl::drawStringCentered("Move Player",
-                                 bottom_right_corner - glm::vec2(-(kWindowSize / 8), kWindowSize / 20),
-                                 ci::Color("white"));
-      break;
-    case InputType::kMovementInput :
-      ci::gl::drawStringCentered("Attack",
-                                 bottom_right_corner - glm::vec2(-(kWindowSize / 20), kWindowSize / 20),
-                                 ci::Color("white"));
-      ci::gl::drawStringCentered("Move Player",
-                                 bottom_right_corner - glm::vec2(-(kWindowSize / 8), kWindowSize / 20),
-                                 ci::Color("blue"));
-      break;
-    case InputType::kGameOver :
-      break;
+  for(size_t index = 0; index < inputs.size(); index++) {
+    const float kBottomMargin = kWindowSize / 20.0f;
+    const float kSideSpacing = kBottomMargin * (index + 1.0f);
+
+    if(static_cast<size_t>(game_engine_.GetInputType()) == index) {
+      color = ci::Color("blue");
+    } else {
+      color = ci::Color("white");
+    }
+
+    ci::gl::drawStringCentered(inputs[index],
+                               bottom_right_corner - glm::vec2(-kSideSpacing, kBottomMargin),
+                               color);
   }
 }
 

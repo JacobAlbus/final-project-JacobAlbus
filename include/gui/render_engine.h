@@ -31,8 +31,9 @@ class RenderEngine {
  private:
   /**
    * Renders player input options
+   * @param inputs to be rendered
    */
-  void RenderInputOptions() const;
+  void RenderInputOptions(const std::vector<std::string>& inputs) const;
 
   /**
    * Renders All face plates
