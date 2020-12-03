@@ -11,28 +11,22 @@ void RenderEngine::RenderGame() const {
   game_engine_.RenderBoardState();
 
   const characters_t& allied_characters = game_engine_.GetAlliedCharacters();
+  const characters_t& enemy_characters = game_engine_.GetEnemyCharacters();
   bool is_player_allied = game_engine_.GetCharacterIndex() < allied_characters.size();
 
-  if(is_player_allied) {
-    ci::gl::color(ci::Color("white"));
-  } else {
-    ci::gl::color(ci::Color("gray"));
-  }
+  SetFacePlateColor(is_player_allied);
   for(size_t index = 0; index < allied_characters.size(); index++) {
-    allied_characters[index].RenderCharacterFacePlate(false,
+    bool is_character_enemy = false;
+    allied_characters[index].RenderCharacterFacePlate(is_character_enemy,
                                                       game_engine_.GetBoardSize(),
                                                       index,
                                                       kWindowSize);
   }
 
-  if(is_player_allied) {
-    ci::gl::color(ci::Color("gray"));
-  } else {
-    ci::gl::color(ci::Color("white"));
-  }
-  const characters_t& enemy_characters = game_engine_.GetEnemyCharacters();
+  SetFacePlateColor(is_player_allied);
   for(size_t index = 0; index < enemy_characters.size(); index++) {
-    enemy_characters[index].RenderCharacterFacePlate(true,
+    bool is_character_enemy = true;
+    enemy_characters[index].RenderCharacterFacePlate(is_character_enemy,
                                                      game_engine_.GetBoardSize(),
                                                      index,
                                                      kWindowSize);
@@ -51,23 +45,36 @@ void RenderEngine::UpdateGameState() {
   game_engine_.UpdateGameState();
 }
 
-//TODO is fine that I "hard-code" each input option
 void RenderEngine::RenderInputOptions() const {
-  glm::vec2 nib(0, kWindowSize);
+  glm::vec2 bottom_right_corner(0, kWindowSize);
 
   switch(game_engine_.GetInputType()) {
     case InputType::kAttack :
-      ci::gl::drawStringCentered("Attack", nib - glm::vec2(-(kWindowSize / 20), kWindowSize / 20),
+      ci::gl::drawStringCentered("Attack",
+                                 bottom_right_corner - glm::vec2(-(kWindowSize / 20), kWindowSize / 20),
                                  ci::Color("blue"));
-      ci::gl::drawStringCentered("Move Player", nib - glm::vec2(-(kWindowSize / 8), kWindowSize / 20),
+      ci::gl::drawStringCentered("Move Player",
+                                 bottom_right_corner - glm::vec2(-(kWindowSize / 8), kWindowSize / 20),
                                  ci::Color("white"));
       break;
     case InputType::kMovementInput :
-      ci::gl::drawStringCentered("Attack", nib - glm::vec2(-(kWindowSize / 20), kWindowSize / 20),
+      ci::gl::drawStringCentered("Attack",
+                                 bottom_right_corner - glm::vec2(-(kWindowSize / 20), kWindowSize / 20),
                                  ci::Color("white"));
-      ci::gl::drawStringCentered("Move Player", nib - glm::vec2(-(kWindowSize / 8), kWindowSize / 20),
+      ci::gl::drawStringCentered("Move Player",
+                                 bottom_right_corner - glm::vec2(-(kWindowSize / 8), kWindowSize / 20),
                                  ci::Color("blue"));
       break;
+    case InputType::kGameOver :
+      break;
+  }
+}
+
+void RenderEngine::SetFacePlateColor(bool is_player_allied) const {
+  if(is_player_allied) {
+    ci::gl::color(ci::Color("white"));
+  } else {
+    ci::gl::color(ci::Color("gray"));
   }
 }
 

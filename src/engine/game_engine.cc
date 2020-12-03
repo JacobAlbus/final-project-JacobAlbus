@@ -4,7 +4,7 @@ namespace jjba_strategy {
 
 GameEngine::GameEngine(float window_size, const std::string& boards_folder_path) :
                        kWindowSize(window_size),
-                       boards_folder_path_(boards_folder_path),
+                       kBoardsFolderPath(boards_folder_path),
                        board_(boards_folder_path + "board1.json"),
                        current_input_(InputType::kAttack),
                        in_menu_(true),
@@ -13,6 +13,7 @@ GameEngine::GameEngine(float window_size, const std::string& boards_folder_path)
                        character_index_(0),
                        targeted_character_index_(0),
                        message_("Pick an input (use enter bar to confirm)") {
+
   allied_characters_ = Character::GenerateCharacters(boards_folder_path + "board1.json", "allied characters");
   enemy_characters_ = Character::GenerateCharacters(boards_folder_path + "board1.json", "enemy characters");
   player_ = FindCurrentPlayer();
@@ -27,6 +28,7 @@ void GameEngine::UpdateGameState() {
       allied_characters_.erase(allied_characters_.begin() + index);
     }
   }
+
   for(size_t index = 0; index < enemy_characters_.size(); index++) {
     if(enemy_characters_[index].GetHealth() <= 0.0f) {
       enemy_characters_.erase(enemy_characters_.begin() + index);
@@ -41,7 +43,7 @@ void GameEngine::UpdateGameState() {
 }
 
 void GameEngine::RenderBoardState() const {
-  bool player_is_moving = current_input_ == InputType::kMovementInput && !in_menu_;
+  bool player_is_moving = (current_input_ == InputType::kMovementInput) && !in_menu_;
   board_.RenderBoard(kWindowSize, player_is_moving,
                      player_movement_option_index, CalculatePlayerMovement());
 
@@ -333,10 +335,10 @@ Character* GameEngine::GetTargetedCharacter(const std::vector<size_t>& targeted_
 void GameEngine::HandleGameOverInput(const ci::app::KeyEvent& event) {
   switch(event.getCode()) {
     case ci::app::KeyEvent::KEY_1 :
-      UpdateBoardState(boards_folder_path_ + "board1.json");
+      UpdateBoardState(kBoardsFolderPath + "board1.json");
       break;
     case ci::app::KeyEvent::KEY_2 :
-      UpdateBoardState(boards_folder_path_ + "board2.json");
+      UpdateBoardState(kBoardsFolderPath + "board2.json");
       break;
     case ci::app::KeyEvent::KEY_ESCAPE :
       exit(0);

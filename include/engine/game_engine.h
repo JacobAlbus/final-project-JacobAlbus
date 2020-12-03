@@ -133,7 +133,7 @@ class GameEngine {
   size_t player_movement_option_index;
   size_t targeted_character_index_;
   std::string message_;
-  std::string boards_folder_path_;
+  const std::string kBoardsFolderPath;
   InputType current_input_;
   bool in_menu_;
   bool is_player_allied_;

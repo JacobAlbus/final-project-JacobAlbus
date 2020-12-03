@@ -29,7 +29,11 @@ class RenderEngine {
    */
   void UpdateGameState();
  private:
-
+  /**
+   * Sets the color of the face plates
+   * @param whether or not the player is allied
+   */
+  void SetFacePlateColor(bool is_player_allied) const;
   /**
    * Renders player input options
    */
