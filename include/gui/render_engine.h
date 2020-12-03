@@ -30,14 +30,26 @@ class RenderEngine {
   void UpdateGameState();
  private:
   /**
-   * Sets the color of the face plates
-   * @param whether or not the player is allied
-   */
-  void SetFacePlateColor(bool is_player_allied) const;
-  /**
    * Renders player input options
    */
   void RenderInputOptions() const;
+
+  /**
+   * Renders All face plates
+   */
+  void RenderAllFacePlates() const;
+
+  /**
+   * Sets the color of the face plates
+   * @param whether or not the player is allied
+   */
+  void SetAlliesFacePlateColor(bool is_player_allied) const;
+
+  /**
+   * Sets the color of the face plates
+   * @param whether or not the player is allied
+   */
+  void SetEnemyFacePlateColor(bool is_player_allied) const;
 
   GameEngine game_engine_;
   const float kWindowSize;
