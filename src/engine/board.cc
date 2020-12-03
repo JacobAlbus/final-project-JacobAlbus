@@ -12,7 +12,12 @@ void Board::GenerateBoard(const std::string& json_file_path) {
   board_.clear();
   std::ifstream file(json_file_path);
   nlohmann::json board_state;
-  file >> board_state;
+
+  try {
+    file >> board_state;
+  } catch (const std::string& message) {
+    throw std::invalid_argument("The passed json is null: " + message);
+  }
 
   for(const auto& file_row : board_state["board"]) {
     std::vector<Tile> board_row;
@@ -24,6 +29,12 @@ void Board::GenerateBoard(const std::string& json_file_path) {
   }
 
   board_size_ = board_.size();
+
+  for(const auto& row : board_) {
+    if(board_size_ != row.size()) {
+      throw std::exception("The board object in the passed JSON is not a square");
+    }
+  }
 }
 
 void Board::RenderBoard(float window_size,

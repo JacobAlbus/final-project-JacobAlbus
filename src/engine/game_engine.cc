@@ -5,7 +5,7 @@ namespace jjba_strategy {
 GameEngine::GameEngine(float window_size, const std::string& boards_folder_path) :
                        kWindowSize(window_size),
                        boards_folder_path_(boards_folder_path),
-                       board_(kWindowSize, boards_folder_path + "board1.json"),
+                       board_(boards_folder_path + "board1.json"),
                        current_input_(InputType::kAttack),
                        in_menu_(true),
                        player_movement_option_index(0),

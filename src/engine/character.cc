@@ -3,12 +3,6 @@
 
 namespace jjba_strategy {
 
-enum CharacterType {
-  kBrawler,
-  kLongRange,
-  kSupport,
-};
-
 Character::Character(const std::string& name,
                      const glm::vec2& position,
                      const std::string& image_path,

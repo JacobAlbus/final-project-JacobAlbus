@@ -7,6 +7,12 @@
 
 namespace jjba_strategy {
 
+enum CharacterType {
+  kBrawler,
+  kLongRange,
+  kSupport,
+};
+
 class Character {
  public:
   /**
