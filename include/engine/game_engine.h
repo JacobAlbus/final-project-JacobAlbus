@@ -7,6 +7,12 @@
 
 namespace jjba_strategy {
 
+enum InputType {
+  kAttack,
+  kMovementInput,
+  kGameOver,
+};
+
 typedef std::vector<Character> characters_t;
 
 class GameEngine {
@@ -29,7 +35,25 @@ class GameEngine {
    */
   void RenderBoardState() const;
 
+  /**
+   * Checks for win conditions and deaths and updates game accordingly
+   */
+  void UpdateGameState();
+
+  inline const characters_t& GetAlliedCharacters() const { return allied_characters_; }
+  inline const characters_t& GetEnemyCharacters() const { return enemy_characters_; }
+  inline size_t GetBoardSize() const { return board_size_; }
+  inline InputType GetInputType() const { return current_input_; }
+  inline const std::string& GetMessage() const { return message_; }
+  inline size_t GetCharacterIndex() const { return character_index_; }
+
  private:
+  /**
+   * Moves player based on user input
+   * @param event object containing input
+   */
+  void HandleMovementInput(const ci::app::KeyEvent& event);
+
   /**
    * Returns true or false depending if a character exists at tile
    * @param given position object
@@ -58,13 +82,68 @@ class GameEngine {
    * Finds the index of current player
    * @return index of current player
    */
-  size_t FindCurrentPlayerIndex() const;
+  Character* FindCurrentPlayer();
+
+  /**
+   * Calculates tiles player is able to move to in turn
+   * @return vector of positions player can move to
+   */
+  std::vector<glm::vec2> CalculatePlayerMovement() const;
+
+  /**
+   * Handles inputs to the character action menu
+   * @param event object containing input
+   */
+  void HandleMenuInput(const ci::app::KeyEvent& event);
+
+  /**
+   * Handles input for when player attacks
+   * @param event object containing input
+   */
+  void HandleAttackInput(const ci::app::KeyEvent& event);
+
+  /**
+   * Finds characters within attack range of player
+   * @return vector characters in attack range of player
+   */
+  std::vector<size_t> FindCharactersIndexesInAttackRange();
+
+  /**
+   * Gets character who is currently targeted by player
+   * @param whether or not the player is on the allied team
+   * @param vector of indexes containing opposing characters in attack range
+   * @return character is currently targeted by player
+   */
+  Character* GetTargetedCharacter(const std::vector<size_t>& targeted_character_indexes);
+
+  /**
+   * Updates message to player
+   */
+   void UpdateMessage();
+
+   /**
+    * Handles input for when the game is over;
+    * @param event object containing input
+    */
+   void HandleGameOverInput(const ci::app::KeyEvent& event);
 
   const float kWindowSize;
+  const std::string kBoardsFolderPath;
   size_t character_index_;
+
+  std::string message_;
+  InputType current_input_;
+  bool in_menu_;
+
   size_t board_size_;
   Board board_;
-  characters_t characters_;
+
+  bool is_player_allied_;
+  size_t player_movement_option_index;
+  size_t targeted_character_index_;
+
+  characters_t allied_characters_;
+  characters_t enemy_characters_;
   Character* player_;
 };
 

@@ -14,7 +14,7 @@ class Board {
    * Instantiates board object
    * @param path to json file containing board state
    */
-  Board(float window_size, const std::string& json_file_path);
+  Board(const std::string& json_file_path);
 
   inline const board_t& GetBoard() const { return board_; }
 
@@ -26,10 +26,22 @@ class Board {
 
   /**
    * Renders board object
+   * @param size of window length/width
+   * @param all positions player can move
    */
-  void RenderBoard(float window_size) const;
+  void RenderBoard(float window_size,
+                   bool player_is_moving,
+                   size_t player_movement_option_index,
+                   const std::vector<glm::vec2>& player_movement_options)
+                   const;
 
  private:
+  void UpdateCharacterColor(bool is_player_moving,
+                            size_t movement_option_index,
+                            const glm::vec2& current_tile,
+                            const std::vector<glm::vec2>& player_movement_options)
+                            const;
+
   size_t board_size_;
   board_t board_;
 };

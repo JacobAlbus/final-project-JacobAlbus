@@ -4,22 +4,21 @@ namespace jjba_strategy {
 
 namespace visualizer {
 
-JJBAStrategyApp::JJBAStrategyApp() : game_engine_(kWindowSize, initial_board_file_path) {
-
+JJBAStrategyApp::JJBAStrategyApp() : render_engine_(kWindowSize, kBoardsFolderPath) {
   ci::app::setWindowSize((int) kWindowSize, (int) kWindowSize);
 }
 
 void JJBAStrategyApp::update() {
+  render_engine_.UpdateGameState();
 }
 
 void JJBAStrategyApp::draw() {
-  game_engine_.RenderBoardState();
+  render_engine_.RenderGame();
 }
 
 void JJBAStrategyApp::keyDown(ci::app::KeyEvent event) {
-  game_engine_.HandleInput(event);
+  render_engine_.HandleInput(event);
 }
-
 
 }  // namespace visualizer
 

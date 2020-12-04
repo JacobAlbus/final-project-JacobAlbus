@@ -19,9 +19,5 @@
     "Polnareff": ["Polnareff", [11, 1], "characters/polnareff.png", false],
     "Joseph": ["Joseph", [11, 2], "characters/joseph.jpg", true]
   }],
-  "enemy characters": [{
-    "Dio": ["Dio", [2, 11], "characters/dio.jpg", false],
-    "Bio": ["Bio", [3, 11], "characters/dio.jpg", false],
-    "Lio": ["Lio", [2, 10], "characters/dio.jpg", false]
-  }]
+  "enemy characters": []
 }

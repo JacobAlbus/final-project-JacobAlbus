@@ -6,10 +6,13 @@ namespace jjba_strategy {
 Character::Character(const std::string& name,
                      const glm::vec2& position,
                      const std::string& image_path,
-                     bool is_player) :
+                     bool is_player,
+                     bool is_targeted) :
+                     health_(100.0f),
                      kName(name),
                      position_(position),
-                     is_player_(is_player) {
+                     is_player_(is_player),
+                     is_targeted_(is_targeted) {
 
   ci::fs::path path = ci::fs::path(image_path);
   kImage = ci::gl::Texture::create(ci::loadImage(cinder::app::loadAsset(path)));
@@ -26,6 +29,8 @@ void Character::UpdateIsPlayer() {
 void Character::RenderCharacter(size_t board_size, float window_size) const {
   if(is_player_) {
     ci::gl::color(ci::Color("white"));
+  } else if(is_targeted_){
+    ci::gl::color(ci::Color("red"));
   } else {
     ci::gl::color(ci::Color("gray"));
   }
@@ -33,6 +38,38 @@ void Character::RenderCharacter(size_t board_size, float window_size) const {
   ci::Rectf pixel_bounding_box = CalculatePixelBoundingBox(board_size,
                                                            window_size);
   ci::gl::draw(kImage, pixel_bounding_box);
+}
+
+void Character::RenderCharacterFacePlate(bool is_enemy, size_t board_size,
+                                         size_t index, float window_size) const {
+
+  const auto kTileSize = static_cast<float>(window_size / board_size);
+  const auto kSideMargin = static_cast<float>(board_size * index);
+  const auto kTopMargin = static_cast<float>(board_size);
+
+  glm::vec2 pixel_top_left;
+  if(is_enemy) {
+    pixel_top_left = glm::vec2(window_size - ((index + 1) * kTileSize) - kSideMargin - kTopMargin, kTopMargin);
+  } else {
+    pixel_top_left = glm::vec2(index * kTileSize + kSideMargin + kTopMargin, kTopMargin);
+  }
+
+  glm::vec2 pixel_bottom_right = pixel_top_left + glm::vec2(kTileSize, kTileSize);
+  ci::Rectf pixel_bounding_box(pixel_top_left, pixel_bottom_right);
+
+  ci::gl::draw(kImage, pixel_bounding_box);
+
+  //TODO implement health bar
+  const float kSpacing = -15.0f;
+  auto health = static_cast<size_t>(health_);
+  ci::gl::drawStringCentered(std::to_string(health), pixel_bottom_right - glm::vec2(kTileSize / 2, kSpacing),
+                             ci::Color("white"));
+  ci::gl::drawStringCentered(kName, pixel_bottom_right - glm::vec2(kTileSize / 2, kSpacing * 2),
+                             ci::Color("white"));
+}
+
+void Character::UpdateHealth(float new_health) {
+  health_ = new_health;
 }
 
 ci::Rectf Character::CalculatePixelBoundingBox(size_t board_size,
@@ -46,8 +83,7 @@ ci::Rectf Character::CalculatePixelBoundingBox(size_t board_size,
   glm::vec2 pixel_bottom_right = pixel_top_left +
                                  glm::vec2(kTileSize, kTileSize);
 
-  //TODO isn't passing by copy slower?
-  return ci::Rectf(pixel_top_left, pixel_bottom_right);
+  return {pixel_top_left, pixel_bottom_right};
 }
 
 } // namespace jjba_strategy

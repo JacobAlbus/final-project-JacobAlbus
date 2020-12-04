@@ -21,12 +21,15 @@ Tile::Tile(TileType type) {
       ci::fs::path path = ci::fs::path("tiles/water.jpg");
       kImage = ci::gl::Texture::create(ci::loadImage(cinder::app::loadAsset(path)));
       break;
+    } case kEmpty: {
+      ci::fs::path path = ci::fs::path("tiles/empty.png");
+      kImage = ci::gl::Texture::create(ci::loadImage(cinder::app::loadAsset(path)));
+      break;
     }
   }
 }
 
 void Tile::RenderTile(const ci::Rectf& tile_location) const {
-  ci::gl::color(ci::Color("white"));
   ci::gl::draw(kImage, tile_location);
 }
 
