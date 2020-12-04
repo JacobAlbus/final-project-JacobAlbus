@@ -6,8 +6,10 @@ GameEngine::GameEngine(float window_size, const std::string& boards_folder_path)
                        kWindowSize(window_size),
                        kBoardsFolderPath(boards_folder_path),
                        board_(boards_folder_path + "board1.json"),
-                       current_input_(InputType::kAttack),
-                       in_menu_(true),
+                       current_menu_input_(InputType::kAttack),
+                       current_attack_input_(AttackType::kStarFinger),
+                       in_input_menu_(true),
+                       in_attack_menu_(false),
                        player_movement_option_index(0),
                        is_player_allied_(true),
                        character_index_(0),
@@ -36,14 +38,14 @@ void GameEngine::UpdateGameState() {
   }
 
   if(allied_characters_.empty() || enemy_characters_.empty()) {
-    current_input_ = InputType::kGameOver;
+    current_menu_input_ = InputType::kGameOver;
   }
 
   UpdateMessage();
 }
 
 void GameEngine::RenderBoardState() const {
-  bool player_is_moving = (current_input_ == InputType::kMovementInput) && !in_menu_;
+  bool player_is_moving = (current_menu_input_ == InputType::kMovementInput) && !in_input_menu_;
   board_.RenderBoard(kWindowSize, player_is_moving,
                      player_movement_option_index, CalculatePlayerMovement());
 
@@ -56,15 +58,19 @@ void GameEngine::RenderBoardState() const {
 }
 
 void GameEngine::HandleInput(const ci::app::KeyEvent& event) {
-  if(in_menu_) {
+  if(in_input_menu_) {
     HandleMenuInput(event);
   } else {
-    switch(current_input_) {
+    switch(current_menu_input_) {
       case InputType::kMovementInput :
         HandleMovementInput(event);
         break;
       case InputType::kAttack :
-        HandleAttackInput(event);
+        if(in_attack_menu_) {
+          HandleAttackMenuInput(event);
+        } else {
+          HandleAttackInput(event);
+        }
         break;
       case kGameOver :
         HandleGameOverInput(event);
@@ -74,10 +80,10 @@ void GameEngine::HandleInput(const ci::app::KeyEvent& event) {
 }
 
 void GameEngine::UpdateMessage() {
-  if(in_menu_) {
+  if(in_input_menu_) {
     message_ = "Pick an input (use enter bar to confirm)";
   } else {
-    switch(current_input_) {
+    switch(current_menu_input_) {
       case InputType::kMovementInput :
         message_ = "Pick a tile to move to (use backspace to go back)";
         break;
@@ -127,8 +133,8 @@ void GameEngine::UpdateBoardState(const std::string& json_file_path) {
   player_ = FindCurrentPlayer();
   board_size_ = board_.GetBoard().size();
   character_index_ = 0;
-  current_input_ = InputType::kAttack;
-  in_menu_ = true;
+  current_menu_input_ = InputType::kAttack;
+  in_input_menu_ = true;
   player_movement_option_index = 0;
   targeted_character_index_ = 0;
 }
@@ -145,32 +151,28 @@ Character* GameEngine::FindCurrentPlayer() {
 
 void GameEngine::HandleMenuInput(const ci::app::KeyEvent &event) {
   auto max_input = static_cast<size_t>(kGameOver) - 1;
-  auto current_input = static_cast<size_t>(current_input_);
+  auto current_input = static_cast<size_t>(current_menu_input_);
 
   switch(event.getCode()) {
     case ci::app::KeyEvent::KEY_a :
       if(current_input <= 0) {
-        current_input_ = static_cast<InputType>(max_input);
+        current_menu_input_ = static_cast<InputType>(max_input);
       } else {
-        current_input_ = static_cast<InputType>(current_input - 1);
+        current_menu_input_ = static_cast<InputType>(current_input - 1);
       }
       break;
     case ci::app::KeyEvent::KEY_d :
       current_input++;
       if(current_input > max_input) {
-        current_input_ = static_cast<InputType>(0);
+        current_menu_input_ = static_cast<InputType>(0);
       } else {
-        current_input_ = static_cast<InputType>(current_input);
+        current_menu_input_ = static_cast<InputType>(current_input);
       }
       break;
     case ci::app::KeyEvent::KEY_RETURN : {
-      in_menu_ = false;
-      //does the initial render of targeted character
+      in_input_menu_ = false;
       if(current_input == InputType::kAttack) {
-        auto targeted_characters = FindCharactersIndexesInAttackRange();
-        if (!targeted_characters.empty()) {
-          GetTargetedCharacter(targeted_characters)->UpdateIsTarget();
-        }
+        in_attack_menu_ = true;
       }
       break;
     }
@@ -186,7 +188,7 @@ void GameEngine::HandleMovementInput(const ci::app::KeyEvent& event) {
     case ci::app::KeyEvent::KEY_ESCAPE :
       exit(0);
     case ci::app::KeyEvent::KEY_BACKSPACE :
-      in_menu_ = true;
+      in_input_menu_ = true;
       break;
     case ci::app::KeyEvent::KEY_a :
       if(player_movement_option_index == 0) {
@@ -207,7 +209,7 @@ void GameEngine::HandleMovementInput(const ci::app::KeyEvent& event) {
       if(!IsCharacterAtTile(new_position) && IsCharacterOnScreen(new_position)) {
         player_->UpdatePosition(new_position);
         UpdatePlayableCharacter();
-        in_menu_ = true;
+        in_input_menu_ = true;
       }
       break;
   }
@@ -259,6 +261,44 @@ bool GameEngine::IsCharacterOnScreen(const glm::vec2& position) const {
          position.y <= static_cast<float>(board_size_ - kWindowSideMargin);
 }
 
+void GameEngine::HandleAttackMenuInput(const ci::app::KeyEvent &event) {
+  auto max_input = static_cast<size_t>(kHermitPurple);
+  auto current_input = static_cast<size_t>(current_attack_input_);
+
+  switch(event.getCode()) {
+    case ci::app::KeyEvent::KEY_a :
+      if(current_input <= 0) {
+        current_attack_input_ = static_cast<AttackType>(max_input);
+      } else {
+        current_attack_input_ = static_cast<AttackType>(current_input - 1);
+      }
+      break;
+    case ci::app::KeyEvent::KEY_d :
+      current_input++;
+      if(current_input > max_input) {
+        current_attack_input_ = static_cast<AttackType>(0);
+      } else {
+        current_attack_input_ = static_cast<AttackType>(current_input);
+      }
+      break;
+    case ci::app::KeyEvent::KEY_RETURN : {
+      in_attack_menu_ = false;
+      //does the initial render of targeted character
+      auto targeted_characters = FindCharactersIndexesInAttackRange();
+      if (!targeted_characters.empty()) {
+        GetTargetedCharacter(targeted_characters)->UpdateIsTarget();
+      }
+      break;
+    }
+    case ci::app::KeyEvent::KEY_BACKSPACE :
+      in_attack_menu_ = false;
+      in_input_menu_ = true;
+      break;
+    case ci::app::KeyEvent::KEY_ESCAPE :
+      exit(0);
+  }
+}
+
 void GameEngine::HandleAttackInput(const ci::app::KeyEvent& event) {
   auto targeted_characters = FindCharactersIndexesInAttackRange();
 
@@ -266,7 +306,7 @@ void GameEngine::HandleAttackInput(const ci::app::KeyEvent& event) {
     switch (event.getCode()) {
       case ci::app::KeyEvent::KEY_BACKSPACE: {
         GetTargetedCharacter(targeted_characters)->UpdateIsTarget();
-        in_menu_ = true;
+        in_attack_menu_ = true;
         break;
       } case ci::app::KeyEvent::KEY_d:
         GetTargetedCharacter(targeted_characters)->UpdateIsTarget();
@@ -290,12 +330,12 @@ void GameEngine::HandleAttackInput(const ci::app::KeyEvent& event) {
         target_character->UpdateHealth(target_character->GetHealth() - 10.0f);
         target_character->UpdateIsTarget();
         targeted_character_index_ = 0;
-        in_menu_ = true;
+        in_input_menu_ = true;
         UpdatePlayableCharacter();
         break;
     }
   } else {
-    in_menu_ = true;
+    in_input_menu_ = true;
   }
 }
 

@@ -11,8 +11,15 @@ void RenderEngine::RenderGame() const {
   game_engine_.RenderBoardState();
 
   std::vector<std::string> inputs;
-  inputs.emplace_back("Attack");
-  inputs.emplace_back("Move Player");
+  if(game_engine_.InInputMenu()) {
+    inputs.emplace_back("Attack");
+    inputs.emplace_back("Move Player");
+  } else if(game_engine_.InAttackMenu()) {
+    inputs.emplace_back("Star Finger");
+    inputs.emplace_back("Emerald Splash");
+    inputs.emplace_back("Hermit Purple");
+  }
+
 
   RenderInputOptions(inputs);
   RenderAllFacePlates();
@@ -59,7 +66,7 @@ void RenderEngine::RenderInputOptions(const std::vector<std::string>& inputs ) c
 
   for(size_t index = 0; index < inputs.size(); index++) {
     const float kBottomMargin = kWindowSize / 20.0f;
-    const float kSideSpacing = kBottomMargin * (index + 1.0f);
+    const float kSideSpacing = (kWindowSize / 12.0f) * (index + 1.0f);
 
     if(static_cast<size_t>(game_engine_.GetInputType()) == index) {
       color = ci::Color("blue");

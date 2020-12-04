@@ -13,6 +13,12 @@ enum InputType {
   kGameOver,
 };
 
+enum AttackType {
+    kStarFinger,
+    kEmeraldSplash,
+    kHermitPurple
+};
+
 typedef std::vector<Character> characters_t;
 
 class GameEngine {
@@ -43,11 +49,21 @@ class GameEngine {
   inline const characters_t& GetAlliedCharacters() const { return allied_characters_; }
   inline const characters_t& GetEnemyCharacters() const { return enemy_characters_; }
   inline size_t GetBoardSize() const { return board_size_; }
-  inline InputType GetInputType() const { return current_input_; }
+  inline size_t GetInputType() const {
+    if(in_input_menu_) {
+      return static_cast<size_t>(current_menu_input_);
+    } else if(in_attack_menu_) {
+      return static_cast<size_t>(current_attack_input_);
+    } else {
+      return 0;
+    }
+  }
   inline const std::string& GetMessage() const { return message_; }
   inline size_t GetCharacterIndex() const { return character_index_; }
+  inline bool InInputMenu() const { return in_input_menu_; }
+  inline bool InAttackMenu() const { return in_attack_menu_; }
 
- private:
+private:
   /**
    * Moves player based on user input
    * @param event object containing input
@@ -97,6 +113,12 @@ class GameEngine {
   void HandleMenuInput(const ci::app::KeyEvent& event);
 
   /**
+   * Handles input for when player is choosing an attack
+   * @param event object containing input
+   */
+  void HandleAttackMenuInput(const ci::app::KeyEvent& event);
+
+  /**
    * Handles input for when player attacks
    * @param event object containing input
    */
@@ -132,8 +154,13 @@ class GameEngine {
   size_t character_index_;
 
   std::string message_;
-  InputType current_input_;
-  bool in_menu_;
+  InputType current_menu_input_;
+  AttackType current_attack_input_;
+  /**
+   * Whether or not the player is selecting a menu input (move, attack, etc.)
+   */
+  bool in_input_menu_;
+  bool in_attack_menu_;
 
   size_t board_size_;
   Board board_;
