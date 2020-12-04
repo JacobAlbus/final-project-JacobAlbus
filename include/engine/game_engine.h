@@ -11,8 +11,25 @@ typedef std::vector<Character> characters_t;
 
 class GameEngine {
  public:
-  GameEngine(size_t board_size);
+  /**
+   * Instantiates GameEngine
+   * @param board size of initial board
+   * @param path to json file containing board state
+   */
+  GameEngine(float window_size, const std::string& json_file_path);
 
+  /**
+   * Handles User Inputs
+   * @param event object containing input
+   */
+  void HandleInput(const ci::app::KeyEvent& event);
+
+  /**
+   * Renders the board and characters
+   */
+  void RenderBoardState() const;
+
+ private:
   /**
    * Returns true or false depending if a character exists at tile
    * @param given position object
@@ -21,27 +38,34 @@ class GameEngine {
   bool IsCharacterAtTile(const glm::vec2& tile_position) const;
 
   /**
-   * Finds character at given position returns SOMETHING if not found
-   * @param given position object
-   * @return character at position if found, SOMETHING otherwise
+   * Checks to see if character is on screen
+   * @param position object of character
+   * @return true or false depending on if character is on screen
    */
-  const Character* FindCharacterAtPosition(const glm::vec2& position) const;
+  bool IsCharacterOnScreen(const glm::vec2& position) const;
 
   /**
-   * Handles User Inputs
-   * @param event object containing input
+   * Updates which character is currently being controlled
    */
-  void HandleInput(const ci::app::KeyEvent& event);
+  void UpdatePlayableCharacter();
 
-  //TODO change naming possibly
-  inline const board_t& GetBoard() const { return board_.GetBoard(); };
+  /**
+   * Updates the state of board, including the characters
+   */
+  void UpdateBoardState(const std::string& json_file_path);
 
-  inline const characters_t& GetCharacters() const { return characters_; };
+  /**
+   * Finds the index of current player
+   * @return index of current player
+   */
+  size_t FindCurrentPlayerIndex() const;
 
- private:
-  size_t kBoardSize;
+  const float kWindowSize;
+  size_t character_index_;
+  size_t board_size_;
   Board board_;
   characters_t characters_;
+  Character* player_;
 };
 
 } // namespace jjba_strategy

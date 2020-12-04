@@ -1,35 +1,48 @@
 #include "engine/board.h"
-#include <cinder/Rand.h>
+#include "nlohmann/json.hpp"
 
 namespace jjba_strategy {
 
-//TODO implement JSON reader
-Board::Board(size_t board_size) : kBoardSize(board_size) {
-  std::vector<Tile> empty;
-  board_.push_back(empty);
-  board_.push_back(empty);
-  board_.push_back(empty);
-  board_.push_back(empty);
+Board::Board(float window_size, const std::string& json_file_path) {
 
-  board_[0].push_back(Tile(TileType::kMountain));
-  board_[0].push_back(Tile(TileType::kMountain));
-  board_[0].push_back(Tile(TileType::kMountain));
-  board_[0].push_back(Tile(TileType::kMountain));
+  GenerateBoard(json_file_path);
+  board_size_ = board_.size();
+}
 
-  board_[1].push_back(Tile(TileType::kGrass));
-  board_[1].push_back(Tile(TileType::kGrass));
-  board_[1].push_back(Tile(TileType::kWater));
-  board_[1].push_back(Tile(TileType::kWater));
+void Board::GenerateBoard(const std::string& json_file_path) {
+  board_.clear();
+  std::ifstream file(json_file_path);
+  nlohmann::json board_state;
+  file >> board_state;
 
-  board_[2].push_back(Tile(TileType::kGrass));
-  board_[2].push_back(Tile(TileType::kGrass));
-  board_[2].push_back(Tile(TileType::kWater));
-  board_[2].push_back(Tile(TileType::kDesert));
+  for(const auto& file_row : board_state["board"]) {
+    std::vector<Tile> board_row;
+    for(const auto& file_tile : file_row) {
+      Tile board_tile = Tile(static_cast<TileType>(*file_tile.begin()));
+      board_row.push_back(board_tile);
+    }
+    board_.push_back(board_row);
+  }
 
-  board_[3].push_back(Tile(TileType::kGrass));
-  board_[3].push_back(Tile(TileType::kGrass));
-  board_[3].push_back(Tile(TileType::kWater));
-  board_[3].push_back(Tile(TileType::kDesert));
+  board_size_ = board_.size();
+}
+
+void Board::RenderBoard(float window_size) const {
+  const auto kTileSize = static_cast<float>(window_size / board_size_);
+
+  for (size_t row = 0; row < board_size_; ++row) {
+    for (size_t col = 0; col < board_size_; ++col) {
+
+      glm::vec2 pixel_top_left = glm::vec2(col * kTileSize, row * kTileSize);
+      glm::vec2 pixel_bottom_right = pixel_top_left +
+                                     glm::vec2(kTileSize, kTileSize);
+
+      ci::Rectf pixel_bounding_box(pixel_top_left, pixel_bottom_right);
+
+      const auto& tile = board_[row][col];
+      tile.RenderTile(pixel_bounding_box);
+    }
+  }
 }
 
 } // namespace jjba_strategy

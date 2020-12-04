@@ -10,11 +10,27 @@ typedef std::vector<std::vector<Tile>> board_t;
 
 class Board {
  public:
-  Board(size_t board_size);
+  /**
+   * Instantiates board object
+   * @param path to json file containing board state
+   */
+  Board(float window_size, const std::string& json_file_path);
 
   inline const board_t& GetBoard() const { return board_; }
+
+  /**
+   * Generates board from a json file
+   * @param path to json
+   */
+  void GenerateBoard(const std::string& json_file_path);
+
+  /**
+   * Renders board object
+   */
+  void RenderBoard(float window_size) const;
+
  private:
-  size_t kBoardSize;
+  size_t board_size_;
   board_t board_;
 };
 

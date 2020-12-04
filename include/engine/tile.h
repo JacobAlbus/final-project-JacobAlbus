@@ -15,10 +15,17 @@ enum TileType {
 
 class Tile {
  public:
+  /**
+   * Instantiates tile based on TileType passed
+   * @param given TileType enum
+   */
   Tile(TileType type);
 
-
-  inline const ci::gl::TextureRef& GetImage() const { return kImage; }
+  /**
+   * Renders tile at given location
+   * @param location of tile
+   */
+  void RenderTile(const ci::Rectf& tile_location) const;
 
  private:
   ci::gl::TextureRef kImage;
