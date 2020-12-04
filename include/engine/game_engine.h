@@ -45,6 +45,7 @@ class GameEngine {
   inline size_t GetBoardSize() const { return board_size_; }
   inline const Character* GetPlayer() const { return player_; }
   size_t GetInputType() const;
+  inline const glm::vec2& GetMovementOption() const { return player_movement_option; }
   inline const std::string& GetMessage() const { return message_; }
   inline size_t GetCharacterIndex() const { return character_index_; }
   inline bool InInputMenu() const { return in_input_menu_; }
@@ -70,6 +71,14 @@ private:
    * @return true or false depending on if character is on screen
    */
   bool IsCharacterOnScreen(const glm::vec2& position) const;
+
+  /**
+   * Checks to see if currently selected movement tile is within range
+   * @param vector of possible movement option
+   * @return true or false depending on if the selected tile is within range
+   */
+  bool IsMovementInRange(const std::vector<glm::vec2>& movement_options,
+                         const glm::vec2& selected_tile) const;
 
   /**
    * Updates which character is currently being controlled
@@ -153,6 +162,7 @@ private:
   Board board_;
 
   bool is_player_allied_;
+  glm::vec2 player_movement_option;
   size_t player_movement_option_index;
   size_t targeted_character_index_;
 

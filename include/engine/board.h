@@ -30,14 +30,21 @@ class Board {
    * @param all positions player can move
    */
   void RenderBoard(float window_size,
-                   bool player_is_moving,
-                   size_t player_movement_option_index,
+                   bool is_player_moving,
+                   const glm::vec2& selected_movement_option,
                    const std::vector<glm::vec2>& player_movement_options)
                    const;
 
  private:
+  /**
+   * Updates the color of a tile depending player movement
+   * @param whether or not player is selecting a tile to move to
+   * @param currently selected tile to move to
+   * @param tile to be colored
+   * @param tiles player can move to
+   */
   void UpdateCharacterColor(bool is_player_moving,
-                            size_t movement_option_index,
+                            const glm::vec2& selected_movement_option,
                             const glm::vec2& current_tile,
                             const std::vector<glm::vec2>& player_movement_options)
                             const;

@@ -11,6 +11,7 @@ GameEngine::GameEngine(float window_size, const std::string& boards_folder_path)
                        in_input_menu_(true),
                        in_attack_menu_(false),
                        player_movement_option_index(0),
+                       player_movement_option(glm::vec2(0, 0)),
                        is_player_allied_(true),
                        character_index_(0),
                        targeted_character_index_(0),
@@ -47,7 +48,7 @@ void GameEngine::UpdateGameState() {
 void GameEngine::RenderBoardState() const {
   bool player_is_moving = (current_menu_input_ == InputType::kMovementInput) && !in_input_menu_;
   board_.RenderBoard(kWindowSize, player_is_moving,
-                     player_movement_option_index, CalculatePlayerMovement());
+                     player_movement_option, CalculatePlayerMovement());
 
   for(const auto& character : allied_characters_) {
     character.RenderCharacter(board_size_, kWindowSize);
@@ -98,7 +99,6 @@ void GameEngine::UpdateMessage() {
             message_ = "No enemies in attack range, pick another input";
           }
         }
-
         break;
       }
       case kGameOver :
@@ -177,6 +177,8 @@ void GameEngine::HandleMenuInput(const ci::app::KeyEvent &event) {
       in_input_menu_ = false;
       if(current_input == InputType::kAttack) {
         in_attack_menu_ = true;
+      } else if(current_input == InputType::kMovementInput) {
+        player_movement_option = CalculatePlayerMovement()[0];
       }
       break;
     }
@@ -194,24 +196,37 @@ void GameEngine::HandleMovementInput(const ci::app::KeyEvent& event) {
     case ci::app::KeyEvent::KEY_BACKSPACE :
       in_input_menu_ = true;
       break;
-    case ci::app::KeyEvent::KEY_a :
-      if(player_movement_option_index == 0) {
-        player_movement_option_index = movement_options.size() - 1;
-      } else {
-        player_movement_option_index--;
+    case ci::app::KeyEvent::KEY_a : {
+      glm::vec2 temp_tile(player_movement_option.x, player_movement_option.y - 1);
+      if (IsMovementInRange(movement_options, temp_tile) && !IsCharacterAtTile(temp_tile)) {
+        player_movement_option = temp_tile;
       }
       break;
-    case ci::app::KeyEvent::KEY_d :
-      if(player_movement_option_index == movement_options.size() - 1) {
-        player_movement_option_index = 0;
-      } else {
-        player_movement_option_index++;
+    }
+    case ci::app::KeyEvent::KEY_d : {
+      glm::vec2 temp_tile(player_movement_option.x, player_movement_option.y + 1);
+      if (IsMovementInRange(movement_options, temp_tile) && !IsCharacterAtTile(temp_tile)) {
+        player_movement_option = temp_tile;
       }
       break;
+    }
+    case ci::app::KeyEvent::KEY_w : {
+      glm::vec2 temp_tile(player_movement_option.x - 1, player_movement_option.y);
+      if (IsMovementInRange(movement_options, temp_tile) && !IsCharacterAtTile(temp_tile)) {
+        player_movement_option = temp_tile;
+      }
+      break;
+    }
+    case ci::app::KeyEvent::KEY_s : {
+      glm::vec2 temp_tile(player_movement_option.x + 1, player_movement_option.y);
+      if (IsMovementInRange(movement_options, temp_tile) && !IsCharacterAtTile(temp_tile)) {
+        player_movement_option = temp_tile;
+      }
+      break;
+    }
     case ci::app::KeyEvent::KEY_RETURN :
-      glm::vec2 new_position = movement_options[player_movement_option_index];
-      if(!IsCharacterAtTile(new_position) && IsCharacterOnScreen(new_position)) {
-        player_->UpdatePosition(new_position);
+      if(IsCharacterOnScreen(player_movement_option)) {
+        player_->UpdatePosition(player_movement_option);
         UpdatePlayableCharacter();
         in_input_menu_ = true;
       }
@@ -397,6 +412,20 @@ size_t GameEngine::GetInputType() const  {
   } else {
     return 0;
   }
+}
+
+bool GameEngine::IsMovementInRange(const std::vector<glm::vec2>& movement_options, const glm::vec2& selected_tile) const {
+  for(const auto& position : movement_options) {
+    if(position == selected_tile) {
+      return true;
+    }
+  }
+
+  return false;
+  //  //TODO get this to work
+//  return std::any_of(allied_characters_.begin()->GetPosition(),
+//                     allied_characters_.end()->GetPosition(),
+//                     [] (const auto& other_pos) { return tile_position == other_pos; });
 }
 
 } // namespace jjba_strategy

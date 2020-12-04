@@ -39,7 +39,7 @@ void Board::GenerateBoard(const std::string& json_file_path) {
 
 void Board::RenderBoard(float window_size,
                         bool is_player_moving,
-                        size_t movement_option_index,
+                        const glm::vec2& selected_movement_option,
                         const std::vector<glm::vec2>& player_movement_options) const {
   const auto kTileSize = static_cast<float>(window_size / board_size_);
 
@@ -47,7 +47,7 @@ void Board::RenderBoard(float window_size,
     for (size_t col = 0; col < board_size_; ++col) {
 
       glm::vec2 current_tile(row, col);
-      UpdateCharacterColor(is_player_moving, movement_option_index,
+      UpdateCharacterColor(is_player_moving, selected_movement_option,
                            current_tile, player_movement_options);
 
       glm::vec2 pixel_top_left = glm::vec2(col * kTileSize, row * kTileSize);
@@ -63,12 +63,13 @@ void Board::RenderBoard(float window_size,
 }
 
 void Board::UpdateCharacterColor(bool is_player_moving,
-                                 size_t movement_option_index,
+                                 const glm::vec2& selected_movement_option,
                                  const glm::vec2& current_tile,
-                                 const std::vector<glm::vec2>& player_movement_options) const {
+                                 const std::vector<glm::vec2>& player_movement_options)
+                                 const {
   if(is_player_moving) {
     for(const auto& position : player_movement_options) {
-      if(current_tile == player_movement_options[movement_option_index]) {
+      if(current_tile == selected_movement_option) {
         ci::gl::color(ci::Color("red"));
         break;
       } else if(current_tile == position) {
