@@ -66,11 +66,11 @@ private:
   bool IsCharacterAtTile(const glm::vec2& tile_position) const;
 
   /**
-   * Checks to see if character is on screen
-   * @param position object of character
-   * @return true or false depending on if character is on screen
+   * Checks to see if tile is on the screen
+   * @param position of tile
+   * @return true or false depending on if tile is off screen
    */
-  bool IsCharacterOnScreen(const glm::vec2& position) const;
+  bool IsTileOffScreen(const glm::vec2& position) const;
 
   /**
    * Checks to see if currently selected movement tile is within range

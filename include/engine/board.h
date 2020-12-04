@@ -18,6 +18,7 @@ class Board {
 
   inline const board_t& GetBoard() const { return board_; }
 
+  inline const Tile& GetTile(size_t x, size_t y) const { return board_[x][y]; }
   /**
    * Generates board from a json file
    * @param path to json

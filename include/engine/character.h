@@ -64,6 +64,13 @@ class Character {
    * @param passed value
    */
   void UpdateHealth(float new_health);
+
+  /**
+   * Calculates character movement options
+   * @return vector containing all the tiles within character movement range
+   */
+  std::vector<glm::vec2> CalculateCharacterMovementOptions() const;
+
   /**
    * Calculates attack damage on other character then updates health
    * @param character object being attacked
@@ -118,6 +125,7 @@ class Character {
   float health_;
   bool is_player_;
   bool is_targeted_;
+  int movement_range_;
   glm::vec2 position_;
   std::string kName;
   ci::gl::TextureRef kImage;

@@ -198,34 +198,34 @@ void GameEngine::HandleMovementInput(const ci::app::KeyEvent& event) {
       break;
     case ci::app::KeyEvent::KEY_a : {
       glm::vec2 temp_tile(player_movement_option.x, player_movement_option.y - 1);
-      if (IsMovementInRange(movement_options, temp_tile) && !IsCharacterAtTile(temp_tile)) {
+      if (IsMovementInRange(movement_options, temp_tile)) {
         player_movement_option = temp_tile;
       }
       break;
     }
     case ci::app::KeyEvent::KEY_d : {
       glm::vec2 temp_tile(player_movement_option.x, player_movement_option.y + 1);
-      if (IsMovementInRange(movement_options, temp_tile) && !IsCharacterAtTile(temp_tile)) {
+      if (IsMovementInRange(movement_options, temp_tile)) {
         player_movement_option = temp_tile;
       }
       break;
     }
     case ci::app::KeyEvent::KEY_w : {
       glm::vec2 temp_tile(player_movement_option.x - 1, player_movement_option.y);
-      if (IsMovementInRange(movement_options, temp_tile) && !IsCharacterAtTile(temp_tile)) {
+      if (IsMovementInRange(movement_options, temp_tile)) {
         player_movement_option = temp_tile;
       }
       break;
     }
     case ci::app::KeyEvent::KEY_s : {
       glm::vec2 temp_tile(player_movement_option.x + 1, player_movement_option.y);
-      if (IsMovementInRange(movement_options, temp_tile) && !IsCharacterAtTile(temp_tile)) {
+      if (IsMovementInRange(movement_options, temp_tile)) {
         player_movement_option = temp_tile;
       }
       break;
     }
     case ci::app::KeyEvent::KEY_RETURN :
-      if(IsCharacterOnScreen(player_movement_option)) {
+      if(player_movement_option != player_->GetPosition()) {
         player_->UpdatePosition(player_movement_option);
         UpdatePlayableCharacter();
         in_input_menu_ = true;
@@ -236,48 +236,50 @@ void GameEngine::HandleMovementInput(const ci::app::KeyEvent& event) {
 
 //TODO actually calculate based on board state and character
 std::vector<glm::vec2> GameEngine::CalculatePlayerMovement() const {
-  std::vector<glm::vec2> player_movement_options;
-  player_movement_options.push_back(player_->GetPosition() - glm::vec2(1, 1));
-  player_movement_options.push_back(player_->GetPosition() - glm::vec2(1, 0));
-  player_movement_options.push_back(player_->GetPosition() - glm::vec2(1, -1));
-  player_movement_options.push_back(player_->GetPosition() + glm::vec2(0, 1));
-  player_movement_options.push_back(player_->GetPosition() + glm::vec2(1, 1));
-  player_movement_options.push_back(player_->GetPosition() + glm::vec2(1, 0));
-  player_movement_options.push_back(player_->GetPosition() + glm::vec2(1, -1));
-  player_movement_options.push_back(player_->GetPosition() - glm::vec2(0, 1));
+  std::vector<glm::vec2> movement_options = player_->CalculateCharacterMovementOptions();
+  std::vector<size_t> valid_tiles_indexes;
 
-  return player_movement_options;
+  for(size_t index = 0; index < movement_options.size(); index++) {
+    glm::vec2 movement_tile = movement_options[index];
+    if(!IsCharacterAtTile(movement_tile) && !IsTileOffScreen(movement_tile)) {
+      valid_tiles_indexes.emplace_back(index);
+    }
+  }
+
+  std::vector<glm::vec2> valid_movement_options;
+  valid_movement_options.reserve(valid_tiles_indexes.size());
+  for(auto index : valid_tiles_indexes) {
+    valid_movement_options.emplace_back(movement_options[index]);
+  }
+
+  return valid_movement_options;
 }
 
 bool GameEngine::IsCharacterAtTile(const glm::vec2& tile_position) const {
   for(const auto& character : allied_characters_) {
-    if(character.GetPosition() == tile_position) {
+    if(tile_position == player_->GetPosition()) {
+      break;
+    } else if(character.GetPosition() == tile_position) {
       return true;
     }
   }
 
   for(const auto& character : enemy_characters_) {
-    if(character.GetPosition() == tile_position) {
+    if(tile_position == player_->GetPosition()) {
+      break;
+    } else if(character.GetPosition() == tile_position) {
       return true;
     }
   }
 
   return false;
-//  //TODO get this to work
-//  return std::any_of(allied_characters_.begin()->GetPosition(),
-//                     allied_characters_.end()->GetPosition(),
-//                     [] (const auto& other_pos) { return tile_position == other_pos; });
 }
 
-bool GameEngine::IsCharacterOnScreen(const glm::vec2& position) const {
-  const size_t kWindowTopMargin = 2;
-  const size_t kWindowSideMargin = 2;
-  const size_t kWindowBottomMargin = 1;
-
-  return position.x >= kWindowTopMargin &&
-         position.x <= static_cast<float>(board_size_ - kWindowSideMargin) &&
-         position.y >= kWindowBottomMargin &&
-         position.y <= static_cast<float>(board_size_ - kWindowSideMargin);
+bool GameEngine::IsTileOffScreen(const glm::vec2& position) const {
+  return position.x < 2 ||
+         position.x > static_cast<float>(board_size_ - 2) ||
+         position.y < 1 ||
+         position.y > static_cast<float>(board_size_ - 2);
 }
 
 void GameEngine::HandleAttackMenuInput(const ci::app::KeyEvent &event) {

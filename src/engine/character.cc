@@ -19,15 +19,18 @@ Character::Character(const std::string& name,
   switch(character_type) {
     case CharacterType::kBrawler :
       health_ = 200.0f;
+      movement_range_ = 1;
       attacks_.emplace_back(AttackType::kStarFinger);
       break;
     case kLongRange:
       health_ = 150.0f;
+      movement_range_ = 2;
       attacks_.emplace_back(AttackType::kStarFinger);
       attacks_.emplace_back(AttackType::kEmeraldSplash);
       break;
     case kSupport:
       health_ = 100.0f;
+      movement_range_ = 3;
       attacks_.emplace_back(AttackType::kStarFinger);
       attacks_.emplace_back(AttackType::kEmeraldSplash);
       attacks_.emplace_back(AttackType::kHermitPurple);
@@ -88,8 +91,16 @@ void Character::RenderCharacterFacePlate(bool is_enemy, size_t board_size,
                              ci::Color("white"));
 }
 
-void Character::UpdateHealth(float new_health) {
-  health_ = new_health;
+std::vector<glm::vec2> Character::CalculateCharacterMovementOptions() const {
+  std::vector<glm::vec2> movement_options;
+  for(int row = -movement_range_; row < movement_range_ + 1; row++) {
+    for(int col = -movement_range_; col < movement_range_ + 1; col++) {
+      glm::vec2 option(position_.x + static_cast<float>(row), position_.y + static_cast<float>(col));
+      movement_options.emplace_back(option);
+    }
+  }
+
+  return movement_options;
 }
 
 void Character::AttackCharacter(Character* character) {

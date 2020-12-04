@@ -28,8 +28,12 @@ class Tile {
    */
   void RenderTile(const ci::Rectf& tile_location) const;
 
+  inline TileType GetType() const { return kType; }
+
  private:
   ci::gl::TextureRef kImage;
+
+  TileType kType;
 };
 
 } // namespace jjba_strategy

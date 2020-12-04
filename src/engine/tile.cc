@@ -4,6 +4,8 @@
 namespace jjba_strategy {
 
 Tile::Tile(TileType type) {
+  kType = type;
+
   switch(type) {
     case kGrass: {
       ci::fs::path path = ci::fs::path("tiles/grass.png");
@@ -11,6 +13,7 @@ Tile::Tile(TileType type) {
       break;
     } case kDesert: {
       ci::fs::path path = ci::fs::path("tiles/sand.jpg");
+      kType = type;
       kImage = ci::gl::Texture::create(ci::loadImage(cinder::app::loadAsset(path)));
       break;
     } case kMountain: {
