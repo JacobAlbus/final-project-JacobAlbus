@@ -13,12 +13,6 @@ enum InputType {
   kGameOver,
 };
 
-enum AttackType {
-    kStarFinger,
-    kEmeraldSplash,
-    kHermitPurple
-};
-
 typedef std::vector<Character> characters_t;
 
 class GameEngine {
@@ -49,15 +43,8 @@ class GameEngine {
   inline const characters_t& GetAlliedCharacters() const { return allied_characters_; }
   inline const characters_t& GetEnemyCharacters() const { return enemy_characters_; }
   inline size_t GetBoardSize() const { return board_size_; }
-  inline size_t GetInputType() const {
-    if(in_input_menu_) {
-      return static_cast<size_t>(current_menu_input_);
-    } else if(in_attack_menu_) {
-      return static_cast<size_t>(current_attack_input_);
-    } else {
-      return 0;
-    }
-  }
+  inline const Character* GetPlayer() const { return player_; }
+  size_t GetInputType() const;
   inline const std::string& GetMessage() const { return message_; }
   inline size_t GetCharacterIndex() const { return character_index_; }
   inline bool InInputMenu() const { return in_input_menu_; }

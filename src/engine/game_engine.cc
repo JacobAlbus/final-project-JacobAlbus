@@ -81,20 +81,24 @@ void GameEngine::HandleInput(const ci::app::KeyEvent& event) {
 
 void GameEngine::UpdateMessage() {
   if(in_input_menu_) {
-    message_ = "Pick an input (use enter bar to confirm)";
+    message_ = "Pick an input (use enter to confirm)";
   } else {
     switch(current_menu_input_) {
       case InputType::kMovementInput :
         message_ = "Pick a tile to move to (use backspace to go back)";
         break;
       case InputType::kAttack : {
-        auto targeted_characters = FindCharactersIndexesInAttackRange();
-
-        if (!targeted_characters.empty()) {
-          message_ = "Pick a character to attack (use backspace to go back)";
+        if(in_attack_menu_) {
+          message_ = "Pick an attack (use enter to confirm)";
         } else {
-          message_ = "No enemies in attack range, pick another input";
+          auto targeted_characters = FindCharactersIndexesInAttackRange();
+          if (!targeted_characters.empty()) {
+            message_ = "Pick a character to attack (use backspace to go back)";
+          } else {
+            message_ = "No enemies in attack range, pick another input";
+          }
         }
+
         break;
       }
       case kGameOver :
@@ -262,23 +266,23 @@ bool GameEngine::IsCharacterOnScreen(const glm::vec2& position) const {
 }
 
 void GameEngine::HandleAttackMenuInput(const ci::app::KeyEvent &event) {
-  auto max_input = static_cast<size_t>(kHermitPurple);
-  auto current_input = static_cast<size_t>(current_attack_input_);
+  auto max_input = player_->GetAttacks().size() - 1;
+  auto current_input = static_cast<size_t>(player_->GetCurrentAttackType());
 
   switch(event.getCode()) {
     case ci::app::KeyEvent::KEY_a :
       if(current_input <= 0) {
-        current_attack_input_ = static_cast<AttackType>(max_input);
+        player_->UpdateCurrentAttackType(static_cast<AttackType>(max_input));
       } else {
-        current_attack_input_ = static_cast<AttackType>(current_input - 1);
+        player_->UpdateCurrentAttackType(static_cast<AttackType>(current_input - 1));
       }
       break;
     case ci::app::KeyEvent::KEY_d :
       current_input++;
       if(current_input > max_input) {
-        current_attack_input_ = static_cast<AttackType>(0);
+        player_->UpdateCurrentAttackType(static_cast<AttackType>(0));
       } else {
-        current_attack_input_ = static_cast<AttackType>(current_input);
+        player_->UpdateCurrentAttackType(static_cast<AttackType>(current_input));
       }
       break;
     case ci::app::KeyEvent::KEY_RETURN : {
@@ -327,7 +331,7 @@ void GameEngine::HandleAttackInput(const ci::app::KeyEvent& event) {
         break;
       case ci::app::KeyEvent::KEY_RETURN:
         Character* target_character = GetTargetedCharacter(targeted_characters);
-        target_character->UpdateHealth(target_character->GetHealth() - 10.0f);
+        player_->AttackCharacter(target_character);
         target_character->UpdateIsTarget();
         targeted_character_index_ = 0;
         in_input_menu_ = true;
@@ -382,6 +386,16 @@ void GameEngine::HandleGameOverInput(const ci::app::KeyEvent& event) {
       break;
     case ci::app::KeyEvent::KEY_ESCAPE :
       exit(0);
+  }
+}
+
+size_t GameEngine::GetInputType() const  {
+  if(in_input_menu_) {
+    return static_cast<size_t>(current_menu_input_);
+  } else if(in_attack_menu_) {
+    return static_cast<size_t>(player_->GetCurrentAttackType());
+  } else {
+    return 0;
   }
 }
 

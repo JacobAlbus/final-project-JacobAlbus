@@ -3,6 +3,7 @@
 
 #include <string>
 #include "cinder/gl/gl.h"
+#include "engine/attack.h"
 #include "nlohmann/json.hpp"
 
 namespace jjba_strategy {
@@ -26,7 +27,8 @@ class Character {
             const glm::vec2& position,
             const std::string& image_path,
             bool is_player,
-            bool is_targeted);
+            bool is_targeted,
+            size_t character_type_index);
 
   //TODO do I need big 5?
   inline Character& operator=(const Character& rhs) = default;
@@ -62,6 +64,11 @@ class Character {
    * @param passed value
    */
   void UpdateHealth(float new_health);
+  /**
+   * Calculates attack damage on other character then updates health
+   * @param character object being attacked
+   */
+  void AttackCharacter(Character* character);
 
   /**
    * Reads characters from JSON file
@@ -84,7 +91,9 @@ class Character {
         glm::vec2 position(x_position, y_position);
         std::string image_path = character[2];
         bool is_player = character[3];
-        characters.emplace_back(name, position, image_path, is_player, false);
+        size_t character_type_index = character[4];
+        characters.emplace_back(name, position, image_path,
+                                is_player, false, character_type_index);
       }
     }
 
@@ -95,6 +104,9 @@ class Character {
   inline bool IsPlayer() const { return is_player_; }
   inline float GetHealth() const { return health_; }
   inline void UpdateIsTarget() { is_targeted_ = !is_targeted_; }
+  inline const std::vector<Attack>& GetAttacks() const { return attacks_; }
+  inline AttackType GetCurrentAttackType() const { return current_attack_type_; }
+  inline void UpdateCurrentAttackType(AttackType new_type) { current_attack_type_ = new_type; }
 
  private:
   /**
@@ -109,6 +121,9 @@ class Character {
   glm::vec2 position_;
   std::string kName;
   ci::gl::TextureRef kImage;
+  std::vector<Attack> attacks_;
+  CharacterType character_type;
+  AttackType current_attack_type_;
 };
 
 } // namespace jjba_strategy

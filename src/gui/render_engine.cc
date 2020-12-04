@@ -15,11 +15,11 @@ void RenderEngine::RenderGame() const {
     inputs.emplace_back("Attack");
     inputs.emplace_back("Move Player");
   } else if(game_engine_.InAttackMenu()) {
-    inputs.emplace_back("Star Finger");
-    inputs.emplace_back("Emerald Splash");
-    inputs.emplace_back("Hermit Purple");
+    const std::vector<Attack> player_attacks = game_engine_.GetPlayer()->GetAttacks();
+    for(const auto& attack : player_attacks) {
+      inputs.emplace_back(attack.name_);
+    }
   }
-
 
   RenderInputOptions(inputs);
   RenderAllFacePlates();

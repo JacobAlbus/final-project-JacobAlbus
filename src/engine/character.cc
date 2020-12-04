@@ -7,12 +7,32 @@ Character::Character(const std::string& name,
                      const glm::vec2& position,
                      const std::string& image_path,
                      bool is_player,
-                     bool is_targeted) :
-                     health_(100.0f),
+                     bool is_targeted,
+                     size_t character_type_index) :
+                     current_attack_type_(static_cast<AttackType>(0)),
                      kName(name),
                      position_(position),
+                     character_type(static_cast<CharacterType>(character_type_index)),
                      is_player_(is_player),
                      is_targeted_(is_targeted) {
+
+  switch(character_type) {
+    case CharacterType::kBrawler :
+      health_ = 200.0f;
+      attacks_.emplace_back(AttackType::kStarFinger);
+      break;
+    case kLongRange:
+      health_ = 150.0f;
+      attacks_.emplace_back(AttackType::kStarFinger);
+      attacks_.emplace_back(AttackType::kEmeraldSplash);
+      break;
+    case kSupport:
+      health_ = 100.0f;
+      attacks_.emplace_back(AttackType::kStarFinger);
+      attacks_.emplace_back(AttackType::kEmeraldSplash);
+      attacks_.emplace_back(AttackType::kHermitPurple);
+      break;
+  }
 
   ci::fs::path path = ci::fs::path(image_path);
   kImage = ci::gl::Texture::create(ci::loadImage(cinder::app::loadAsset(path)));
@@ -70,6 +90,11 @@ void Character::RenderCharacterFacePlate(bool is_enemy, size_t board_size,
 
 void Character::UpdateHealth(float new_health) {
   health_ = new_health;
+}
+
+void Character::AttackCharacter(Character* character) {
+  Attack current_attack = attacks_[static_cast<size_t>(current_attack_type_)];
+  character->health_ -= current_attack.base_power;
 }
 
 ci::Rectf Character::CalculatePixelBoundingBox(size_t board_size,

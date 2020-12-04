@@ -31,13 +31,27 @@ if(NOT catch2_POPULATED)
     target_include_directories(catch2 INTERFACE ${catch2_SOURCE_DIR}/single_include)
 endif()
 
+#FetchContent_Declare(
+#        json
+#        GIT_REPOSITORY https://github.com/nlohmann/json.git
+#        GIT_TAG develop
+#)
+#
+#FetchContent_GetProperties(json)
+#if(NOT json_POPULATED)
+#    FetchContent_Populate(json)
+#    add_subdirectory(${json_SOURCE_DIR} ${json_BINARY_DIR} EXCLUDE_FROM_ALL)
+#endif()
+#
+#target_link_libraries(foo PRIVATE nlohmann_json::nlohmann_json)
 get_filename_component(CINDER_PATH "${CMAKE_CURRENT_SOURCE_DIR}/../../" ABSOLUTE)
 get_filename_component(APP_PATH "${CMAKE_CURRENT_SOURCE_DIR}/" ABSOLUTE)
 
 include("${CINDER_PATH}/proj/cmake/modules/cinderMakeApp.cmake")
 
 list(APPEND ENGINE_SOURCE_FILES src/engine/board.cc src/engine/tile.cc
-                                src/engine/game_engine.cc src/engine/character.cc)
+                                src/engine/game_engine.cc src/engine/character.cc
+                                src/engine/attack.cc)
 
 list(APPEND GUI_SOURCE_FILES src/gui/jjba_strategy_app.cc src/gui/render_engine.cc)
 
