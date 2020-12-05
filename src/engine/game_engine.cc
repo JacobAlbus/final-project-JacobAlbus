@@ -234,7 +234,6 @@ void GameEngine::HandleMovementInput(const ci::app::KeyEvent& event) {
   }
 }
 
-//TODO actually calculate based on board state and character
 std::vector<glm::vec2> GameEngine::CalculatePlayerMovement() const {
   std::vector<glm::vec2> movement_options = player_->CalculateCharacterMovementOptions();
   std::vector<size_t> valid_tiles_indexes;
