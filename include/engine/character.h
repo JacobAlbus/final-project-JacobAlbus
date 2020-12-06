@@ -4,7 +4,7 @@
 #include <string>
 #include "cinder/gl/gl.h"
 #include "engine/attack.h"
-#include "nlohmann/json.hpp"
+#include <nlohmann/json.hpp>
 
 namespace jjba_strategy {
 

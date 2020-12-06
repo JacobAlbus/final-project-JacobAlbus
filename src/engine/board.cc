@@ -1,5 +1,5 @@
 #include "engine/board.h"
-#include "nlohmann/json.hpp"
+#include <nlohmann/json.hpp>
 
 namespace jjba_strategy {
 
@@ -12,11 +12,6 @@ void Board::GenerateBoard(const std::string& json_file_path) {
   board_.clear();
   std::ifstream file(json_file_path);
   nlohmann::json board_state;
-
-  std::ofstream output_file;
-  output_file.open("nibba.json");
-  output_file << board_state;
-  output_file.close();
 
   try {
     file >> board_state;

@@ -31,19 +31,18 @@ if(NOT catch2_POPULATED)
     target_include_directories(catch2 INTERFACE ${catch2_SOURCE_DIR}/single_include)
 endif()
 
-#FetchContent_Declare(
-#        json
-#        GIT_REPOSITORY https://github.com/nlohmann/json.git
-#        GIT_TAG develop
-#)
-#
-#FetchContent_GetProperties(json)
-#if(NOT json_POPULATED)
-#    FetchContent_Populate(json)
-#    add_subdirectory(${json_SOURCE_DIR} ${json_BINARY_DIR} EXCLUDE_FROM_ALL)
-#endif()
-#
-#target_link_libraries(foo PRIVATE nlohmann_json::nlohmann_json)
+FetchContent_Declare(
+        nlohmann_json
+        URL https://github.com/nlohmann/json/releases/download/v3.7.3/include.zip
+)
+# Adds nlohmann_json library. This is a header only library
+FetchContent_GetProperties(nlohmann_json)
+if(NOT nlohmann_json_POPULATED)
+    FetchContent_Populate(nlohmann_json)
+    add_library(nlohmann_json INTERFACE)
+    target_include_directories(nlohmann_json INTERFACE ${nlohmann_json_SOURCE_DIR}/single_include)
+endif()
+
 get_filename_component(CINDER_PATH "${CMAKE_CURRENT_SOURCE_DIR}/../../" ABSOLUTE)
 get_filename_component(APP_PATH "${CMAKE_CURRENT_SOURCE_DIR}/" ABSOLUTE)
 
@@ -63,6 +62,7 @@ ci_make_app(
         CINDER_PATH     ${CINDER_PATH}
         SOURCES jjba_strategy_main.cc ${GUI_SOURCE_FILES} ${ENGINE_SOURCE_FILES}
         INCLUDES        include
+        LIBRARIES       nlohmann_json
 )
 
 ci_make_app(
