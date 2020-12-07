@@ -137,13 +137,13 @@ private:
   /**
    * Updates message to player
    */
-   void UpdateMessage();
+ void UpdateMessage();
 
-   /**
-    * Handles input for when the game is over;
-    * @param event object containing input
-    */
-   void HandleGameOverInput(const ci::app::KeyEvent& event);
+  /**
+   * Handles input for when the game is over;
+   * @param event object containing input
+   */
+  void HandleGameOverInput(const ci::app::KeyEvent& event);
 
   const float kWindowSize;
   const std::string kBoardsFolderPath;

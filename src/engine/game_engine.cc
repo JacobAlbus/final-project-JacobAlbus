@@ -238,11 +238,15 @@ std::vector<glm::vec2> GameEngine::CalculatePlayerMovement() const {
   std::vector<glm::vec2> movement_options = player_->CalculateCharacterMovementOptions();
   std::vector<size_t> valid_tiles_indexes;
 
-  for(size_t index = 0; index < movement_options.size(); index++) {
-    glm::vec2 movement_tile = movement_options[index];
-    if(!IsCharacterAtTile(movement_tile) && !IsTileOffScreen(movement_tile)) {
-      valid_tiles_indexes.emplace_back(index);
+  if(current_menu_input_ != InputType::kAttack) {
+    for(size_t index = 0; index < movement_options.size(); index++) {
+      glm::vec2 movement_tile = movement_options[index];
+      if(!IsCharacterAtTile(movement_tile) && !IsTileOffScreen(movement_tile)) {
+        valid_tiles_indexes.emplace_back(index);
+      }
     }
+  } else {
+    return movement_options;
   }
 
   std::vector<glm::vec2> valid_movement_options;

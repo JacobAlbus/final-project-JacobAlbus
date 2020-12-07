@@ -5,12 +5,12 @@
 #include "engine/game_engine.h"
 using namespace jjba_strategy;
 
-const std::string kBoardsFolderPath = "C:\\Users\\asus\\CLionProjects\\cinder_0.9.2_vc2015\\my-projects\\final-project-JacobAlbus\\assets\\boards\\";
+const std::string kBoardsFolderPath = "../../../assets/boards/";
 
 //TODO fix error handling
 TEST_CASE("Generate Board") {
   SECTION("Throws error when json is empty") {
-    GameEngine engine = GameEngine(900.0f, kBoardsFolderPath);
+    GameEngine engine = GameEngine(900.0f, kBoardsFolderPath + "board1.json");
   }
 
   SECTION("Throws error when board object in json is empty") {

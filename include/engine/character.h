@@ -30,7 +30,11 @@ class Character {
             bool is_targeted,
             size_t character_type_index);
 
-  //TODO do I need big 5?
+  /**
+   * Copies values of passed character into a different character object
+   * @param character object to be copied
+   * @return copy of character object
+   */
   inline Character& operator=(const Character& rhs) = default;
 
   /**
