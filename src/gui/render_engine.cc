@@ -29,8 +29,35 @@ void RenderEngine::RenderMainMenu() const {
   ci::gl::color(ci::Color("white"));
   ci::gl::draw(kImage, ci::Rectf(0, 0, kWindowSize, kWindowSize));
 
-  ci::gl::drawStringCentered("Jojo's Bizzare Strategy Game", glm::vec2(kWindowSize / 2, kWindowSize / 40),
+  const float kInitialPosition = kWindowSize / 40.0f;
+  const float kSpacing = kWindowSize / 15.0f;
+
+  ci::gl::drawStringCentered("Jojo's Bizzare Strategy Game", glm::vec2(kWindowSize / 2, kInitialPosition),
                              ci::Color("white"), ci::Font("Impact", 80));
+
+  ci::gl::drawStringCentered("Controls", glm::vec2(kWindowSize / 4, kInitialPosition + (kSpacing * 2)),
+                             ci::Color("white"), ci::Font("Impact", 40));
+  ci::gl::drawStringCentered("Use WASD keys to navigate menus", glm::vec2(kWindowSize / 4, kInitialPosition + (kSpacing * 3)),
+                             ci::Color("white"), ci::Font("Impact", 25));
+  ci::gl::drawStringCentered("Use Enter to confirm and Backspace to decline", glm::vec2(kWindowSize / 4, kInitialPosition + (kSpacing * 4)),
+                             ci::Color("white"), ci::Font("Impact", 25));
+  ci::gl::drawStringCentered("Use ESC to go to main menu or exit game if already there", glm::vec2(kWindowSize / 4, kInitialPosition + (kSpacing * 5)),
+                             ci::Color("white"), ci::Font("Impact", 25));
+
+
+  ci::gl::drawStringCentered("How to Play", glm::vec2(kWindowSize / 1.35, kInitialPosition + (kSpacing * 2)),
+                             ci::Color("white"), ci::Font("Impact", 40));
+  ci::gl::drawStringCentered("The goal is to move characters around the board", glm::vec2(kWindowSize / 1.35, kInitialPosition + (kSpacing * 3)),
+                             ci::Color("white"), ci::Font("Impact", 25));
+  ci::gl::drawStringCentered("and kill the other team", glm::vec2(kWindowSize / 1.35, kInitialPosition + (kSpacing * 3.3)),
+                             ci::Color("white"), ci::Font("Impact", 25));
+  ci::gl::drawStringCentered("Your characters move in a set order and can", glm::vec2(kWindowSize / 1.35, kInitialPosition + (kSpacing * 4)),
+                             ci::Color("white"), ci::Font("Impact", 25));
+  ci::gl::drawStringCentered("only attack OR move each turn", glm::vec2(kWindowSize / 1.35, kInitialPosition + (kSpacing * 4.3)),
+                             ci::Color("white"), ci::Font("Impact", 25));
+
+  ci::gl::drawStringCentered("Press any key to start playing!", glm::vec2(kWindowSize / 2, kInitialPosition + (kSpacing * 6)),
+                             ci::Color("white"), ci::Font("Impact", 35));
 }
 
 void RenderEngine::RenderGameState() const {
