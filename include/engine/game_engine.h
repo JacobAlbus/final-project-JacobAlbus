@@ -50,6 +50,7 @@ class GameEngine {
   inline size_t GetCharacterIndex() const { return character_index_; }
   inline bool InInputMenu() const { return in_input_menu_; }
   inline bool InAttackMenu() const { return in_attack_menu_; }
+  inline bool InMainMenu() const { return in_main_menu_; }
 
 private:
   /**
@@ -156,6 +157,7 @@ private:
    * Whether or not the player is selecting a menu input (move, attack, etc.)
    */
   bool in_input_menu_;
+  bool in_main_menu_;
   bool in_attack_menu_;
 
   size_t board_size_;

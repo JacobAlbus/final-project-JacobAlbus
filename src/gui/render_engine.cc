@@ -8,6 +8,32 @@ RenderEngine::RenderEngine(float window_size,
                            game_engine_(window_size, boards_folder_path) {}
 
 void RenderEngine::RenderGame() const {
+  if(game_engine_.InMainMenu()) {
+    RenderMainMenu();
+  } else {
+    RenderGameState();
+  }
+}
+
+void RenderEngine::HandleInput(const ci::app::KeyEvent& event) {
+  game_engine_.HandleInput(event);
+}
+
+void RenderEngine::UpdateGameState() {
+  game_engine_.UpdateGameState();
+}
+
+void RenderEngine::RenderMainMenu() const {
+  ci::fs::path path = ci::fs::path("tiles/main_menu.jpg");
+  ci::gl::TextureRef kImage = ci::gl::Texture::create(ci::loadImage(cinder::app::loadAsset(path)));
+  ci::gl::color(ci::Color("white"));
+  ci::gl::draw(kImage, ci::Rectf(0, 0, kWindowSize, kWindowSize));
+
+  ci::gl::drawStringCentered("Jojo's Bizzare Strategy Game", glm::vec2(kWindowSize / 2, kWindowSize / 40),
+                             ci::Color("white"), ci::Font("Impact", 80));
+}
+
+void RenderEngine::RenderGameState() const {
   game_engine_.RenderBoardState();
 
   std::vector<std::string> inputs;
@@ -25,15 +51,7 @@ void RenderEngine::RenderGame() const {
   RenderAllFacePlates();
 
   ci::gl::drawStringCentered(game_engine_.GetMessage(), glm::vec2(kWindowSize / 2, kWindowSize / 10),
-                             ci::Color("white"));
-}
-
-void RenderEngine::HandleInput(const ci::app::KeyEvent& event) {
-  game_engine_.HandleInput(event);
-}
-
-void RenderEngine::UpdateGameState() {
-  game_engine_.UpdateGameState();
+                             ci::Color("white"), ci::Font("Impact", 20));
 }
 
 void RenderEngine::RenderAllFacePlates() const {
@@ -66,7 +84,7 @@ void RenderEngine::RenderInputOptions(const std::vector<std::string>& inputs ) c
 
   for(size_t index = 0; index < inputs.size(); index++) {
     const float kBottomMargin = kWindowSize / 20.0f;
-    const float kSideSpacing = (kWindowSize / 12.0f) * (index + 1.0f);
+    const float kSideSpacing = (kWindowSize / 8.0f) * (index + 1.0f);
 
     if(static_cast<size_t>(game_engine_.GetInputType()) == index) {
       color = ci::Color("blue");
@@ -76,7 +94,7 @@ void RenderEngine::RenderInputOptions(const std::vector<std::string>& inputs ) c
 
     ci::gl::drawStringCentered(inputs[index],
                                bottom_right_corner - glm::vec2(-kSideSpacing, kBottomMargin),
-                               color);
+                               color, ci::Font("Impact", 20));
   }
 }
 

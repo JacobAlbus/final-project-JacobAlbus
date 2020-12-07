@@ -5,11 +5,12 @@ namespace jjba_strategy {
 GameEngine::GameEngine(float window_size, const std::string& boards_folder_path) :
                        kWindowSize(window_size),
                        kBoardsFolderPath(boards_folder_path),
-                       board_(boards_folder_path + "board1.json"),
+                       board_(boards_folder_path + "board2.json"),
                        current_menu_input_(InputType::kAttack),
                        current_attack_input_(AttackType::kStarFinger),
                        in_input_menu_(true),
                        in_attack_menu_(false),
+                       in_main_menu_(true),
                        player_movement_option_index(0),
                        player_movement_option(glm::vec2(0, 0)),
                        is_player_allied_(true),
@@ -17,8 +18,8 @@ GameEngine::GameEngine(float window_size, const std::string& boards_folder_path)
                        targeted_character_index_(0),
                        message_("Pick an input (use enter bar to confirm)") {
 
-  allied_characters_ = Character::GenerateCharacters(boards_folder_path + "board1.json", "allied characters");
-  enemy_characters_ = Character::GenerateCharacters(boards_folder_path + "board1.json", "enemy characters");
+  allied_characters_ = Character::GenerateCharacters(boards_folder_path + "board2.json", "allied characters");
+  enemy_characters_ = Character::GenerateCharacters(boards_folder_path + "board2.json", "enemy characters");
   player_ = FindCurrentPlayer();
   board_size_ = board_.GetBoard().size();
 }
@@ -59,9 +60,13 @@ void GameEngine::RenderBoardState() const {
 }
 
 void GameEngine::HandleInput(const ci::app::KeyEvent& event) {
-  if(in_input_menu_) {
+  if(in_main_menu_ && event.getCode() == ci::app::KeyEvent::KEY_ESCAPE) {
+    exit(0);
+  } else if(in_input_menu_) {
+    in_main_menu_ = false;
     HandleMenuInput(event);
   } else {
+    in_main_menu_ = false;
     switch(current_menu_input_) {
       case InputType::kMovementInput :
         HandleMovementInput(event);
@@ -183,7 +188,7 @@ void GameEngine::HandleMenuInput(const ci::app::KeyEvent &event) {
       break;
     }
     case ci::app::KeyEvent::KEY_ESCAPE :
-      exit(0);
+      in_main_menu_ = true;
   }
 }
 
@@ -192,7 +197,7 @@ void GameEngine::HandleMovementInput(const ci::app::KeyEvent& event) {
 
   switch (event.getCode()) {
     case ci::app::KeyEvent::KEY_ESCAPE :
-      exit(0);
+      in_main_menu_ = true;
     case ci::app::KeyEvent::KEY_BACKSPACE :
       in_input_menu_ = true;
       break;
@@ -319,7 +324,7 @@ void GameEngine::HandleAttackMenuInput(const ci::app::KeyEvent &event) {
       in_input_menu_ = true;
       break;
     case ci::app::KeyEvent::KEY_ESCAPE :
-      exit(0);
+      in_main_menu_ = true;
   }
 }
 
@@ -405,7 +410,7 @@ void GameEngine::HandleGameOverInput(const ci::app::KeyEvent& event) {
       UpdateBoardState(kBoardsFolderPath + "board2.json");
       break;
     case ci::app::KeyEvent::KEY_ESCAPE :
-      exit(0);
+      in_main_menu_ = true;
   }
 }
 

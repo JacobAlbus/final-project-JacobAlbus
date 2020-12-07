@@ -29,6 +29,11 @@ class JJBAStrategyApp : public ci::app::App {
   void update() override;
 
   /**
+   * Calls audio
+   */
+  void setup() override;
+
+  /**
    * Calls methods depending on which key is pressed
    * @param event object containing pressed key
    */

@@ -20,7 +20,7 @@ struct Attack {
         base_power = 20.0f;
         break;
       case AttackType::kEmeraldSplash :
-        name_ = "EmeraldSplash";
+        name_ = "Emerald Splash";
         base_power = 15.0f;
         break;
       case AttackType::kHermitPurple :

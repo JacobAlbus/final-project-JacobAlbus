@@ -52,6 +52,16 @@ class RenderEngine {
    */
   void SetEnemyFacePlateColor(bool is_player_allied) const;
 
+  /**
+   * Renders the main menu
+   */
+  void RenderMainMenu() const;
+
+  /**
+   * Renders board and UI elements
+   */
+  void RenderGameState() const;
+
   GameEngine game_engine_;
   const float kWindowSize;
 };

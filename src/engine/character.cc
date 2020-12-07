@@ -83,12 +83,14 @@ void Character::RenderCharacterFacePlate(bool is_enemy, size_t board_size,
   ci::gl::draw(kImage, pixel_bounding_box);
 
   //TODO implement health bar
-  const float kSpacing = -15.0f;
+  const float kSpacing = -10.0f;
   auto health = static_cast<size_t>(health_);
-  ci::gl::drawStringCentered(std::to_string(health), pixel_bottom_right - glm::vec2(kTileSize / 2, kSpacing),
-                             ci::Color("white"));
-  ci::gl::drawStringCentered(kName, pixel_bottom_right - glm::vec2(kTileSize / 2, kSpacing * 2),
-                             ci::Color("white"));
+  ci::gl::drawStringCentered(std::to_string(health),
+                             pixel_bottom_right - glm::vec2(kTileSize / 2, kSpacing),
+                             ci::Color("white"), ci::Font("Impact", 20));
+  ci::gl::drawStringCentered(kName,
+                             pixel_bottom_right - glm::vec2(kTileSize / 2, kSpacing * 3),
+                             ci::Color("white"), ci::Font("Impact", 20));
 }
 
 std::vector<glm::vec2> Character::CalculateCharacterMovementOptions() const {

@@ -9,11 +9,11 @@
     [4, 4, 4, 4, 4, 4, 4]
   ],
   "allied characters": [{
-    "Avdol": ["Avdol", [2, 2], "characters/avdol.jpg", true],
-    "Iggy": ["Iggy", [2, 1], "characters/iggy.jpg", false]
+    "Avdol": ["Avdol", [2, 2], "characters/avdol.jpg", true, 0],
+    "Iggy": ["Iggy", [2, 1], "characters/iggy.jpg", false, 2]
   }],
   "enemy characters": [{
-    "Avdol": ["Avdol", [3, 3], "characters/avdol.jpg", false],
-    "Iggy": ["Iggy", [4, 4], "characters/iggy.jpg", false]
+    "Avdol": ["Avdol", [3, 3], "characters/avdol.jpg", false, 0],
+    "Iggy": ["Iggy", [4, 4], "characters/iggy.jpg", false, 2]
   }]
 }
