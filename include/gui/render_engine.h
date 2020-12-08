@@ -2,6 +2,7 @@
 #define JJBA_STRATEGY_RPG_INCLUDE_GUI_RENDER_ENGINE_H_
 
 #include "engine/game_engine.h"
+#include "cinder/audio/Voice.h"
 
 namespace jjba_strategy {
 
@@ -28,6 +29,12 @@ class RenderEngine {
    * Updates Game State
    */
   void UpdateGameState();
+
+  /**
+   * Plays music at specified path
+   * @param path to audio file
+   */
+  void PlayMusic(const std::string& file_path);
  private:
   /**
    * Renders player input options
@@ -64,6 +71,7 @@ class RenderEngine {
 
   GameEngine game_engine_;
   const float kWindowSize;
+  ci::audio::VoiceRef audio_player_;
 };
 
 } //namespace jjba_strategy

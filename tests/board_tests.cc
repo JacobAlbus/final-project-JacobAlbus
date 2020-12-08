@@ -10,7 +10,8 @@ const std::string kBoardsFolderPath = "../../../assets/boards/";
 //TODO fix error handling
 TEST_CASE("Generate Board") {
   SECTION("Throws error when json is empty") {
-    GameEngine engine = GameEngine(900.0f, kBoardsFolderPath + "board1.json");
+//    Board board = Board(kBoardsFolderPath + "board1.json");
+    GameEngine engine = GameEngine(900.0f, kBoardsFolderPath);
   }
 
   SECTION("Throws error when board object in json is empty") {

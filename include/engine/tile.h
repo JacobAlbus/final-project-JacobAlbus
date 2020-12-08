@@ -33,7 +33,7 @@ class Tile {
  private:
   ci::gl::TextureRef kImage;
 
-  TileType kType;
+  const TileType kType;
 };
 
 } // namespace jjba_strategy

@@ -4,6 +4,7 @@
 #include "engine/board.h"
 #include "engine/character.h"
 #include "cinder/app/App.h"
+#include "cinder/audio/Voice.h"
 
 namespace jjba_strategy {
 
@@ -146,6 +147,11 @@ private:
    */
   void HandleGameOverInput(const ci::app::KeyEvent& event);
 
+  /**
+   * Plays the audio for the last used attack
+   */
+  void PlayAttackAudio();
+
   const float kWindowSize;
   const std::string kBoardsFolderPath;
   size_t character_index_;
@@ -171,6 +177,8 @@ private:
   characters_t allied_characters_;
   characters_t enemy_characters_;
   Character* player_;
+
+  ci::audio::VoiceRef audio_player_;
 };
 
 } // namespace jjba_strategy

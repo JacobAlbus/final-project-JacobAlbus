@@ -5,7 +5,7 @@ namespace jjba_strategy {
 GameEngine::GameEngine(float window_size, const std::string& boards_folder_path) :
                        kWindowSize(window_size),
                        kBoardsFolderPath(boards_folder_path),
-                       board_(boards_folder_path + "board2.json"),
+                       board_(boards_folder_path + "board1.json"),
                        current_menu_input_(InputType::kAttack),
                        current_attack_input_(AttackType::kStarFinger),
                        in_input_menu_(true),
@@ -18,8 +18,8 @@ GameEngine::GameEngine(float window_size, const std::string& boards_folder_path)
                        targeted_character_index_(0),
                        message_("Pick an input (use enter bar to confirm)") {
 
-  allied_characters_ = Character::GenerateCharacters(boards_folder_path + "board2.json", "allied characters");
-  enemy_characters_ = Character::GenerateCharacters(boards_folder_path + "board2.json", "enemy characters");
+  allied_characters_ = Character::GenerateCharacters(boards_folder_path + "board1.json", "allied characters");
+  enemy_characters_ = Character::GenerateCharacters(boards_folder_path + "board1.json", "enemy characters");
   player_ = FindCurrentPlayer();
   board_size_ = board_.GetBoard().size();
 }
@@ -357,6 +357,7 @@ void GameEngine::HandleAttackInput(const ci::app::KeyEvent& event) {
       case ci::app::KeyEvent::KEY_RETURN:
         Character* target_character = GetTargetedCharacter(targeted_characters);
         player_->AttackCharacter(target_character);
+        PlayAttackAudio();
         target_character->UpdateIsTarget();
         targeted_character_index_ = 0;
         in_input_menu_ = true;
@@ -436,6 +437,22 @@ bool GameEngine::IsMovementInRange(const std::vector<glm::vec2>& movement_option
 //  return std::any_of(allied_characters_.begin()->GetPosition(),
 //                     allied_characters_.end()->GetPosition(),
 //                     [] (const auto& other_pos) { return tile_position == other_pos; });
+}
+
+void GameEngine::PlayAttackAudio() {
+  if(player_->GetCurrentAttackType() == AttackType::kStarFinger) {
+    ci::audio::SourceFileRef source = ci::audio::load(ci::app::loadAsset("audio/star_finger.mp3"));
+    audio_player_ = ci::audio::Voice::create(source);
+    audio_player_->start();
+  } else if(player_->GetCurrentAttackType() == AttackType::kEmeraldSplash) {
+    ci::audio::SourceFileRef source = ci::audio::load(ci::app::loadAsset("audio/emerald_splash.mp3"));
+    audio_player_ = ci::audio::Voice::create(source);
+    audio_player_->start();
+  } else if(player_->GetCurrentAttackType() == AttackType::kHermitPurple) {
+    ci::audio::SourceFileRef source = ci::audio::load(ci::app::loadAsset("audio/hermit_purple.mp3"));
+    audio_player_ = ci::audio::Voice::create(source);
+    audio_player_->start();
+  }
 }
 
 } // namespace jjba_strategy

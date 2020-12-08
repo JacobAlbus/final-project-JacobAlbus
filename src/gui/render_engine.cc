@@ -16,7 +16,21 @@ void RenderEngine::RenderGame() const {
 }
 
 void RenderEngine::HandleInput(const ci::app::KeyEvent& event) {
+  bool in_main_menu_before_input = game_engine_.InMainMenu();
   game_engine_.HandleInput(event);
+
+  if(game_engine_.InMainMenu()) {
+    PlayMusic("audio/kira_theme.mp3");
+  } else if(in_main_menu_before_input){
+    PlayMusic("audio/main_theme.mp3");
+  }
+
+}
+
+void RenderEngine::PlayMusic(const std::string& file_path) {
+  ci::audio::SourceFileRef source = ci::audio::load(ci::app::loadAsset(file_path));
+  audio_player_ = ci::audio::Voice::create(source);
+  audio_player_->start();
 }
 
 void RenderEngine::UpdateGameState() {
@@ -26,7 +40,7 @@ void RenderEngine::UpdateGameState() {
 void RenderEngine::RenderMainMenu() const {
   ci::fs::path path = ci::fs::path("tiles/main_menu.jpg");
   ci::gl::TextureRef kImage = ci::gl::Texture::create(ci::loadImage(cinder::app::loadAsset(path)));
-  ci::gl::color(ci::Color("white"));
+  ci::gl::color(ci::Color("gray"));
   ci::gl::draw(kImage, ci::Rectf(0, 0, kWindowSize, kWindowSize));
 
   const float kInitialPosition = kWindowSize / 40.0f;
@@ -105,7 +119,7 @@ void RenderEngine::RenderAllFacePlates() const {
   }
 }
 
-void RenderEngine::RenderInputOptions(const std::vector<std::string>& inputs ) const {
+void RenderEngine::RenderInputOptions(const std::vector<std::string>& inputs) const {
   glm::vec2 bottom_right_corner(0, kWindowSize);
   ci::Color color;
 

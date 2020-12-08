@@ -6,6 +6,8 @@ namespace jjba_strategy {
 
 namespace visualizer {
 
+ci::audio::VoiceRef mVoice;
+
 JJBAStrategyApp::JJBAStrategyApp() : render_engine_(kWindowSize, kBoardsFolderPath) {
   ci::app::setWindowSize((int) kWindowSize, (int) kWindowSize);
 }
@@ -23,9 +25,7 @@ void JJBAStrategyApp::keyDown(ci::app::KeyEvent event) {
 }
 
 void JJBAStrategyApp::setup() {
-  ci::audio::SourceFileRef sourceFile = ci::audio::load(ci::app::loadAsset("audio/johnathan_theme.wav"));
-  ci::audio::VoiceRef mVoice = ci::audio::Voice::create(sourceFile);
-  mVoice->start();
+  render_engine_.PlayMusic("audio/pillar_men_theme.mp3");
 }
 
 }  // namespace visualizer
