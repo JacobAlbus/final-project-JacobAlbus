@@ -8,9 +8,9 @@
 
 namespace jjba_strategy {
 
-enum InputType {
+enum MenuInputType {
   kAttack,
-  kMovementInput,
+  kMovement,
   kGameOver,
 };
 
@@ -151,32 +151,83 @@ private:
    */
   void PlayAttackAudio();
 
+  /**
+   * Width and length of window
+   */
   const float kWindowSize;
+  /**
+   * Path to boards folder
+   */
   const std::string kBoardsFolderPath;
+  /**
+   * Index of player in list of characters from both team
+   */
   size_t character_index_;
 
+  /**
+   * Message to users
+   */
   std::string message_;
-  InputType current_menu_input_;
+  /**
+   * Current selection in menu selecting input type
+   */
+  MenuInputType current_menu_input_;
+  /**
+   * Current selection in menu selecting attack type
+   */
   AttackType current_attack_input_;
+
   /**
    * Whether or not the player is selecting a menu input (move, attack, etc.)
    */
   bool in_input_menu_;
+  /**
+   * Whether or not the player is in the main menu
+   */
   bool in_main_menu_;
+  /**
+   * Whether or not the player is selecting an attack input
+   */
   bool in_attack_menu_;
 
+  /**
+   * Width and length of board
+   */
   size_t board_size_;
+  /**
+   * Board object containing board data
+   */
   Board board_;
 
+  /**
+   * Whether or not the current player is allied
+   */
   bool is_player_allied_;
-  glm::vec2 player_movement_option;
-  size_t player_movement_option_index;
+  /**
+   * Currently selected tile for movement
+   */
+  glm::vec2 player_movement_option_;
+  /**
+   * Index of targeted character in list of characters on opposing team
+   */
   size_t targeted_character_index_;
 
+  /**
+   * List of characters on allied team
+   */
   characters_t allied_characters_;
+  /**
+   * List of characters on enemy team
+   */
   characters_t enemy_characters_;
+  /**
+   * Current player controlled by user
+   */
   Character* player_;
 
+  /**
+   * Object able to play sounds
+   */
   ci::audio::VoiceRef audio_player_;
 };
 

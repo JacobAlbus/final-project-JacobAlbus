@@ -28,14 +28,15 @@ class Tile {
    */
   void RenderTile(const ci::Rectf& tile_location) const;
 
-  inline TileType GetType() const { return kType; }
-
  private:
   /**
    * Image representing the tile
    */
   ci::gl::TextureRef image_;
 
+  /**
+   * Type of tile, used to determine movement range and image
+   */
   const TileType kType;
 };
 

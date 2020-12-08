@@ -6,7 +6,7 @@ GameEngine::GameEngine(float window_size, const std::string& boards_folder_path)
                        kWindowSize(window_size),
                        kBoardsFolderPath(boards_folder_path),
                        board_(boards_folder_path + "board1.json"),
-                       current_menu_input_(InputType::kAttack),
+                       current_menu_input_(MenuInputType::kAttack),
                        current_attack_input_(AttackType::kStarFinger),
                        in_input_menu_(true),
                        in_attack_menu_(false),
@@ -40,14 +40,14 @@ void GameEngine::UpdateGameState() {
   }
 
   if(allied_characters_.empty() || enemy_characters_.empty()) {
-    current_menu_input_ = InputType::kGameOver;
+    current_menu_input_ = MenuInputType::kGameOver;
   }
 
   UpdateMessage();
 }
 
 void GameEngine::RenderBoardState() const {
-  bool player_is_moving = (current_menu_input_ == InputType::kMovementInput) && !in_input_menu_;
+  bool player_is_moving = (current_menu_input_ == MenuInputType::kMovement) && !in_input_menu_;
   board_.RenderBoard(kWindowSize, player_is_moving,
                      player_movement_option, CalculatePlayerMovement());
 
@@ -68,10 +68,10 @@ void GameEngine::HandleInput(const ci::app::KeyEvent& event) {
   } else {
     in_main_menu_ = false;
     switch(current_menu_input_) {
-      case InputType::kMovementInput:
+      case MenuInputType::kMovement:
         HandleMovementInput(event);
         break;
-      case InputType::kAttack:
+      case MenuInputType::kAttack:
         if(in_attack_menu_) {
           HandleAttackMenuInput(event);
         } else {
@@ -90,10 +90,10 @@ void GameEngine::UpdateMessage() {
     message_ = "Pick an input (use enter to confirm)";
   } else {
     switch(current_menu_input_) {
-      case InputType::kMovementInput:
+      case MenuInputType::kMovement:
         message_ = "Pick a tile to move to (use backspace to go back)";
         break;
-      case InputType::kAttack: {
+      case MenuInputType::kAttack: {
         if(in_attack_menu_) {
           message_ = "Pick an attack (use enter to confirm)";
         } else {
@@ -143,7 +143,7 @@ void GameEngine::UpdateBoardState(const std::string& json_file_path) {
   enemy_characters_ = Character::GenerateCharacters(json_file_path, "enemy characters");
   player_ = FindCurrentPlayer();
 
-  current_menu_input_ = InputType::kAttack;
+  current_menu_input_ = MenuInputType::kAttack;
   in_input_menu_ = true;
 
   character_index_ = 0;
@@ -168,24 +168,24 @@ void GameEngine::HandleMenuInput(const ci::app::KeyEvent &event) {
   switch(event.getCode()) {
     case ci::app::KeyEvent::KEY_a:
       if(current_input <= 0) {
-        current_menu_input_ = static_cast<InputType>(max_input);
+        current_menu_input_ = static_cast<MenuInputType>(max_input);
       } else {
-        current_menu_input_ = static_cast<InputType>(current_input - 1);
+        current_menu_input_ = static_cast<MenuInputType>(current_input - 1);
       }
       break;
     case ci::app::KeyEvent::KEY_d:
       current_input++;
       if(current_input > max_input) {
-        current_menu_input_ = static_cast<InputType>(0);
+        current_menu_input_ = static_cast<MenuInputType>(0);
       } else {
-        current_menu_input_ = static_cast<InputType>(current_input);
+        current_menu_input_ = static_cast<MenuInputType>(current_input);
       }
       break;
     case ci::app::KeyEvent::KEY_RETURN:
       in_input_menu_ = false;
-      if(current_input == InputType::kAttack) {
+      if(current_input == MenuInputType::kAttack) {
         in_attack_menu_ = true;
-      } else if(current_input == InputType::kMovementInput) {
+      } else if(current_input == MenuInputType::kMovement) {
         player_movement_option = CalculatePlayerMovement()[0];
       }
       break;
@@ -245,7 +245,7 @@ std::vector<glm::vec2> GameEngine::CalculatePlayerMovement() const {
   std::vector<glm::vec2> movement_options = player_->CalculateCharacterMovementOptions();
   std::vector<size_t> valid_tiles_indexes;
 
-  if(current_menu_input_ != InputType::kAttack) {
+  if(current_menu_input_ != MenuInputType::kAttack) {
     for(size_t index = 0; index < movement_options.size(); index++) {
       glm::vec2 movement_tile = movement_options[index];
       if(!IsCharacterAtTile(movement_tile) && !IsTileOffScreen(movement_tile)) {
