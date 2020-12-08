@@ -9,11 +9,12 @@ namespace jjba_strategy {
 class RenderEngine {
  public:
   /**
-   * Instantiates a RenderEngine Object
+   * Instantiates a RenderEngine object with a GameEngine object set to passed
+   * boards file path
    * @param size of window
    * @param path to json file containing board
    */
-  RenderEngine(float window_size_, const std::string& boards_folder_path);
+  RenderEngine(float window_size, const std::string& boards_folder_path);
 
   /**
    * Renders the board and other UI components
@@ -21,12 +22,14 @@ class RenderEngine {
   void RenderGame() const;
 
   /**
-   * Handles user inputs
+   * Handles user keyed inputs, allowing them to
+   * interact with the GameEngine object
+   *
    */
   void HandleInput(const ci::app::KeyEvent& event);
 
   /**
-   * Updates Game State
+   * Updates Game State based on user inputs and win conditions
    */
   void UpdateGameState();
 
@@ -35,6 +38,7 @@ class RenderEngine {
    * @param path to audio file
    */
   void PlayMusic(const std::string& file_path);
+
  private:
   /**
    * Renders player input options
@@ -43,7 +47,7 @@ class RenderEngine {
   void RenderInputOptions(const std::vector<std::string>& inputs) const;
 
   /**
-   * Renders All face plates
+   * Renders face plates including image of character, health, and name
    */
   void RenderAllFacePlates() const;
 
@@ -60,7 +64,7 @@ class RenderEngine {
   void SetEnemyFacePlateColor(bool is_player_allied) const;
 
   /**
-   * Renders the main menu
+   * Renders the main menu/pause screen
    */
   void RenderMainMenu() const;
 
@@ -69,8 +73,17 @@ class RenderEngine {
    */
   void RenderGameState() const;
 
+  /**
+   * GameEngine object containing game state
+   */
   GameEngine game_engine_;
-  const float kWindowSize;
+  /**
+   * Length and width of window
+   */
+  const float kWindowSize_;
+  /**
+   * Cinder object able to play audio files
+   */
   ci::audio::VoiceRef audio_player_;
 };
 

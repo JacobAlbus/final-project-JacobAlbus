@@ -14,11 +14,10 @@ class Board {
    * Instantiates board object
    * @param path to json file containing board state
    */
-  Board(const std::string& json_file_path);
+  explicit Board(const std::string& json_file_path);
 
   inline const board_t& GetBoard() const { return board_; }
 
-  inline const Tile& GetTile(size_t x, size_t y) const { return board_[x][y]; }
   /**
    * Generates board from a json file
    * @param path to json
@@ -50,7 +49,14 @@ class Board {
                             const std::vector<glm::vec2>& player_movement_options)
                             const;
 
+  /**
+   * width and length of board
+   */
   size_t board_size_;
+
+  /**
+   * 2d vector of tiles representing every square on board
+   */
   board_t board_;
 };
 

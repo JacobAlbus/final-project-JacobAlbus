@@ -49,8 +49,7 @@ get_filename_component(APP_PATH "${CMAKE_CURRENT_SOURCE_DIR}/" ABSOLUTE)
 include("${CINDER_PATH}/proj/cmake/modules/cinderMakeApp.cmake")
 
 list(APPEND ENGINE_SOURCE_FILES src/engine/board.cc src/engine/tile.cc
-                                src/engine/game_engine.cc src/engine/character.cc
-                                src/engine/attack.cc)
+                                src/engine/game_engine.cc src/engine/character.cc)
 
 list(APPEND GUI_SOURCE_FILES src/gui/jjba_strategy_app.cc src/gui/render_engine.cc)
 

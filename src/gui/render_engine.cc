@@ -4,7 +4,7 @@ namespace jjba_strategy {
 
 RenderEngine::RenderEngine(float window_size,
                            const std::string& boards_folder_path) :
-                           kWindowSize(window_size),
+                           kWindowSize_(window_size),
                            game_engine_(window_size, boards_folder_path) {}
 
 void RenderEngine::RenderGame() const {
@@ -41,37 +41,41 @@ void RenderEngine::RenderMainMenu() const {
   ci::fs::path path = ci::fs::path("tiles/main_menu.jpg");
   ci::gl::TextureRef kImage = ci::gl::Texture::create(ci::loadImage(cinder::app::loadAsset(path)));
   ci::gl::color(ci::Color("gray"));
-  ci::gl::draw(kImage, ci::Rectf(0, 0, kWindowSize, kWindowSize));
+  ci::gl::draw(kImage, ci::Rectf(0, 0, kWindowSize_, kWindowSize_));
 
-  const float kInitialPosition = kWindowSize / 40.0f;
-  const float kSpacing = kWindowSize / 15.0f;
+  const float kInitialPosition = kWindowSize_ / 40.0f;
+  const float kSpacing = kWindowSize_ / 15.0f;
 
-  ci::gl::drawStringCentered("Jojo's Bizzare Strategy Game", glm::vec2(kWindowSize / 2, kInitialPosition),
+  ci::gl::drawStringCentered("Jojo's Bizzare Strategy Game", glm::vec2(kWindowSize_ / 2, kInitialPosition),
                              ci::Color("white"), ci::Font("Impact", 80));
 
-  ci::gl::drawStringCentered("Controls", glm::vec2(kWindowSize / 4, kInitialPosition + (kSpacing * 2)),
-                             ci::Color("white"), ci::Font("Impact", 40));
-  ci::gl::drawStringCentered("Use WASD keys to navigate menus", glm::vec2(kWindowSize / 4, kInitialPosition + (kSpacing * 3)),
-                             ci::Color("white"), ci::Font("Impact", 25));
-  ci::gl::drawStringCentered("Use Enter to confirm and Backspace to decline", glm::vec2(kWindowSize / 4, kInitialPosition + (kSpacing * 4)),
-                             ci::Color("white"), ci::Font("Impact", 25));
-  ci::gl::drawStringCentered("Use ESC to go to main menu or exit game if already there", glm::vec2(kWindowSize / 4, kInitialPosition + (kSpacing * 5)),
-                             ci::Color("white"), ci::Font("Impact", 25));
+  const float kControlSpacing = 4.0f;
+  const float kHowToPlaySpacing = 1.35f;
+  const float kNormalFontSize = 25.0f;
+  const float kHeaderFontSize = 40.0f;
 
+  ci::gl::drawStringCentered("Controls", glm::vec2(kWindowSize_ / kControlSpacing, kInitialPosition + (kSpacing * 2)),
+                             ci::Color("white"), ci::Font("Impact", kHeaderFontSize));
+  ci::gl::drawStringCentered("Use WASD keys to navigate menus", glm::vec2(kWindowSize_ / kControlSpacing, kInitialPosition + (kSpacing * 3)),
+                             ci::Color("white"), ci::Font("Impact", kNormalFontSize));
+  ci::gl::drawStringCentered("Use Enter to confirm and Backspace to decline", glm::vec2(kWindowSize_ / kControlSpacing, kInitialPosition + (kSpacing * 4)),
+                             ci::Color("white"), ci::Font("Impact", kNormalFontSize));
+  ci::gl::drawStringCentered("Use ESC to go to main menu or exit game if already there", glm::vec2(kWindowSize_ / kControlSpacing, kInitialPosition + (kSpacing * 5)),
+                             ci::Color("white"), ci::Font("Impact", kNormalFontSize));
 
-  ci::gl::drawStringCentered("How to Play", glm::vec2(kWindowSize / 1.35, kInitialPosition + (kSpacing * 2)),
-                             ci::Color("white"), ci::Font("Impact", 40));
-  ci::gl::drawStringCentered("The goal is to move characters around the board", glm::vec2(kWindowSize / 1.35, kInitialPosition + (kSpacing * 3)),
-                             ci::Color("white"), ci::Font("Impact", 25));
-  ci::gl::drawStringCentered("and kill the other team", glm::vec2(kWindowSize / 1.35, kInitialPosition + (kSpacing * 3.3)),
-                             ci::Color("white"), ci::Font("Impact", 25));
-  ci::gl::drawStringCentered("Your characters move in a set order and can", glm::vec2(kWindowSize / 1.35, kInitialPosition + (kSpacing * 4)),
-                             ci::Color("white"), ci::Font("Impact", 25));
-  ci::gl::drawStringCentered("only attack OR move each turn", glm::vec2(kWindowSize / 1.35, kInitialPosition + (kSpacing * 4.3)),
-                             ci::Color("white"), ci::Font("Impact", 25));
+  ci::gl::drawStringCentered("How to Play", glm::vec2(kWindowSize_ / kHowToPlaySpacing , kInitialPosition + (kSpacing * 2)),
+                             ci::Color("white"), ci::Font("Impact", kHeaderFontSize));
+  ci::gl::drawStringCentered("The goal is to move characters around the board", glm::vec2(kWindowSize_ / kHowToPlaySpacing , kInitialPosition + (kSpacing * 3)),
+                             ci::Color("white"), ci::Font("Impact", kNormalFontSize));
+  ci::gl::drawStringCentered("and kill the other team", glm::vec2(kWindowSize_ / kHowToPlaySpacing , kInitialPosition + (kSpacing * 3.3)),
+                             ci::Color("white"), ci::Font("Impact", kNormalFontSize));
+  ci::gl::drawStringCentered("Your characters move in a set order and can", glm::vec2(kWindowSize_ / kHowToPlaySpacing , kInitialPosition + (kSpacing * 4)),
+                             ci::Color("white"), ci::Font("Impact", kNormalFontSize));
+  ci::gl::drawStringCentered("only attack OR move each turn", glm::vec2(kWindowSize_ / kHowToPlaySpacing, kInitialPosition + (kSpacing * 4.3)),
+                             ci::Color("white"), ci::Font("Impact", kNormalFontSize));
 
-  ci::gl::drawStringCentered("Press any key to start playing!", glm::vec2(kWindowSize / 2, kInitialPosition + (kSpacing * 6)),
-                             ci::Color("white"), ci::Font("Impact", 35));
+  ci::gl::drawStringCentered("Press any key to start playing!", glm::vec2(kWindowSize_ / 2, kInitialPosition + (kSpacing * 6)),
+                             ci::Color("white"), ci::Font("Impact", kHeaderFontSize));
 }
 
 void RenderEngine::RenderGameState() const {
@@ -91,7 +95,7 @@ void RenderEngine::RenderGameState() const {
   RenderInputOptions(inputs);
   RenderAllFacePlates();
 
-  ci::gl::drawStringCentered(game_engine_.GetMessage(), glm::vec2(kWindowSize / 2, kWindowSize / 10),
+  ci::gl::drawStringCentered(game_engine_.GetMessage(), glm::vec2(kWindowSize_ / 2, kWindowSize_ / 10),
                              ci::Color("white"), ci::Font("Impact", 20));
 }
 
@@ -106,7 +110,7 @@ void RenderEngine::RenderAllFacePlates() const {
     allied_characters[index].RenderCharacterFacePlate(is_character_enemy,
                                                       game_engine_.GetBoardSize(),
                                                       index,
-                                                      kWindowSize);
+                                                      kWindowSize_);
   }
 
   SetEnemyFacePlateColor(is_player_allied);
@@ -115,19 +119,19 @@ void RenderEngine::RenderAllFacePlates() const {
     enemy_characters[index].RenderCharacterFacePlate(is_character_enemy,
                                                      game_engine_.GetBoardSize(),
                                                      index,
-                                                     kWindowSize);
+                                                     kWindowSize_);
   }
 }
 
 void RenderEngine::RenderInputOptions(const std::vector<std::string>& inputs) const {
-  glm::vec2 bottom_right_corner(0, kWindowSize);
+  glm::vec2 bottom_right_corner(0, kWindowSize_);
   ci::Color color;
 
   for(size_t index = 0; index < inputs.size(); index++) {
-    const float kBottomMargin = kWindowSize / 20.0f;
-    const float kSideSpacing = (kWindowSize / 8.0f) * (index + 1.0f);
+    const float kBottomMargin = kWindowSize_ / 20.0f;
+    const float kSideSpacing = (kWindowSize_ / 8.0f) * (index + 1.0f);
 
-    if(static_cast<size_t>(game_engine_.GetInputType()) == index) {
+    if(game_engine_.GetInputType() == index) {
       color = ci::Color("blue");
     } else {
       color = ci::Color("white");

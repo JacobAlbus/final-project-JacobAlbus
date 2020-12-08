@@ -7,17 +7,16 @@ Character::Character(const std::string& name,
                      const glm::vec2& position,
                      const std::string& image_path,
                      bool is_player,
-                     bool is_targeted,
                      size_t character_type_index) :
                      current_attack_type_(static_cast<AttackType>(0)),
-                     kName(name),
+                     name_(name),
                      position_(position),
                      character_type(static_cast<CharacterType>(character_type_index)),
                      is_player_(is_player),
-                     is_targeted_(is_targeted) {
+                     is_targeted_(false) {
 
   switch(character_type) {
-    case CharacterType::kBrawler :
+    case CharacterType::kBrawler:
       health_ = 200.0f;
       movement_range_ = 1;
       attacks_.emplace_back(AttackType::kStarFinger);
@@ -38,15 +37,31 @@ Character::Character(const std::string& name,
   }
 
   ci::fs::path path = ci::fs::path(image_path);
-  kImage = ci::gl::Texture::create(ci::loadImage(cinder::app::loadAsset(path)));
+  image_ = ci::gl::Texture::create(ci::loadImage(cinder::app::loadAsset(path)));
 }
 
-void Character::UpdatePosition(const glm::vec2 &updated_position) {
-  position_ = updated_position;
-}
+std::vector<Character> Character::GenerateCharacters(const std::string &json_file_path,
+                                                     const std::string &characters_type) {
+  std::ifstream file(json_file_path);
+  nlohmann::json board_state;
+  file >> board_state;
+  std::vector<Character> characters;
 
-void Character::UpdateIsPlayer() {
-  is_player_ = !is_player_;
+  for(const auto& json_characters : board_state[characters_type]) {
+    for(const auto& character: json_characters){
+      std::string name = character[0];
+      size_t x_position = character[1][0];
+      size_t y_position = character[1][1];
+      glm::vec2 position(x_position, y_position);
+      std::string image_path = character[2];
+      bool is_player = character[3];
+      size_t character_type_index = character[4];
+      characters.emplace_back(name, position, image_path,
+                              is_player, character_type_index);
+    }
+  }
+
+  return characters;
 }
 
 void Character::RenderCharacter(size_t board_size, float window_size) const {
@@ -60,7 +75,7 @@ void Character::RenderCharacter(size_t board_size, float window_size) const {
 
   ci::Rectf pixel_bounding_box = CalculatePixelBoundingBox(board_size,
                                                            window_size);
-  ci::gl::draw(kImage, pixel_bounding_box);
+  ci::gl::draw(image_, pixel_bounding_box);
 }
 
 void Character::RenderCharacterFacePlate(bool is_enemy, size_t board_size,
@@ -80,15 +95,14 @@ void Character::RenderCharacterFacePlate(bool is_enemy, size_t board_size,
   glm::vec2 pixel_bottom_right = pixel_top_left + glm::vec2(kTileSize, kTileSize);
   ci::Rectf pixel_bounding_box(pixel_top_left, pixel_bottom_right);
 
-  ci::gl::draw(kImage, pixel_bounding_box);
+  ci::gl::draw(image_, pixel_bounding_box);
 
-  //TODO implement health bar
   const float kSpacing = -10.0f;
   auto health = static_cast<size_t>(health_);
   ci::gl::drawStringCentered(std::to_string(health),
                              pixel_bottom_right - glm::vec2(kTileSize / 2, kSpacing),
                              ci::Color("white"), ci::Font("Impact", 20));
-  ci::gl::drawStringCentered(kName,
+  ci::gl::drawStringCentered(name_,
                              pixel_bottom_right - glm::vec2(kTileSize / 2, kSpacing * 3),
                              ci::Color("white"), ci::Font("Impact", 20));
 }

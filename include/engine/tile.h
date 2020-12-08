@@ -31,7 +31,10 @@ class Tile {
   inline TileType GetType() const { return kType; }
 
  private:
-  ci::gl::TextureRef kImage;
+  /**
+   * Image representing the tile
+   */
+  ci::gl::TextureRef image_;
 
   const TileType kType;
 };

@@ -46,7 +46,6 @@ class GameEngine {
   inline size_t GetBoardSize() const { return board_size_; }
   inline const Character* GetPlayer() const { return player_; }
   size_t GetInputType() const;
-  inline const glm::vec2& GetMovementOption() const { return player_movement_option; }
   inline const std::string& GetMessage() const { return message_; }
   inline size_t GetCharacterIndex() const { return character_index_; }
   inline bool InInputMenu() const { return in_input_menu_; }

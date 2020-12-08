@@ -22,12 +22,12 @@ class Character {
    * @param position of character
    * @param path to image file
    * @param whether or not character is initial player
+   * @param index in CharacterType enum
    */
   Character(const std::string& name,
             const glm::vec2& position,
             const std::string& image_path,
             bool is_player,
-            bool is_targeted,
             size_t character_type_index);
 
   /**
@@ -38,20 +38,9 @@ class Character {
   inline Character& operator=(const Character& rhs) = default;
 
   /**
-   * Updates position of player
-   * @param new position of player
-   */
-  void UpdatePosition(const glm::vec2& updated_position);
-
-  /**
    * Renders character at their position
    */
   void RenderCharacter(size_t board_size, float window_size) const;
-
-  /**
-   * Changes whether or not character is current player
-   */
-  void UpdateIsPlayer();
 
   /**
    * Renders character face plate at top of the screen
@@ -62,12 +51,6 @@ class Character {
    */
   void RenderCharacterFacePlate(bool is_enemy, size_t board_size,
                                 size_t index, float window_size) const;
-
-  /**
-   * Updates health with passed value
-   * @param passed value
-   */
-  void UpdateHealth(float new_health);
 
   /**
    * Calculates character movement options
@@ -88,36 +71,18 @@ class Character {
    * @return vector of characters from JSON file
    */
   static std::vector<Character> Character::GenerateCharacters(const std::string& json_file_path,
-                                                              const std::string& characters_type) {
-    std::ifstream file(json_file_path);
-    nlohmann::json board_state;
-    file >> board_state;
-    std::vector<Character> characters;
-
-    for(const auto& json_characters : board_state[characters_type]) {
-      for(const auto& character: json_characters){
-        std::string name = character[0];
-        size_t x_position = character[1][0];
-        size_t y_position = character[1][1];
-        glm::vec2 position(x_position, y_position);
-        std::string image_path = character[2];
-        bool is_player = character[3];
-        size_t character_type_index = character[4];
-        characters.emplace_back(name, position, image_path,
-                                is_player, false, character_type_index);
-      }
-    }
-
-    return characters;
-  }
+                                                              const std::string& characters_type);
 
   inline const glm::vec2& GetPosition() const { return position_; };
   inline bool IsPlayer() const { return is_player_; }
   inline float GetHealth() const { return health_; }
-  inline void UpdateIsTarget() { is_targeted_ = !is_targeted_; }
   inline const std::vector<Attack>& GetAttacks() const { return attacks_; }
   inline AttackType GetCurrentAttackType() const { return current_attack_type_; }
   inline void UpdateCurrentAttackType(AttackType new_type) { current_attack_type_ = new_type; }
+
+  inline void ToggleIsPlayer() { is_player_ = !is_player_; }
+  inline void ToggleIsTarget() { is_targeted_ = !is_targeted_; }
+  inline void SetPosition(const glm::vec2 &updated_position) { position_ = updated_position; }
 
  private:
   /**
@@ -126,15 +91,45 @@ class Character {
    */
   ci::Rectf CalculatePixelBoundingBox(size_t board_size, float window_size) const;
 
+  /**
+   * Health of character
+   */
   float health_;
+  /**
+   * Whether or not character is being controlled
+   */
   bool is_player_;
+  /**
+   * Whether or not character is currently being targeted
+   */
   bool is_targeted_;
+  /**
+   * How many squares character can move in single turn
+   */
   int movement_range_;
+  /**
+   * Position of character
+   */
   glm::vec2 position_;
-  std::string kName;
-  ci::gl::TextureRef kImage;
+  /**
+   * Name of Character
+   */
+  std::string name_;
+  /**
+   * Image object of character
+   */
+  ci::gl::TextureRef image_;
+  /**
+   * Vector containing all attacks character can perform
+   */
   std::vector<Attack> attacks_;
+  /**
+   * Type of character. Determines health, movement range, and attack options
+   */
   CharacterType character_type;
+  /**
+   * Currently selected attack type
+   */
   AttackType current_attack_type_;
 };
 
