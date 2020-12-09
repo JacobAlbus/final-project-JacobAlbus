@@ -11,6 +11,7 @@ namespace jjba_strategy {
 enum MenuInputType {
   kAttack,
   kMovement,
+  kSkip,
   kGameOver,
 };
 
@@ -172,10 +173,6 @@ private:
    * Current selection in menu selecting input type
    */
   MenuInputType current_menu_input_;
-  /**
-   * Current selection in menu selecting attack type
-   */
-  AttackType current_attack_input_;
 
   /**
    * Whether or not the player is selecting a menu input (move, attack, etc.)

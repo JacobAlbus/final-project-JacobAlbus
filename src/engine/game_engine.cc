@@ -7,12 +7,10 @@ GameEngine::GameEngine(float window_size, const std::string& boards_folder_path)
                        kBoardsFolderPath(boards_folder_path),
                        board_(boards_folder_path + "board1.json"),
                        current_menu_input_(MenuInputType::kAttack),
-                       current_attack_input_(AttackType::kStarFinger),
                        in_input_menu_(true),
                        in_attack_menu_(false),
                        in_main_menu_(true),
-                       player_movement_option_index(0),
-                       player_movement_option(glm::vec2(0, 0)),
+                       player_movement_option_(glm::vec2(0, 0)),
                        is_player_allied_(true),
                        character_index_(0),
                        targeted_character_index_(0),
@@ -49,7 +47,7 @@ void GameEngine::UpdateGameState() {
 void GameEngine::RenderBoardState() const {
   bool player_is_moving = (current_menu_input_ == MenuInputType::kMovement) && !in_input_menu_;
   board_.RenderBoard(kWindowSize, player_is_moving,
-                     player_movement_option, CalculatePlayerMovement());
+                     player_movement_option_, CalculatePlayerMovement());
 
   for(const auto& character : allied_characters_) {
     character.RenderCharacter(board_size_, kWindowSize);
@@ -78,6 +76,10 @@ void GameEngine::HandleInput(const ci::app::KeyEvent& event) {
           HandleAttackInput(event);
         }
         break;
+      case kSkip:
+        UpdatePlayableCharacter();
+        in_input_menu_ = true;
+        break;
       case kGameOver:
         HandleGameOverInput(event);
         break;
@@ -91,7 +93,11 @@ void GameEngine::UpdateMessage() {
   } else {
     switch(current_menu_input_) {
       case MenuInputType::kMovement:
-        message_ = "Pick a tile to move to (use backspace to go back)";
+        if(CalculatePlayerMovement().size() == 1) {
+          message_ = "No tiles to move to, skip turn or attack";
+        } else {
+          message_ = "Pick a tile to move to (use backspace to go back)";
+        }
         break;
       case MenuInputType::kAttack: {
         if(in_attack_menu_) {
@@ -147,7 +153,6 @@ void GameEngine::UpdateBoardState(const std::string& json_file_path) {
   in_input_menu_ = true;
 
   character_index_ = 0;
-  player_movement_option_index = 0;
   targeted_character_index_ = 0;
 }
 
@@ -186,7 +191,9 @@ void GameEngine::HandleMenuInput(const ci::app::KeyEvent &event) {
       if(current_input == MenuInputType::kAttack) {
         in_attack_menu_ = true;
       } else if(current_input == MenuInputType::kMovement) {
-        player_movement_option = CalculatePlayerMovement()[0];
+        player_movement_option_ = CalculatePlayerMovement()[0];
+      } else if(current_input == MenuInputType::kSkip) {
+        HandleInput(event);
       }
       break;
     case ci::app::KeyEvent::KEY_ESCAPE:
@@ -204,36 +211,36 @@ void GameEngine::HandleMovementInput(const ci::app::KeyEvent& event) {
       in_input_menu_ = true;
       break;
     case ci::app::KeyEvent::KEY_a: {
-      glm::vec2 temp_tile(player_movement_option.x, player_movement_option.y - 1);
+      glm::vec2 temp_tile(player_movement_option_.x, player_movement_option_.y - 1);
       if (IsMovementInRange(movement_options, temp_tile)) {
-        player_movement_option = temp_tile;
+        player_movement_option_ = temp_tile;
       }
       break;
     }
     case ci::app::KeyEvent::KEY_d: {
-      glm::vec2 temp_tile(player_movement_option.x, player_movement_option.y + 1);
+      glm::vec2 temp_tile(player_movement_option_.x, player_movement_option_.y + 1);
       if (IsMovementInRange(movement_options, temp_tile)) {
-        player_movement_option = temp_tile;
+        player_movement_option_ = temp_tile;
       }
       break;
     }
     case ci::app::KeyEvent::KEY_w:  {
-      glm::vec2 temp_tile(player_movement_option.x - 1, player_movement_option.y);
+      glm::vec2 temp_tile(player_movement_option_.x - 1, player_movement_option_.y);
       if (IsMovementInRange(movement_options, temp_tile)) {
-        player_movement_option = temp_tile;
+        player_movement_option_ = temp_tile;
       }
       break;
     }
     case ci::app::KeyEvent::KEY_s: {
-      glm::vec2 temp_tile(player_movement_option.x + 1, player_movement_option.y);
+      glm::vec2 temp_tile(player_movement_option_.x + 1, player_movement_option_.y);
       if (IsMovementInRange(movement_options, temp_tile)) {
-        player_movement_option = temp_tile;
+        player_movement_option_ = temp_tile;
       }
       break;
     }
     case ci::app::KeyEvent::KEY_RETURN:
-      if(player_movement_option != player_->GetPosition()) {
-        player_->SetPosition(player_movement_option);
+      if(player_movement_option_ != player_->GetPosition()) {
+        player_->SetPosition(player_movement_option_);
         UpdatePlayableCharacter();
         in_input_menu_ = true;
       }

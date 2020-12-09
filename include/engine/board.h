@@ -35,6 +35,30 @@ class Board {
                    const std::vector<glm::vec2>& player_movement_options)
                    const;
 
+  /**
+   * Creates a json object containing board date
+   * @return json object containing board data
+   */
+  static nlohmann::json ReadJSONFile(const std::string& json_file_path);
+
+  /**
+   * Checks to see if Board is square, throws error if not
+   * @param json object containing board
+   */
+  static void CheckIfBoardSquare(const nlohmann::json& board_state);
+
+  /**
+   * Checks to see if Board is empty, throws error if not
+   * @param json object containing board
+   */
+  static void CheckIfBoardEmpty(const nlohmann::json& board_state);
+
+  /**
+   * Checks to see if Board object exists in JSON, throws error if not
+   * @param json object containing board
+   */
+  static void CheckIfBoardExists(const nlohmann::json& board_state);
+
  private:
   /**
    * Updates the color of a tile depending player movement

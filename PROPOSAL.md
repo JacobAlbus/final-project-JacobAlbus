@@ -11,6 +11,6 @@
 	in the past when I tried to allow for more free form movement. However, I believe that the project should still
 	be of significant challenge, especially if I make complex item/battle systems.
 		By the end of the first week, I hope to have created a basic map and character class, allowing me to move
-	across a simple tiled board. By the end of the second week, I hope to have implemented items and a basic battle
-	system allowing me to actually create a full battle for the player to play through. By the end of my third week,
-	I hope to have created multiple battles, with dialogue, a hub world, and NPC's I can interact with.
+	across a simple tiled board. By the end of the second week, I hope to have created an intuitive user interface and
+	implemented more robust attack options. By the end of the third week, I hope to have created mutliple maps for people to
+	play on, audio based on in-game events, and a menu-screen detailing how to play the game.

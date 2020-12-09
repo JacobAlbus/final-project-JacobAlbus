@@ -85,6 +85,7 @@ void RenderEngine::RenderGameState() const {
   if(game_engine_.InInputMenu()) {
     inputs.emplace_back("Attack");
     inputs.emplace_back("Move Player");
+    inputs.emplace_back("Skip");
   } else if(game_engine_.InAttackMenu()) {
     const std::vector<Attack> player_attacks = game_engine_.GetPlayer()->GetAttacks();
     for(const auto& attack : player_attacks) {

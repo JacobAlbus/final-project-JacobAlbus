@@ -10,14 +10,11 @@ Board::Board(const std::string& json_file_path) {
 
 void Board::GenerateBoard(const std::string& json_file_path) {
   board_.clear();
-  std::ifstream file(json_file_path);
-  nlohmann::json board_state;
 
-  try {
-    file >> board_state;
-  } catch (const std::string& message) {
-    throw std::invalid_argument("The passed json is null: " + message);
-  }
+  nlohmann::json board_state = ReadJSONFile(json_file_path);
+  CheckIfBoardExists(board_state);
+  CheckIfBoardEmpty(board_state);
+  CheckIfBoardSquare(board_state);
 
   for(const auto& file_row : board_state["board"]) {
     std::vector<Tile> board_row;
@@ -29,12 +26,6 @@ void Board::GenerateBoard(const std::string& json_file_path) {
   }
 
   board_size_ = board_.size();
-
-  for(const auto& row : board_) {
-    if(board_size_ != row.size()) {
-      throw std::exception("The board object in the passed JSON is not a square");
-    }
-  }
 }
 
 void Board::RenderBoard(float window_size,
@@ -59,6 +50,46 @@ void Board::RenderBoard(float window_size,
       const auto& tile = board_[row][col];
       tile.RenderTile(pixel_bounding_box);
     }
+  }
+}
+
+nlohmann::json Board::ReadJSONFile(const std::string& json_file_path) {
+  std::ifstream file(json_file_path);
+  nlohmann::json board_state;
+
+  try {
+    file >> board_state;
+  }
+  catch (nlohmann::detail::parse_error& ex) {
+    std::cerr << "Passed JSON is Null" << ex.byte << std::endl;
+    throw std::invalid_argument("");
+  }
+
+  return board_state;
+}
+
+void Board::CheckIfBoardSquare(const nlohmann::json& board_state) {
+  for(const auto& row : board_state["board"]) {
+    if(board_state["board"].size() != row.size()) {
+      std::cerr << "The board object in the passed JSON is not a square" << std::endl;
+      throw std::exception("");
+    }
+  }
+}
+
+void Board::CheckIfBoardEmpty(const nlohmann::json &board_state) {
+  if(board_state["board"].empty()) {
+    std::cerr << "The board object in the passed JSON is empty" << std::endl;
+    throw std::exception("");
+  }
+}
+
+void Board::CheckIfBoardExists(const nlohmann::json& board_state) {
+  try {
+    const auto& temp = board_state["board"];
+  } catch (const std::exception& ex) {
+    std::cerr << "There is no board object in the passed JSON" << ex.what() << std::endl;
+    throw std::exception("");
   }
 }
 
