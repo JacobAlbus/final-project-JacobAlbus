@@ -5,7 +5,7 @@ namespace jjba_strategy {
 RenderEngine::RenderEngine(float window_size,
                            const std::string& boards_folder_path) :
                            kWindowSize_(window_size),
-                           game_engine_(window_size, boards_folder_path) {}
+                           game_engine_(window_size, boards_folder_path, false) {}
 
 void RenderEngine::RenderGame() const {
   if(game_engine_.InMainMenu()) {

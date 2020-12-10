@@ -29,7 +29,7 @@ class Character {
             const std::string& image_path,
             bool is_player,
             size_t character_type_index,
-            bool is_unit_testing);
+            bool is_unit_test);
 
   /**
    * Copies values of passed character into a different character object

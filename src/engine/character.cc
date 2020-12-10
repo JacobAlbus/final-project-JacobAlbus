@@ -8,7 +8,7 @@ Character::Character(const std::string& name,
                      const std::string& image_path,
                      bool is_player,
                      size_t character_type_index,
-                     bool is_unit_testing) :
+                     bool is_unit_test) :
                      current_attack_type_(static_cast<AttackType>(0)),
                      kName(name),
                      position_(position),
@@ -37,7 +37,7 @@ Character::Character(const std::string& name,
       break;
   }
 
-  if(!is_unit_testing) {
+  if(!is_unit_test) {
     ci::fs::path path = ci::fs::path(image_path);
     image_ = ci::gl::Texture::create(ci::loadImage(cinder::app::loadAsset(path)));
   }

@@ -2,10 +2,10 @@
 
 namespace jjba_strategy {
 
-GameEngine::GameEngine(float window_size, const std::string& boards_folder_path) :
+GameEngine::GameEngine(float window_size, const std::string& boards_folder_path, bool is_unit_test) :
                        kWindowSize(window_size),
                        kBoardsFolderPath(boards_folder_path),
-                       board_(boards_folder_path + "board1.json"),
+                       board_(boards_folder_path + "board1.json", is_unit_test),
                        current_menu_input_(MenuInputType::kAttack),
                        in_input_menu_(true),
                        in_attack_menu_(false),
@@ -16,10 +16,17 @@ GameEngine::GameEngine(float window_size, const std::string& boards_folder_path)
                        targeted_character_index_(0),
                        message_("Pick an input (use enter bar to confirm)") {
 
-  allied_characters_ = Character::GenerateCharacters(boards_folder_path + "board1.json", "allied characters");
-  enemy_characters_ = Character::GenerateCharacters(boards_folder_path + "board1.json", "enemy characters");
-  player_ = FindCurrentPlayer();
-  board_size_ = board_.GetBoard().size();
+  if(is_unit_test) {
+    allied_characters_.push_back(Character("long", glm::vec2(5, 5), "characters/jotaro.jpg", true, CharacterType::kBrawler, is_unit_test));
+    enemy_characters_.push_back(Character("brawler", glm::vec2(6, 6), "characters/jotaro.jpg", false, CharacterType::kBrawler, is_unit_test));
+    player_ = FindCurrentPlayer();
+    board_size_ = 10;
+  } else {
+    allied_characters_ = Character::GenerateCharacters(boards_folder_path + "board1.json", "allied characters");
+    enemy_characters_ = Character::GenerateCharacters(boards_folder_path + "board1.json", "enemy characters");
+    player_ = FindCurrentPlayer();
+    board_size_ = board_.GetBoard().size();
+  }
 }
 
 void GameEngine::UpdateGameState() {
@@ -30,7 +37,6 @@ void GameEngine::UpdateGameState() {
       allied_characters_.erase(allied_characters_.begin() + index);
     }
   }
-
   for(size_t index = 0; index < enemy_characters_.size(); index++) {
     if(enemy_characters_[index].GetHealth() <= 0.0f) {
       enemy_characters_.erase(enemy_characters_.begin() + index);
@@ -119,6 +125,8 @@ void GameEngine::UpdateMessage() {
         if(enemy_characters_.empty()) {
           message_ = "Allies Win!";
         }
+        break;
+      case kSkip: //added so CLION would shut up
         break;
     }
   }
@@ -273,18 +281,18 @@ std::vector<glm::vec2> GameEngine::CalculatePlayerMovement() const {
 }
 
 bool GameEngine::IsCharacterAtTile(const glm::vec2& tile_position) const {
+  if(tile_position == player_->GetPosition()) {
+    return false;
+  }
+
   for(const auto& character : allied_characters_) {
-    if(tile_position == player_->GetPosition()) {
-      break;
-    } else if(character.GetPosition() == tile_position) {
+    if(character.GetPosition() == tile_position) {
       return true;
     }
   }
 
   for(const auto& character : enemy_characters_) {
-    if(tile_position == player_->GetPosition()) {
-      break;
-    } else if(character.GetPosition() == tile_position) {
+     if(character.GetPosition() == tile_position) {
       return true;
     }
   }
@@ -442,10 +450,6 @@ bool GameEngine::IsMovementInRange(const std::vector<glm::vec2>& movement_option
   }
 
   return false;
-  //  //TODO get this to work
-//  return std::any_of(allied_characters_.begin()->GetPosition(),
-//                     allied_characters_.end()->GetPosition(),
-//                     [] (const auto& other_pos) { return tile_position == other_pos; });
 }
 
 void GameEngine::PlayAttackAudio() {

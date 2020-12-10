@@ -24,7 +24,7 @@ class GameEngine {
    * @param board size of initial board
    * @param path to json file containing board state
    */
-  GameEngine(float window_size, const std::string& json_file_path);
+  GameEngine(float window_size, const std::string& json_file_path, bool is_unit_test);
 
   /**
    * Handles User Inputs
@@ -41,6 +41,39 @@ class GameEngine {
    * Checks for win conditions and deaths and updates game accordingly
    */
   void UpdateGameState();
+
+  /**
+   * Updates which character is currently being controlled
+   */
+  void UpdatePlayableCharacter(); // Made public for testing
+
+  /**
+   * Returns true or false depending on if a character exists at tile
+   * @param given position object
+   * @return true or false
+   */
+  bool IsCharacterAtTile(const glm::vec2& tile_position) const; // Made public for testing
+
+  /**
+   * Checks to see if tile is on the screen
+   * @param position of tile
+   * @return true or false depending on if tile is off screen
+   */
+  bool IsTileOffScreen(const glm::vec2& position) const; // Made public for testing
+
+  /**
+   * Checks to see if currently selected movement tile is within range
+   * @param vector of possible movement option
+   * @return true or false depending on if the selected tile is within range
+   */
+  bool IsMovementInRange(const std::vector<glm::vec2>& movement_options,
+                         const glm::vec2& selected_tile) const; // Made public for testing
+
+  /**
+   * Calculates tiles player is able to move to in turn
+   * @return vector of positions player can move to
+   */
+  std::vector<glm::vec2> CalculatePlayerMovement() const; // Made public for testing
 
   inline const characters_t& GetAlliedCharacters() const { return allied_characters_; }
   inline const characters_t& GetEnemyCharacters() const { return enemy_characters_; }
@@ -61,33 +94,6 @@ private:
   void HandleMovementInput(const ci::app::KeyEvent& event);
 
   /**
-   * Returns true or false depending if a character exists at tile
-   * @param given position object
-   * @return true or false
-   */
-  bool IsCharacterAtTile(const glm::vec2& tile_position) const;
-
-  /**
-   * Checks to see if tile is on the screen
-   * @param position of tile
-   * @return true or false depending on if tile is off screen
-   */
-  bool IsTileOffScreen(const glm::vec2& position) const;
-
-  /**
-   * Checks to see if currently selected movement tile is within range
-   * @param vector of possible movement option
-   * @return true or false depending on if the selected tile is within range
-   */
-  bool IsMovementInRange(const std::vector<glm::vec2>& movement_options,
-                         const glm::vec2& selected_tile) const;
-
-  /**
-   * Updates which character is currently being controlled
-   */
-  void UpdatePlayableCharacter();
-
-  /**
    * Updates the state of board, including the characters
    */
   void UpdateBoardState(const std::string& json_file_path);
@@ -97,12 +103,6 @@ private:
    * @return index of current player
    */
   Character* FindCurrentPlayer();
-
-  /**
-   * Calculates tiles player is able to move to in turn
-   * @return vector of positions player can move to
-   */
-  std::vector<glm::vec2> CalculatePlayerMovement() const;
 
   /**
    * Handles inputs to the character action menu
@@ -139,7 +139,7 @@ private:
   /**
    * Updates message to player
    */
- void UpdateMessage();
+  void UpdateMessage();
 
   /**
    * Handles input for when the game is over;

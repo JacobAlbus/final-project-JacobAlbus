@@ -3,9 +3,37 @@
 
 namespace jjba_strategy {
 
-Board::Board(const std::string& json_file_path) {
-  GenerateBoard(json_file_path);
-  board_size_ = board_.size();
+Board::Board(const std::string& json_file_path, bool is_unit_test) {
+  if(is_unit_test) {
+    std::vector<Tile> empty_row;
+
+    board_.push_back(empty_row);
+    board_[0].push_back(Tile(TileType::kGrass, is_unit_test));
+    board_[0].push_back(Tile(TileType::kGrass, is_unit_test));
+    board_[0].push_back(Tile(TileType::kGrass, is_unit_test));
+    board_[0].push_back(Tile(TileType::kGrass, is_unit_test));
+
+    board_.push_back(empty_row);
+    board_[1].push_back(Tile(TileType::kDesert, is_unit_test));
+    board_[1].push_back(Tile(TileType::kDesert, is_unit_test));
+    board_[1].push_back(Tile(TileType::kDesert, is_unit_test));
+    board_[1].push_back(Tile(TileType::kDesert, is_unit_test));
+
+    board_.push_back(empty_row);
+    board_[2].push_back(Tile(TileType::kWater, is_unit_test));
+    board_[2].push_back(Tile(TileType::kWater, is_unit_test));
+    board_[2].push_back(Tile(TileType::kWater, is_unit_test));
+    board_[2].push_back(Tile(TileType::kWater, is_unit_test));
+
+    board_.push_back(empty_row);
+    board_[3].push_back(Tile(TileType::kMountain, is_unit_test));
+    board_[3].push_back(Tile(TileType::kMountain, is_unit_test));
+    board_[3].push_back(Tile(TileType::kMountain, is_unit_test));
+    board_[3].push_back(Tile(TileType::kMountain, is_unit_test));
+  } else {
+    GenerateBoard(json_file_path);
+    board_size_ = board_.size();
+  }
 }
 
 void Board::GenerateBoard(const std::string& json_file_path) {
@@ -19,7 +47,8 @@ void Board::GenerateBoard(const std::string& json_file_path) {
   for(const auto& file_row : board_state["board"]) {
     std::vector<Tile> board_row;
     for(const auto& file_tile : file_row) {
-      Tile board_tile = Tile(static_cast<TileType>(*file_tile.begin()));
+      bool is_unit_test = false;
+      Tile board_tile = Tile(static_cast<TileType>(*file_tile.begin()), is_unit_test);
       board_row.push_back(board_tile);
     }
     board_.push_back(board_row);

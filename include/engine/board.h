@@ -14,7 +14,7 @@ class Board {
    * Instantiates board object
    * @param path to json file containing board state
    */
-  explicit Board(const std::string& json_file_path);
+  explicit Board(const std::string& json_file_path, bool is_unit_test);
 
   inline const board_t& GetBoard() const { return board_; }
 
@@ -39,25 +39,25 @@ class Board {
    * Creates a json object containing board date
    * @return json object containing board data
    */
-  static nlohmann::json ReadJSONFile(const std::string& json_file_path);
+  static nlohmann::json ReadJSONFile(const std::string& json_file_path) ;
 
   /**
    * Checks to see if Board is square, throws error if not
    * @param json object containing board
    */
-  static void CheckIfBoardSquare(const nlohmann::json& board_state);
+   static void CheckIfBoardSquare(const nlohmann::json& board_state) ;
 
   /**
    * Checks to see if Board is empty, throws error if not
    * @param json object containing board
    */
-  static void CheckIfBoardEmpty(const nlohmann::json& board_state);
+  static void CheckIfBoardEmpty(const nlohmann::json& board_state) ;
 
   /**
    * Checks to see if Board object exists in JSON, throws error if not
    * @param json object containing board
    */
-  static void CheckIfBoardExists(const nlohmann::json& board_state);
+  static void CheckIfBoardExists(const nlohmann::json& board_state) ;
 
  private:
   /**

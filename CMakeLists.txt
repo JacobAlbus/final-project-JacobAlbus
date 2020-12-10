@@ -53,8 +53,7 @@ list(APPEND ENGINE_SOURCE_FILES src/engine/board.cc src/engine/tile.cc
 
 list(APPEND GUI_SOURCE_FILES src/gui/jjba_strategy_app.cc src/gui/render_engine.cc)
 
-list(APPEND TEST_FILES tests/board_tests.cc tests/character_tests.cc tests/game_engine_tests.cc
-                       tests/tile_tests.cc)
+list(APPEND TEST_FILES tests/board_tests.cc tests/character_tests.cc tests/game_engine_tests.cc)
 
 ci_make_app(
         APP_NAME        jjba-visualizer
