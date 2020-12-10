@@ -18,6 +18,5 @@
     "Jotaro": ["Jotaro", [10, 1], "characters/jotaro.jpg", false],
     "Polnareff": ["Polnareff", [11, 1], "characters/polnareff.png", false],
     "Joseph": ["Joseph", [11, 2], "characters/joseph.jpg", true]
-  }],
-  "enemy characters": []
+  }]
 }

@@ -2,8 +2,6 @@
 #include <catch2/catch.hpp>
 
 #include "engine/board.h"
-#include "engine/game_engine.h"
-#include <nlohmann/json.hpp>
 
 using namespace jjba_strategy;
 
@@ -23,6 +21,11 @@ TEST_CASE("Generate Board") {
     SECTION("Throws error when board object is not a square") {
       nlohmann::json board_state = Board::ReadJSONFile(kBoardsFolderPath + "non_square_board.json");
       REQUIRE_THROWS(Board::CheckIfBoardSquare(board_state));
+    }
+
+    SECTION("Throws error when board object does not exist") {
+      nlohmann::json board_state = Board::ReadJSONFile(kBoardsFolderPath + "no_board.json");
+      REQUIRE_THROWS(Board::CheckIfBoardExists(board_state));
     }
   }
 }

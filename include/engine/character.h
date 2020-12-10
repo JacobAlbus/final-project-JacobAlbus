@@ -28,7 +28,8 @@ class Character {
             const glm::vec2& position,
             const std::string& image_path,
             bool is_player,
-            size_t character_type_index);
+            size_t character_type_index,
+            bool is_unit_testing);
 
   /**
    * Copies values of passed character into a different character object
@@ -73,10 +74,31 @@ class Character {
   static std::vector<Character> GenerateCharacters(const std::string& json_file_path,
                                                    const std::string& characters_type);
 
+  /**
+   * Reads JSON file and returns an object containing characters, throws
+   * error if JSON is null
+   * @param path to JSON file
+   * @return JSON object containing characters
+   */
+  static nlohmann::json ReadJSONFile(const std::string& json_file_path);
+
+  /**
+   * Checks to see if both character lists are empty, throws error if either is
+   * @param json object containing board
+   */
+  static void CheckIfCharactersEmpty(const nlohmann::json& board_state);
+
+  /**
+   * Checks to see if both character list exists, throws error if either isn't
+   * @param json object containing board
+   */
+  static void CheckIfCharactersExists(const nlohmann::json& board_state);
+
   inline const glm::vec2& GetPosition() const { return position_; };
   inline bool IsPlayer() const { return is_player_; }
   inline float GetHealth() const { return health_; }
   inline const std::vector<Attack>& GetAttacks() const { return attacks_; }
+  inline const std::string& GetName() const { return kName; }
   inline AttackType GetCurrentAttackType() const { return current_attack_type_; }
   inline void UpdateCurrentAttackType(AttackType new_type) { current_attack_type_ = new_type; }
 
@@ -114,7 +136,7 @@ class Character {
   /**
    * Name of Character
    */
-  std::string name_;
+  std::string kName;
   /**
    * Image object of character
    */

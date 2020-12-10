@@ -14,9 +14,10 @@
     [4, 0, 0, 0, 0, 0, 0, 2, 2, 1, 1, 1, 4],
     [4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4]
   ],
+  "allied characters": [],
   "enemy characters": [{
-    "Dio": ["Dio", [2, 11], "characters/dio.jpg", false],
-    "Bio": ["Bio", [3, 11], "characters/dio.jpg", false],
-    "Lio": ["Lio", [2, 10], "characters/dio.jpg", false]
+    "Dio": ["Dio", [2, 11], "characters/dio.jpg", false, 0],
+    "Bio": ["Bio", [3, 11], "characters/dio.jpg", false, 0],
+    "Lio": ["Lio", [2, 10], "characters/dio.jpg", false, 0]
   }]
 }

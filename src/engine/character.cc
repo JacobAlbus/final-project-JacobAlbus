@@ -7,9 +7,10 @@ Character::Character(const std::string& name,
                      const glm::vec2& position,
                      const std::string& image_path,
                      bool is_player,
-                     size_t character_type_index) :
+                     size_t character_type_index,
+                     bool is_unit_testing) :
                      current_attack_type_(static_cast<AttackType>(0)),
-                     name_(name),
+                     kName(name),
                      position_(position),
                      character_type(static_cast<CharacterType>(character_type_index)),
                      is_player_(is_player),
@@ -36,15 +37,18 @@ Character::Character(const std::string& name,
       break;
   }
 
-  ci::fs::path path = ci::fs::path(image_path);
-  image_ = ci::gl::Texture::create(ci::loadImage(cinder::app::loadAsset(path)));
+  if(!is_unit_testing) {
+    ci::fs::path path = ci::fs::path(image_path);
+    image_ = ci::gl::Texture::create(ci::loadImage(cinder::app::loadAsset(path)));
+  }
 }
 
 std::vector<Character> Character::GenerateCharacters(const std::string &json_file_path,
                                                      const std::string &characters_type) {
-  std::ifstream file(json_file_path);
-  nlohmann::json board_state;
-  file >> board_state;
+
+  nlohmann::json board_state = ReadJSONFile(json_file_path);
+  CheckIfCharactersExists(board_state);
+  CheckIfCharactersEmpty(board_state);
   std::vector<Character> characters;
 
   for(const auto& json_characters : board_state[characters_type]) {
@@ -57,7 +61,7 @@ std::vector<Character> Character::GenerateCharacters(const std::string &json_fil
       bool is_player = character[3];
       size_t character_type_index = character[4];
       characters.emplace_back(name, position, image_path,
-                              is_player, character_type_index);
+                              is_player, character_type_index, false);
     }
   }
 
@@ -102,7 +106,7 @@ void Character::RenderCharacterFacePlate(bool is_enemy, size_t board_size,
   ci::gl::drawStringCentered(std::to_string(health),
                              pixel_bottom_right - glm::vec2(kTileSize / 2, kSpacing),
                              ci::Color("white"), ci::Font("Impact", 20));
-  ci::gl::drawStringCentered(name_,
+  ci::gl::drawStringCentered(kName,
                              pixel_bottom_right - glm::vec2(kTileSize / 2, kSpacing * 3),
                              ci::Color("white"), ci::Font("Impact", 20));
 }
@@ -122,6 +126,54 @@ std::vector<glm::vec2> Character::CalculateCharacterMovementOptions() const {
 void Character::AttackCharacter(Character* character) {
   Attack current_attack = attacks_[static_cast<size_t>(current_attack_type_)];
   character->health_ -= current_attack.base_power;
+}
+
+nlohmann::json Character::ReadJSONFile(const std::string& json_file_path) {
+  std::ifstream file(json_file_path);
+  nlohmann::json board_state;
+
+  try {
+    file >> board_state;
+  }
+  catch (nlohmann::detail::parse_error& ex) {
+    std::cerr << "Passed JSON is Null" << ex.byte << std::endl;
+    throw std::invalid_argument("");
+  }
+
+  return board_state;
+}
+
+void Character::CheckIfCharactersEmpty(const nlohmann::json& board_state) {
+  if(board_state["allied characters"].empty()) {
+    std::cerr << "The allied character lists in the passed JSON is empty" << std::endl;
+    throw std::exception("");
+  } else if(board_state["enemy characters"].empty()) {
+    std::cerr << "The enemy character lists in the passed JSON is empty" << std::endl;
+    throw std::exception("");
+  }
+}
+void Character::CheckIfCharactersExists(const nlohmann::json &board_state) {
+  bool allies_exist = false;
+  bool enemies_exist = false;
+
+  for (auto it = board_state.begin(); it != board_state.end(); it++){
+    const auto& key = it.key();
+    if(key == "allied characters") {
+      allies_exist = true;
+    } else if(key == "enemy characters") {
+      enemies_exist = true;
+    }
+  }
+
+  if(!allies_exist) {
+    std::cerr << "The passed JSON file does not contain a list of allied characters"
+    << std::endl;
+    throw std::exception("");
+  } else if (!enemies_exist) {
+    std::cerr << "The passed JSON file does not contain a list of enemy characters"
+              << std::endl;
+    throw std::exception("");
+  }
 }
 
 ci::Rectf Character::CalculatePixelBoundingBox(size_t board_size,

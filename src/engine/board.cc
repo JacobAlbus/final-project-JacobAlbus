@@ -85,10 +85,17 @@ void Board::CheckIfBoardEmpty(const nlohmann::json &board_state) {
 }
 
 void Board::CheckIfBoardExists(const nlohmann::json& board_state) {
-  try {
-    const auto& temp = board_state["board"];
-  } catch (const std::exception& ex) {
-    std::cerr << "There is no board object in the passed JSON" << ex.what() << std::endl;
+  bool board_exists = false;
+
+  for (auto it = board_state.begin(); it != board_state.end(); it++){
+    const auto& key = it.key();
+    if(key == "board") {
+      board_exists = true;
+    }
+  }
+
+  if(!board_exists) {
+    std::cerr << "The board object does not exist in the passed JSON file" << std::endl;
     throw std::exception("");
   }
 }

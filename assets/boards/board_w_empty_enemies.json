@@ -14,9 +14,10 @@
     [4, 0, 0, 0, 0, 0, 0, 2, 2, 1, 1, 1, 4],
     [4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4]
   ],
-  "enemy characters": [{
-    "Dio": ["Dio", [2, 11], "characters/dio.jpg", false],
-    "Bio": ["Bio", [3, 11], "characters/dio.jpg", false],
-    "Lio": ["Lio", [2, 10], "characters/dio.jpg", false]
-  }]
+  "allied characters": [{
+    "Jotaro": ["Jotaro", [10, 1], "characters/jotaro.jpg", false, 0],
+    "Polnareff": ["Polnareff", [11, 1], "characters/polnareff.png", false, 1],
+    "Joseph": ["Joseph", [3, 10], "characters/joseph.jpg", true, 2]
+  }],
+  "enemy characters": []
 }
